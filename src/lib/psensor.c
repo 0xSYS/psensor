@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2014 jeanfi@gmail.com
+ * Copyright (C) 2010-2024 jeanfi@gmail.com, 0xSYS
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -19,15 +19,19 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <dirent.h>
+
 #include <locale.h>
 #include <libintl.h>
 #define _(str) gettext(str)
 
 #include <stdio.h>
+#include <unistd.h>
 
 #include <hdd.h>
 #include <psensor.h>
 #include <temperature.h>
+#include <pio.h>
 
 struct psensor *psensor_create(char *id,
 			       char *name,
@@ -466,4 +470,55 @@ psensor_current_value_to_str(const struct psensor *s, unsigned int use_celsius)
 	return psensor_value_to_str(s->type,
 				    psensor_get_current_value(s),
 				    use_celsius);
+}
+
+//MARK: New Stuff added
+
+int psensor_is_fan(const char *path)
+{
+	DIR *dir;
+  struct dirent *entry;
+  
+  dir = opendir(path);
+  if (!dir) 
+	{
+		log_err("opendir() Failed!");
+    return 0;
+  }
+
+  while ((entry = readdir(dir)) != NULL) 
+	{
+    if (strstr(entry->d_name, "fan1_input") != NULL || strstr(entry->d_name, "pwm1") != NULL)
+		{
+      closedir(dir);
+      return 1;
+    }
+  }
+
+  closedir(dir);
+  return 0;
+}
+
+int psensor_fan_set_pwm(const char * hwClassDir, int PWM)
+{
+	FILE * pwm_ptr;
+
+	pwm_ptr = fopen(hwClassDir, "w");
+
+	if(pwm_ptr == NULL)
+	{
+	  log_err("Failed to write to %s", hwClassDir);
+		return 1;
+	}
+	else
+	{
+		if(PWM > 255 || PWM < 0)
+		{
+		  log_err("Invalid PWM value: %d", PWM);
+			return 1;
+		}
+		else
+		  fprintf(pwm_ptr, "%d", PWM);
+	}
+	return 0;
 }
