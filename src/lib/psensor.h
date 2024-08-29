@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2010-2024 jeanfi@gmail.com, 0xSYS
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
