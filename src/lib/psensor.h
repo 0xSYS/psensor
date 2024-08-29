@@ -174,4 +174,19 @@ char *psensor_current_value_to_str(const struct psensor *, unsigned int);
 
 void psensor_log_measures(struct psensor **sensors);
 
+/*
+Checks if the hardware directory contains "fan1_enable" or "pwm1" files to determine if the directory is realted to the fan control.
+Returns 1 if it detects a fan otherwise it returns 0.
+*/
+int psensor_is_fan(const char *path);
+
+
+/*
+Write a PWM value to the existing fan pwm files created by the kernel.
+Requires full path to the hardware directory + a PWM value (0 - 255 only!)
+Returns 0 if the function is executed successfully if not it returns 1
+Example: int fn_stat = psensor_fan_set_pwm("/sys/class/hwmon/hwmon4/pwm1", 230);
+*/
+int psensor_fan_set_pwm(const char * hwClassDir, int PWM);
+
 #endif
