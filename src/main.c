@@ -40,6 +40,7 @@
 #include <pgtop2.h>
 #include <pmutex.h>
 #include <psensor.h>
+#include <pio.h>
 #include <pudisks2.h>
 #include <rsensor.h>
 #include <slog.h>
@@ -96,6 +97,36 @@ static void print_help(void)
 	printf(_("Report bugs to: %s\n"), PACKAGE_BUGREPORT);
 	puts("");
 	printf(_("%s home page: <%s>\n"), PACKAGE_NAME, PACKAGE_URL);
+}
+
+//MARK: Tests
+static void tests()
+{
+	//Here's a very simpel way to controll the speed of a fan manually using this function
+	psensor_fan_set_pwm("/sys/class/hwmon/hwmon4/pwm1", 255); //Chasis fan
+	psensor_fan_set_pwm("/sys/class/hwmon/hwmon1/pwm1", 255); //GPU Fans
+
+  char **fan_directories = NULL;
+  int i;
+
+  //Read and scan the hwmon directories for fan-related files and store everything into a string array
+  fan_directories = dir_list("/sys/class/hwmon/", psensor_is_fan);
+
+  if (fan_directories) 
+	{
+    printf("Fan-related hwmon directories:\n");
+    for (i = 0; fan_directories[i] != NULL; i++) 
+		{
+      printf("Directory: %s\n", fan_directories[i]);
+      free(fan_directories[i]);
+    }
+    free(fan_directories);
+  } 
+	else 
+	{
+    printf("No fan-related hwmon directories found or an error occurred.\n");
+  }
+
 }
 
 /*
@@ -442,7 +473,7 @@ int main(int argc, char **argv)
 	new_instance = 0;
 
 	cmdok = 1;
-	while ((optc = getopt_long(argc, argv, "vhd:u:n", long_options,
+	while ((optc = getopt_long(argc, argv, "vhtd:u:n", long_options,
 				   &opti)) != -1) {
 		switch (optc) {
 		case 'u':
@@ -452,6 +483,8 @@ int main(int argc, char **argv)
 		case 'h':
 			print_help();
 			exit(EXIT_SUCCESS);
+		case 't':
+      tests(); //MARK: Test function call
 		case 'v':
 			print_version();
 			exit(EXIT_SUCCESS);
