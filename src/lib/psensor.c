@@ -499,6 +499,29 @@ int psensor_is_fan(const char *path)
   return 0;
 }
 
+int psensor_enable_fan_pwm(const char *hwmnoDirPath, int v)
+{
+	FILE * pwm_enable;
+
+	pwm_enable = fopen(hwmnoDirPath, "w");
+
+	if(pwm_enable == NULL)
+	{
+		log_err("Failed to enable fan PWM at \"%s\"", hwmnoDirPath);
+		return 1;
+	}
+
+  if(v > 1)
+	{
+		log_warn("Fan PWM enable value excided.");
+	}
+
+	fprintf(pwm_enable, "%d", v);
+
+	fclose(pwm_enable);
+	return 0;
+}
+
 int psensor_fan_set_pwm(const char * hwClassDir, int PWM)
 {
 	FILE * pwm_ptr;
@@ -520,5 +543,25 @@ int psensor_fan_set_pwm(const char * hwClassDir, int PWM)
 		else
 		  fprintf(pwm_ptr, "%d", PWM);
 	}
+	fclose(pwm_ptr);
 	return 0;
+}
+
+int psensor_test_fan(const char * hwmonDir)
+{
+	for(int i = 0; i < 255; i++)
+	{
+		psensor_fan_set_pwm(hwmonDir, i);
+		printf("\033[38;5;33m[FAN TEST]\033[0m - Increment pwm: %d at \033[38;5;14m\"%s\033[0m\"\n", i, hwmonDir);
+		usleep(50 * 1000);
+	}
+	sleep(4);
+	for(int i = 255; i >= 0; i--)
+	{
+		psensor_fan_set_pwm(hwmonDir, i);
+		printf("\033[38;5;33m[FAN TEST]\033[0m - Decrement pwm: %d at \"\033[38;5;14m%s\033[0m\"\n", i, hwmonDir);
+		usleep(50 * 1000);
+	}
+	return 0;
+	sleep(4);
 }
