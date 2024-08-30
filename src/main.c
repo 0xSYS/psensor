@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2010-2024 jeanfi@gmail.com, 0xSYS
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -102,9 +102,17 @@ static void print_help(void)
 //MARK: Tests
 static void tests()
 {
-	//Here's a very simpel way to controll the speed of a fan manually using this function
-	psensor_fan_set_pwm("/sys/class/hwmon/hwmon4/pwm1", 255); //Chasis fan
-	psensor_fan_set_pwm("/sys/class/hwmon/hwmon1/pwm1", 255); //GPU Fans
+	//Enable pwm control
+	psensor_enable_fan_pwm("/sys/class/hwmon/hwmon1/pwm1_enable", 1);
+	psensor_enable_fan_pwm("/sys/class/hwmon/hwmon4/pwm1_enable", 1);
+ 
+  //Fan testing
+	psensor_test_fan("/sys/class/hwmon/hwmon4/pwm1");
+	psensor_test_fan("/sys/class/hwmon/hwmon1/pwm1");
+
+  //Reset fan PWM bc why not
+	psensor_fan_set_pwm("/sys/class/hwmon/hwmon1/pwm1", 55);
+	psensor_fan_set_pwm("/sys/class/hwmon/hwmon4/pwm1", 105);
 
   char **fan_directories = NULL;
   int i;
@@ -126,7 +134,6 @@ static void tests()
 	{
     printf("No fan-related hwmon directories found or an error occurred.\n");
   }
-
 }
 
 /*
