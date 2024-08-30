@@ -180,6 +180,14 @@ Returns 1 if it detects a fan otherwise it returns 0.
 */
 int psensor_is_fan(const char *path);
 
+/*
+Enable PWM fan control
+Requires full path to pwm enable file and a value, usually 1 or 0
+Returns 0 if the function is executed successfully if not it returns 1
+Example: int fn_stat = psensor_enable_fan_pwm("/sys/class/hwmon/hwmon4/pwm1_enable", 1);
+*/
+int psensor_enable_fan_pwm(const char *hwmnoDirPath, int v);
+
 
 /*
 Write a PWM value to the existing fan pwm files created by the kernel.
@@ -188,5 +196,14 @@ Returns 0 if the function is executed successfully if not it returns 1
 Example: int fn_stat = psensor_fan_set_pwm("/sys/class/hwmon/hwmon4/pwm1", 230);
 */
 int psensor_fan_set_pwm(const char * hwClassDir, int PWM);
+
+
+/*
+Test the speed of a fan by slowly increasing and decreasing the PWM value
+Requires the full path to the PWM file
+Returns 0 if the function is executed successfully if not it returns 1
+Example: int fn_stat = psensor_test_fan("/sys/class/hwmon/hwmon3/pwm1");
+*/
+int psensor_test_fan(const char * hwmonDir);
 
 #endif
