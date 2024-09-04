@@ -25,6 +25,11 @@
 #include <measure.h>
 #include <plog.h>
 
+
+
+#define MAX_HWMON_DIRS 9
+#define SMALL_BUF_SIZE 128
+
 enum psensor_type {
 	/* type of sensor values */
 	SENSOR_TYPE_TEMP = 0x00001,
@@ -59,6 +64,14 @@ enum psensor_type {
 	SENSOR_TYPE_HDD_TEMP = (SENSOR_TYPE_HDD | SENSOR_TYPE_TEMP),
 	SENSOR_TYPE_CPU_USAGE = (SENSOR_TYPE_CPU | SENSOR_TYPE_PERCENT)
 };
+
+typedef struct 
+{
+  char **pwmFiles;
+  char **pwmEnableFiles;
+  int fanInputCount;  // Number of fanX_input files
+} psensor_fan;
+
 
 struct psensor {
 	/* Human readable name of the sensor.  It may not be uniq. */
@@ -174,11 +187,16 @@ char *psensor_current_value_to_str(const struct psensor *, unsigned int);
 
 void psensor_log_measures(struct psensor **sensors);
 
+
 /*
-Checks if the hardware directory contains "fan1_enable" or "pwm1" files to determine if the directory is realted to the fan control.
-Returns 1 if it detects a fan otherwise it returns 0.
+Detect existing cooling fans addressed by the linux kernel inside hwmon directory
+Returns a structure composed out of these parameters:
+- fan.._input file count which represents a phisycal fan inside your computer.
+- pwm_enable files which allow the fans to be controlled by writing a PWM value
+- pwm files. Those files hold the PWM value assigned to them
+- NULL if no fans could be detected
 */
-int psensor_is_fan(const char *path);
+psensor_fan *psensor_detectFans();
 
 /*
 Enable PWM fan control
@@ -187,7 +205,6 @@ Returns 0 if the function is executed successfully if not it returns 1
 Example: int fn_stat = psensor_enable_fan_pwm("/sys/class/hwmon/hwmon4/pwm1_enable", 1);
 */
 int psensor_enable_fan_pwm(const char *hwmnoDirPath, int v);
-
 
 /*
 Write a PWM value to the existing fan pwm files created by the kernel.
