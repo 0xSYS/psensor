@@ -20,7 +20,7 @@ libpsensor_a_SOURCES = \
 	temperature.c temperature.h\
 	url.c url.h
 
-AM_CPPFLAGS = -Wall -Werror
+AM_CPPFLAGS = -Wall
 
 if SENSORS
 libpsensor_a_SOURCES += lmsensor.c
