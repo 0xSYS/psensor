@@ -20,6 +20,8 @@
 #include <string.h>
 
 #include <dirent.h>
+#include <ctype.h>
+#include <regex.h>
 
 #include <locale.h>
 #include <libintl.h>
@@ -27,6 +29,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 #include <hdd.h>
 #include <psensor.h>
@@ -474,29 +477,120 @@ psensor_current_value_to_str(const struct psensor *s, unsigned int use_celsius)
 
 //MARK: New Stuff added
 
-int psensor_is_fan(const char *path)
+int isFanInput(const char *filename) 
 {
-	DIR *dir;
-  struct dirent *entry;
-  
-  dir = opendir(path);
-  if (!dir) 
+  if (strncmp(filename, "fan", 3) == 0 && isdigit(filename[3]) && strcmp(filename + 4, "_input") == 0) 
 	{
-		log_err("opendir() Failed!");
-    return 0;
+    printf("Found fan input file: %s\n", filename);
+    return 1;
+  }
+  return 0;
+}
+
+//Search for pwm<digit> and pwm<digit>_enable files
+void getPwmF(psensor_fan *list, const char *directory, int fan_number) 
+{
+  char pwmFile[SMALL_BUF_SIZE];
+  char pwmEnableFile[SMALL_BUF_SIZE];
+  char pwmPath[SMALL_BUF_SIZE];
+  char pwmEnablePath[SMALL_BUF_SIZE];
+
+  snprintf(pwmFile, SMALL_BUF_SIZE, "pwm%d", fan_number);
+  snprintf(pwmEnableFile, SMALL_BUF_SIZE, "pwm%d_enable", fan_number);
+
+  snprintf(pwmPath, SMALL_BUF_SIZE, "%s/%s", directory, pwmFile);
+  snprintf(pwmEnablePath, SMALL_BUF_SIZE, "%s/%s", directory, pwmEnableFile);
+
+  if (access(pwmPath, F_OK) == 0) 
+	{
+    list->pwmFiles[list->fanInputCount] = strdup(pwmPath);
+  } 
+	else 
+	{
+    list->pwmFiles[list->fanInputCount] = NULL;
   }
 
+  if (access(pwmEnablePath, F_OK) == 0) 
+	{
+    list->pwmEnableFiles[list->fanInputCount] = strdup(pwmEnablePath);
+  } 
+	else 
+	{
+    list->pwmEnableFiles[list->fanInputCount] = NULL;
+  }
+  list->fanInputCount++;
+}
+
+//The actual fan detection function
+psensor_fan *psensor_detectFans() 
+{
+  DIR *dir = opendir("/sys/class/hwmon");
+  struct dirent *entry;
+
+  if (!dir) 
+	{
+		log_err("Failed to open sysfs directory!");
+    return NULL;
+  }
+
+  psensor_fan *list = malloc(sizeof(psensor_fan));
+  list->pwmFiles = NULL;
+  list->pwmEnableFiles = NULL;
+  list->fanInputCount = 0;
+  
+	//Read all available directories
   while ((entry = readdir(dir)) != NULL) 
 	{
-    if (strstr(entry->d_name, "fan1_input") != NULL || strstr(entry->d_name, "pwm1") != NULL)
+    //Skip                    this                           and that
+    if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+      continue;
+    
+    char full_path[SMALL_BUF_SIZE];
+    snprintf(full_path, sizeof(full_path), "%s/%s", "/sys/class/hwmon", entry->d_name);
+  
+    struct stat statbuf;
+    if (stat(full_path, &statbuf) == 0 && S_ISDIR(statbuf.st_mode)) 
 		{
-      closedir(dir);
-      return 1;
+      DIR *subdir = opendir(full_path);
+      struct dirent *subdir_entry;
+    
+      //Read all subdirectories
+      while ((subdir_entry = readdir(subdir)) != NULL) 
+			{
+        //Skip                          this                                   and that again
+        if (strcmp(subdir_entry->d_name, ".") == 0 || strcmp(subdir_entry->d_name, "..") == 0)
+          continue;
+        
+        //Check if there's any fan<digit>_input file existing in any of the hwon directories
+        if (isFanInput(subdir_entry->d_name)) 
+				{
+          int fan_number = subdir_entry->d_name[3] - '0';
+        
+          list->pwmFiles = realloc(list->pwmFiles, (list->fanInputCount + 1) * sizeof(char *));
+          list->pwmEnableFiles = realloc(list->pwmEnableFiles, (list->fanInputCount + 1) * sizeof(char *));
+        
+          if (!list->pwmFiles || !list->pwmEnableFiles) 
+					{
+            log_err("Failed to re-allocate memory for storing pwm files!");
+            exit(EXIT_FAILURE);
+          }
+          getPwmF(list, full_path, fan_number);
+        }
+      }
+      closedir(subdir);
     }
   }
 
   closedir(dir);
-  return 0;
+
+  //Return NULL if no fans exist
+  if (list->fanInputCount == 0) 
+	{
+    free(list);
+    return NULL;
+  }
+
+  return list;
 }
 
 int psensor_enable_fan_pwm(const char *hwmnoDirPath, int v)
@@ -512,9 +606,8 @@ int psensor_enable_fan_pwm(const char *hwmnoDirPath, int v)
 	}
 
   if(v > 1)
-	{
-		log_warn("Fan PWM enable value excided.");
-	}
+		log_warn("Fan PWM enable value is larger than expected.");
+	
 
 	fprintf(pwm_enable, "%d", v);
 
