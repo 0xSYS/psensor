@@ -27,6 +27,7 @@
 #include <ui_sensorlist.h>
 #include <ui_sensorpref.h>
 #include <ui_status.h>
+#include <ui_fancontrol.h>
 
 static GtkWidget *w_sensors_scrolled_tree;
 static GtkWidget *w_graph;
@@ -254,6 +255,11 @@ void ui_cb_preferences(GtkMenuItem *mi, gpointer data)
 	ui_pref_dialog_run((struct ui_psensor *)data);
 }
 
+void ui_cb_fan_ctrl(GtkMenuItem *mi, gpointer data)
+{
+	fanGtrlDlg((struct ui_psensor *)data);
+}
+
 void ui_cb_sensor_preferences(GtkMenuItem *mi, gpointer data)
 {
 	struct ui_psensor *ui = data;
@@ -265,7 +271,8 @@ void ui_cb_sensor_preferences(GtkMenuItem *mi, gpointer data)
 void ui_psensor_quit(struct ui_psensor *ui)
 {
 	save_window_pos(ui);
-
+  //MARK: Free stuff from fan controler
+	//Todo
 	log_debug("Destroy main window");
 	gtk_widget_destroy(ui->main_window);
 	gtk_main_quit();
