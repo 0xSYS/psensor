@@ -214,6 +214,14 @@ Example: int fn_stat = psensor_fan_set_pwm("/sys/class/hwmon/hwmon4/pwm1", 230);
 */
 int psensor_fan_set_pwm(const char * hwClassDir, int PWM);
 
+/*
+Get the last pwm value from hwmon sysfs
+Requires full path to pwm file
+Returns 0 by default and if it fails, if not it returns the last value of a PWM file
+Example int LastFanPwm = psensor_get_last_pwm("/sys/class/hwmon/hwmon4/pwm1");
+*/
+int psensor_get_last_pwm(const char * path);
+
 
 /*
 Test the speed of a fan by slowly increasing and decreasing the PWM value
