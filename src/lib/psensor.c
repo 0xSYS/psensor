@@ -481,7 +481,7 @@ int isFanInput(const char *filename)
 {
   if (strncmp(filename, "fan", 3) == 0 && isdigit(filename[3]) && strcmp(filename + 4, "_input") == 0) 
 	{
-    printf("Found fan input file: %s\n", filename);
+    //printf("Found fan input file: %s\n", filename);
     return 1;
   }
   return 0;
@@ -637,6 +637,29 @@ int psensor_fan_set_pwm(const char * hwClassDir, int PWM)
 		  fprintf(pwm_ptr, "%d", PWM);
 	}
 	fclose(pwm_ptr);
+	return 0;
+}
+
+int psensor_get_last_pwm(const char * path)
+{
+	FILE * pwmFile;
+	char content[10];
+	int Pwm;
+
+	pwmFile = fopen(path, "r");
+  
+	if(pwmFile == NULL)
+	{
+		log_err("Failed to open %s for reading last pwm value!", path);
+		return 0;
+	}
+	else
+	{
+		fgets(content, 10, pwmFile);
+    Pwm = atoi(content);
+		return Pwm;
+	}
+
 	return 0;
 }
 
