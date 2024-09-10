@@ -28,6 +28,7 @@
 #include <ui_sensorpref.h>
 #include <ui_status.h>
 #include <ui_fancontrol.h>
+#include <fan_control_utils.h>
 
 static GtkWidget *w_sensors_scrolled_tree;
 static GtkWidget *w_graph;
@@ -257,7 +258,63 @@ void ui_cb_preferences(GtkMenuItem *mi, gpointer data)
 
 void ui_cb_fan_ctrl(GtkMenuItem *mi, gpointer data)
 {
-	fanGtrlDlg((struct ui_psensor *)data);
+	//Used for independent message boxes
+	GtkWidget* MsgErrNotRoot;
+	GtkWidget* MsgErrUnidentifiedPcFans;
+	GtkWidget* MsgfanControlScript;
+	GtkResponseType msgResp; //Store the Yes or No response from the prompt that stops fancontrol script
+
+	psensor_fan *TempPCFans;
+
+	pid_t fanctrlPid = getFancontrolPID(); //Get the PID from the fancontrol script
+	TempPCFans = psensor_detectFans(); //Temporarly store all the fans into this
+
+  //Initialise the message boxes with text and other parameters (like buttons)
+	MsgErrNotRoot = gtk_message_dialog_new_with_markup(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "To get realtime control over the fans you need to run as root !");
+	MsgErrUnidentifiedPcFans = gtk_message_dialog_new_with_markup(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "No PWM controllable fans could be detected!");
+	MsgfanControlScript = gtk_message_dialog_new_with_markup(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_YES_NO, "fancontrol script is already runing in the background !\n<b>To allow custom control across the fans this script needs to be stopped</b>\nDo you want to stop it ?");
+
+	/*
+	Check if the program runs as root
+	This setp is very important as it insures full control on all avaialbpe PWM controllable fans detected
+	*/
+	if(getuid())
+  {
+    log_err("Not runing as root!!!");
+    gtk_dialog_run(GTK_DIALOG(MsgErrNotRoot));
+		gtk_widget_destroy(MsgErrNotRoot);
+  }
+	else
+	{
+		/*
+		Check if there's any detected fan
+		If not it retuns a message box instead. It wouldn't make sense to still return the fan controller dialog if there are no cooling fans available. This can cause lots of crashes (Segmentation Faults lol)
+		*/
+		if(!TempPCFans)
+		{
+			gtk_dialog_run(GTK_DIALOG(MsgErrUnidentifiedPcFans));
+			gtk_widget_destroy(MsgErrUnidentifiedPcFans);
+		}
+		else
+		{
+			//Check if there's any pid recevied from the fancontroller script
+			if(fanctrlPid != -1)
+			{
+				msgResp = gtk_dialog_run(GTK_DIALOG(MsgfanControlScript));
+				gtk_widget_destroy(MsgfanControlScript);
+			}
+
+      //Get response from the fancontroll prompt (if yes ofc)
+			if(msgResp == GTK_RESPONSE_YES)
+			{
+				//Based on the fancontroll pid the script can be killed to enablr full control of the fans
+				if(killPidProc(fanctrlPid) != 0)
+        	log_err("Failed to kill fancontrol script!");
+			}
+			//Finally show the fancontroller dialog
+			fanGtrlDlg((struct ui_psensor *)data);
+		}
+	}
 }
 
 void ui_cb_sensor_preferences(GtkMenuItem *mi, gpointer data)
