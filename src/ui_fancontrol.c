@@ -1,24 +1,32 @@
 #include <stdio.h>
-//#include <ui.h>
+#include <unistd.h>
 #include <ui_fancontrol.h>
 #include <psensor.h>
 #include <pio.h>
 #include <glib.h>
+#include <fan_control_utils.h>
 
 
 
 
 int FanPWM;
+int FanLastPwm[100];
 int combx_i;
 psensor_fan *PCFans;
+GtkScale *FanPwmSL;
+GtkDialog *dg;
 
 
 
-
+void TestFanFct(GtkButton* btn, gpointer dat)
+{
+  psensor_test_fan(PCFans->pwmFiles[combx_i]);
+}
 
 void SwitchFanList(GtkComboBoxText *combx, gpointer user_data)
 {
   combx_i = gtk_combo_box_get_active(GTK_COMBO_BOX(combx));
+  gtk_range_set_value(GTK_RANGE(FanPwmSL), FanLastPwm[combx_i]);
 }
 
 void GetPWMVal(GtkRange *rg, gpointer user_data)
@@ -29,16 +37,14 @@ void GetPWMVal(GtkRange *rg, gpointer user_data)
 
 void fanGtrlDlg(struct ui_psensor *ui)
 {
-  GtkDialog *dg;
   gint result;
   struct config *cfg;
   GtkBuilder *builder;
   guint ok;
   GError *err = NULL;
   GtkSpinButton *FanPwmSB;
-  GtkScale *FanPwmSL;
   GtkComboBoxText *FanList;
-  GtkCheckButton *ManCtrl;
+  GtkButton *testFan;
 
   cfg = ui -> config;
 
@@ -61,27 +67,27 @@ void fanGtrlDlg(struct ui_psensor *ui)
   FanList = GTK_COMBO_BOX_TEXT(gtk_builder_get_object(builder, "CBXFanList"));
   g_signal_connect(FanList, "changed", G_CALLBACK(SwitchFanList), NULL);
 
-
   FanPwmSL = GTK_SCALE(gtk_builder_get_object(builder, "SetFanPwmSL"));
+
+  testFan = GTK_BUTTON(gtk_builder_get_object(builder, "fanTest"));
+
   char temp[550];
 
-  if (PCFans) 
+  for (int i = 0; i < PCFans->fanInputCount; i++) 
   {
-    for (int i = 0; i < PCFans->fanInputCount; i++) 
-    {
-      sprintf(temp, "Fan %d", i);
-      gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(FanList), NULL, temp);
-      psensor_enable_fan_pwm(PCFans->pwmEnableFiles[i], 1);
-    }
-  } 
-  else 
-  {
-    printf("No fans or corresponding pwm/pwm_enable files found.\n");
+    sprintf(temp, "Fan %d", i);
+    gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(FanList), NULL, temp);
+    psensor_enable_fan_pwm(PCFans->pwmEnableFiles[i], 1);
+    FanLastPwm[i] = psensor_get_last_pwm(PCFans->pwmFiles[i]);
+    //printf("Last pwm's at: %s | %d | %s\n", PCFans->pwmFiles[i], FanLastPwm[i], temp);
   }
+
 
   gtk_combo_box_set_active(GTK_COMBO_BOX(FanList), 0);
 
   g_signal_connect(FanPwmSL, "value-changed", G_CALLBACK(GetPWMVal), NULL);
+  g_signal_connect(testFan, "clicked", G_CALLBACK(TestFanFct), NULL);
+
 
   gtk_builder_connect_signals(builder, NULL);
 
