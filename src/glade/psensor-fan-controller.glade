@@ -42,7 +42,7 @@
           </packing>
         </child>
         <child>
-          <!-- n-columns=4 n-rows=9 -->
+          <!-- n-columns=5 n-rows=9 -->
           <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -52,7 +52,7 @@
                 <property name="can-focus">False</property>
                 <property name="valign">center</property>
                 <property name="margin-end">6</property>
-                <property name="margin-top">16</property>
+                <property name="margin-top">18</property>
                 <property name="label" translatable="yes">Fan List:</property>
               </object>
               <packing>
@@ -98,6 +98,45 @@
                 <property name="left-attach">3</property>
                 <property name="top-attach">0</property>
               </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="fanTest">
+                <property name="label" translatable="yes">Test</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="valign">end</property>
+                <property name="margin-left">8</property>
+                <property name="margin-bottom">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">4</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
             <child>
               <placeholder/>
