@@ -481,7 +481,6 @@ int isFanInput(const char *filename)
 {
   if (strncmp(filename, "fan", 3) == 0 && isdigit(filename[3]) && strcmp(filename + 4, "_input") == 0) 
 	{
-    //printf("Found fan input file: %s\n", filename);
     return 1;
   }
   return 0;
@@ -668,14 +667,14 @@ int psensor_test_fan(const char * hwmonDir)
 	for(int i = 0; i < 255; i++)
 	{
 		psensor_fan_set_pwm(hwmonDir, i);
-		printf("\033[38;5;33m[FAN TEST]\033[0m - Increment pwm: %d at \033[38;5;14m\"%s\033[0m\"\n", i, hwmonDir);
+		log_info( _("\033[38;5;33m[FAN TEST]\033[0m - Increment pwm: %d at \"\033[38;5;14m%s\033[0m\""), i, hwmonDir);
 		usleep(50 * 1000);
 	}
 	sleep(4);
 	for(int i = 255; i >= 0; i--)
 	{
 		psensor_fan_set_pwm(hwmonDir, i);
-		printf("\033[38;5;33m[FAN TEST]\033[0m - Decrement pwm: %d at \"\033[38;5;14m%s\033[0m\"\n", i, hwmonDir);
+		log_info( _("\033[38;5;33m[FAN TEST]\033[0m - Decrement pwm: %d at \"\033[38;5;14m%s\033[0m\""), i, hwmonDir);
 		usleep(50 * 1000);
 	}
 	return 0;
