@@ -1,0 +1,234 @@
+/*
+ * Copyright (C) 2010-2024 jeanfi@gmail.com, 0xSYS
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301 USA
+ */
+#ifndef _PSENSOR_PSENSOR_H_
+#define _PSENSOR_PSENSOR_H_
+
+#include "../../../config.h"
+
+#include "bool.h"
+#include "measure.h"
+#include "plog.h"
+
+
+
+#define MAX_HWMON_DIRS 9
+#define SMALL_BUF_SIZE 128
+
+enum psensor_type {
+	/* type of sensor values */
+	SENSOR_TYPE_TEMP = 0x00001,
+	SENSOR_TYPE_RPM = 0x00002,
+	SENSOR_TYPE_PERCENT = 0x00004,
+
+	/* Whether the sensor is remote */
+	SENSOR_TYPE_REMOTE = 0x00008,
+
+	/* Libraries used for retrieving sensor information */
+	SENSOR_TYPE_LMSENSOR = 0x00100,
+	SENSOR_TYPE_NVCTRL = 0x00200,
+	SENSOR_TYPE_GTOP = 0x00400,
+	SENSOR_TYPE_ATIADL = 0x00800,
+	SENSOR_TYPE_ATASMART = 0x01000,
+	SENSOR_TYPE_HDDTEMP = 0x02000,
+	SENSOR_TYPE_UDISKS2 = 0x800000,
+
+	/* Type of HW component */
+	SENSOR_TYPE_HDD = 0x04000,
+	SENSOR_TYPE_CPU = 0x08000,
+	SENSOR_TYPE_GPU = 0x10000,
+	SENSOR_TYPE_FAN = 0x20000,
+
+	SENSOR_TYPE_GRAPHICS = 0x40000,
+	SENSOR_TYPE_VIDEO = 0x80000,
+	SENSOR_TYPE_PCIE = 0x100000,
+	SENSOR_TYPE_MEMORY = 0x200000,
+	SENSOR_TYPE_AMBIENT = 0x400000,
+
+	/* Combinations */
+	SENSOR_TYPE_HDD_TEMP = (SENSOR_TYPE_HDD | SENSOR_TYPE_TEMP),
+	SENSOR_TYPE_CPU_USAGE = (SENSOR_TYPE_CPU | SENSOR_TYPE_PERCENT)
+};
+
+typedef struct
+{
+  char **pwmFiles;
+  char **pwmEnableFiles;
+  int fanInputCount;  // Number of fanX_input files
+} psensor_fan;
+
+
+struct psensor {
+	/* Human readable name of the sensor.  It may not be uniq. */
+	char *name;
+
+	/* Uniq id of the sensor */
+	char *id;
+
+	/* Name of the chip. */
+	char *chip;
+
+	/* Maximum length of 'values' */
+	int values_max_length;
+
+	/*
+	 * Last registered measures of the sensor.  Index 0 for the
+	 * oldest measure.
+	 */
+	struct measure *measures;
+
+	/* see psensor_type */
+	unsigned int type;
+
+	double max;
+
+	double min;
+
+	/* The highest value detected during this session. */
+	double sess_highest;
+
+	/* The lowest value detected during this session. */
+	double sess_lowest;
+
+	double alarm_high_threshold;
+	double alarm_low_threshold;
+
+	/* Whether an alarm is raised for this sensor */
+	bool alarm_raised;
+
+	void (*cb_alarm_raised)(struct psensor *, void *);
+	void *cb_alarm_raised_data;
+
+//#ifdef HAVE_LIBATIADL
+	/* AMD id for the aticonfig */
+	int amd_id;
+//#endif
+
+	void *provider_data;
+	void (*provider_data_free_fct)(void *);
+};
+
+struct psensor *psensor_create(char *id,
+			       char *name,
+			       char *chip,
+			       unsigned int type,
+			       int values_max_length);
+
+void psensor_values_resize(struct psensor *s, int new_size);
+
+void psensor_free(struct psensor *sensor);
+
+void psensor_list_free(struct psensor **sensors);
+int psensor_list_size(struct psensor **sensors);
+
+struct psensor *psensor_list_get_by_id(struct psensor **sensors,
+				       const char *id);
+
+int is_temp_type(unsigned int type);
+
+double get_min_temp(struct psensor **sensors);
+double get_max_temp(struct psensor **sensors);
+
+double get_min_rpm(struct psensor **sensors);
+double get_max_rpm(struct psensor **sensors);
+
+/*
+ * Converts the value of a sensor to a string.
+ *
+ * parameter 'type' is SENSOR_TYPE_LMSENSOR_TEMP, SENSOR_TYPE_NVIDIA,
+ * or SENSOR_TYPE_LMSENSOR_FAN
+ */
+char *psensor_value_to_str(unsigned int type,
+			   double value,
+			   int use_celsius);
+
+char *psensor_measure_to_str(const struct measure *m,
+			     unsigned int type,
+			     unsigned int use_celsius);
+
+struct psensor **psensor_list_add(struct psensor **sensors,
+				  struct psensor *sensor);
+
+void psensor_list_append(struct psensor ***sensors, struct psensor *sensor);
+
+struct psensor **psensor_list_copy(struct psensor **);
+
+void psensor_set_current_value(struct psensor *sensor, double value);
+void psensor_set_current_measure(struct psensor *sensor, double value,
+				 struct timeval tv);
+
+double psensor_get_current_value(const struct psensor *);
+
+struct measure *psensor_get_current_measure(struct psensor *sensor);
+
+/* Returns a string representation of a psensor type. */
+const char *psensor_type_to_str(unsigned int type);
+
+const char *psensor_type_to_unit_str(unsigned int type, int use_celsius);
+
+double get_max_value(struct psensor **sensors, int type);
+
+char *psensor_current_value_to_str(const struct psensor *, unsigned int);
+
+void psensor_log_measures(struct psensor **sensors);
+
+
+/*
+Detect existing cooling fans addressed by the linux kernel inside hwmon directory
+Returns a structure composed out of these parameters:
+- fan.._input file count which represents a phisycal fan inside your computer.
+- pwm_enable files which allow the fans to be controlled by writing a PWM value
+- pwm files. Those files hold the PWM value assigned to them
+- NULL if no fans could be detected
+*/
+psensor_fan *psensor_detectFans();
+
+/*
+Enable PWM fan control
+Requires full path to pwm enable file and a value, usually 1 or 0
+Returns 0 if the function is executed successfully if not it returns 1
+Example: int fn_stat = psensor_enable_fan_pwm("/sys/class/hwmon/hwmon4/pwm1_enable", 1);
+*/
+int psensor_enable_fan_pwm(const char *hwmnoDirPath, int v);
+
+/*
+Write a PWM value to the existing fan pwm files created by the kernel.
+Requires full path to the hardware directory + a PWM value (0 - 255 only!)
+Returns 0 if the function is executed successfully if not it returns 1
+Example: int fn_stat = psensor_fan_set_pwm("/sys/class/hwmon/hwmon4/pwm1", 230);
+*/
+int psensor_fan_set_pwm(const char * hwClassDir, int PWM);
+
+/*
+Get the last pwm value from hwmon sysfs
+Requires full path to pwm file
+Returns 0 by default and if it fails, if not it returns the last value of a PWM file
+Example int LastFanPwm = psensor_get_last_pwm("/sys/class/hwmon/hwmon4/pwm1");
+*/
+int psensor_get_last_pwm(const char * path);
+
+
+/*
+Test the speed of a fan by slowly increasing and decreasing the PWM value
+Requires the full path to the PWM file
+Returns 0 if the function is executed successfully if not it returns 1
+Example: int fn_stat = psensor_test_fan("/sys/class/hwmon/hwmon3/pwm1");
+*/
+int psensor_test_fan(const char * hwmonDir);
+
+#endif
