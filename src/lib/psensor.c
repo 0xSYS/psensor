@@ -1,0 +1,657 @@
+/*
+ * Copyright (C) 2010-2024 jeanfi@gmail.com, 0xSYS
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301 USA
+ */
+#include "include/psensor/plog.h"
+#include <stdlib.h>
+#include <string.h>
+
+#include <ctype.h>
+#include <dirent.h>
+#include <regex.h>
+
+#include <libintl.h>
+#include <locale.h>
+#define _(str) gettext(str)
+
+#include <stdio.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+#include "include/psensor/hdd.h"
+#include "include/psensor/pio.h"
+#include "include/psensor/psensor.h"
+#include "include/psensor/temperature.h"
+
+struct psensor *psensor_create(char *id, char *name, char *chip,
+                               unsigned int type, int values_max_length) {
+  struct psensor *psensor;
+
+  psensor = (struct psensor *)malloc(sizeof(struct psensor));
+
+  psensor->id = id;
+  psensor->name = name;
+  psensor->chip = chip;
+  psensor->sess_lowest = UNKNOWN_DBL_VALUE;
+  psensor->sess_highest = UNKNOWN_DBL_VALUE;
+
+  if (type & SENSOR_TYPE_PERCENT) {
+    psensor->min = 0;
+    psensor->max = 100;
+  } else {
+    psensor->min = UNKNOWN_DBL_VALUE;
+    psensor->max = UNKNOWN_DBL_VALUE;
+  }
+
+  psensor->type = type;
+
+  psensor->values_max_length = values_max_length;
+  psensor->measures = measures_dbl_create(values_max_length);
+
+  psensor->alarm_high_threshold = 0;
+  psensor->alarm_low_threshold = 0;
+
+  psensor->cb_alarm_raised = NULL;
+  psensor->cb_alarm_raised_data = NULL;
+  psensor->alarm_raised = 0;
+
+  psensor->provider_data = NULL;
+  psensor->provider_data_free_fct = &free;
+
+  return psensor;
+}
+
+void psensor_values_resize(struct psensor *s, int new_size) {
+  struct measure *new_ms, *cur_ms;
+  int cur_size;
+
+  cur_size = s->values_max_length;
+  cur_ms = s->measures;
+  new_ms = measures_dbl_create(new_size);
+
+  if (cur_ms) {
+    int i;
+
+    for (i = 0; i < new_size - 1 && i < cur_size - 1; i++)
+      measure_copy(&cur_ms[cur_size - i - 1], &new_ms[new_size - i - 1]);
+
+    measures_free(s->measures);
+  }
+
+  s->values_max_length = new_size;
+  s->measures = new_ms;
+}
+
+void psensor_free(struct psensor *s) {
+  if (!s)
+    return;
+
+  log_debug("Cleanup %s", s->id);
+
+  free(s->name);
+  free(s->id);
+
+  if (s->chip)
+    free(s->chip);
+
+  measures_free(s->measures);
+
+  if (s->provider_data && s->provider_data_free_fct)
+    s->provider_data_free_fct(s->provider_data);
+
+  free(s);
+}
+
+void psensor_list_free(struct psensor **sensors) {
+  struct psensor **sensor_cur;
+
+  if (sensors) {
+    sensor_cur = sensors;
+
+    while (*sensor_cur) {
+      psensor_free(*sensor_cur);
+
+      sensor_cur++;
+    }
+
+    free(sensors);
+
+    sensors = NULL;
+  }
+}
+
+int psensor_list_size(struct psensor **sensors) {
+  int size;
+  struct psensor **sensor_cur;
+
+  if (!sensors)
+    return 0;
+
+  size = 0;
+  sensor_cur = sensors;
+
+  while (*sensor_cur) {
+    size++;
+    sensor_cur++;
+  }
+  return size;
+}
+
+struct psensor **psensor_list_add(struct psensor **sensors,
+                                  struct psensor *sensor) {
+  int size;
+  struct psensor **result;
+
+  size = psensor_list_size(sensors);
+
+  result = malloc((size + 1 + 1) * sizeof(struct psensor *));
+
+  if (sensors)
+    memcpy(result, sensors, size * sizeof(struct psensor *));
+
+  result[size] = sensor;
+  result[size + 1] = NULL;
+
+  return result;
+}
+
+void psensor_list_append(struct psensor ***sensors, struct psensor *sensor) {
+  struct psensor **tmp;
+
+  if (!sensor)
+    return;
+
+  tmp = psensor_list_add(*sensors, sensor);
+
+  if (tmp != *sensors) {
+    free(*sensors);
+    *sensors = tmp;
+  }
+}
+
+struct psensor *psensor_list_get_by_id(struct psensor **sensors,
+                                       const char *id) {
+  struct psensor **sensors_cur = sensors;
+
+  while (*sensors_cur) {
+    if (!strcmp((*sensors_cur)->id, id))
+      return *sensors_cur;
+
+    sensors_cur++;
+  }
+
+  return NULL;
+}
+
+int is_temp_type(unsigned int type) { return type & SENSOR_TYPE_TEMP; }
+
+char *psensor_value_to_str(unsigned int type, double value, int use_celsius) {
+  char *str;
+  const char *unit;
+
+  /*
+   * should not be possible to exceed 20 characters with temp or
+   * rpm values the .x part is never displayed
+   */
+  str = malloc(20);
+
+  unit = psensor_type_to_unit_str(type, use_celsius);
+
+  if (is_temp_type(type) && !use_celsius)
+    value = celsius_to_fahrenheit(value);
+
+  sprintf(str, "%.0f%s", value, unit);
+
+  return str;
+}
+
+char *psensor_measure_to_str(const struct measure *m, unsigned int type,
+                             unsigned int use_celsius) {
+  return psensor_value_to_str(type, m->value, use_celsius);
+}
+
+void psensor_set_current_value(struct psensor *sensor, double value) {
+  struct timeval tv;
+
+  if (gettimeofday(&tv, NULL) != 0)
+    timerclear(&tv);
+
+  psensor_set_current_measure(sensor, value, tv);
+}
+
+void psensor_set_current_measure(struct psensor *s, double v,
+                                 struct timeval tv) {
+  memmove(s->measures, &s->measures[1],
+          (s->values_max_length - 1) * sizeof(struct measure));
+
+  s->measures[s->values_max_length - 1].value = v;
+  s->measures[s->values_max_length - 1].time = tv;
+
+  if (s->sess_lowest == UNKNOWN_DBL_VALUE || v < s->sess_lowest)
+    s->sess_lowest = v;
+
+  if (s->sess_highest == UNKNOWN_DBL_VALUE || v > s->sess_highest)
+    s->sess_highest = v;
+
+  if (v > s->alarm_high_threshold || v < s->alarm_low_threshold) {
+    if (!s->alarm_raised && s->cb_alarm_raised) {
+      s->alarm_raised = true;
+      s->cb_alarm_raised(s, s->cb_alarm_raised_data);
+    }
+  } else {
+    s->alarm_raised = false;
+  }
+}
+
+double psensor_get_current_value(const struct psensor *sensor) {
+  return sensor->measures[sensor->values_max_length - 1].value;
+}
+
+struct measure *psensor_get_current_measure(struct psensor *sensor) {
+  return &sensor->measures[sensor->values_max_length - 1];
+}
+
+/*
+ * Returns the minimal value of a given 'type' (SENSOR_TYPE_TEMP or
+ * SENSOR_TYPE_FAN)
+ */
+static double get_min_value(struct psensor **sensors, int type) {
+  double m = UNKNOWN_DBL_VALUE;
+  struct psensor **s = sensors;
+
+  while (*s) {
+    struct psensor *sensor = *s;
+
+    if (sensor->type & type) {
+      int i;
+      double t;
+
+      for (i = 0; i < sensor->values_max_length; i++) {
+        t = sensor->measures[i].value;
+
+        if (t == UNKNOWN_DBL_VALUE)
+          continue;
+
+        if (m == UNKNOWN_DBL_VALUE || t < m)
+          m = t;
+      }
+    }
+    s++;
+  }
+
+  return m;
+}
+
+/*
+ * Returns the maximal value of a given 'type' (SENSOR_TYPE_TEMP or
+ * SENSOR_TYPE_FAN)
+ */
+double get_max_value(struct psensor **sensors, int type) {
+  double m = UNKNOWN_DBL_VALUE;
+  struct psensor **s = sensors;
+
+  while (*s) {
+    struct psensor *sensor = *s;
+
+    if (sensor->type & type) {
+      int i;
+      double t;
+
+      for (i = 0; i < sensor->values_max_length; i++) {
+        t = sensor->measures[i].value;
+
+        if (t == UNKNOWN_DBL_VALUE)
+          continue;
+
+        if (m == UNKNOWN_DBL_VALUE || t > m)
+          m = t;
+      }
+    }
+    s++;
+  }
+
+  return m;
+}
+
+double get_min_temp(struct psensor **sensors) {
+  return get_min_value(sensors, SENSOR_TYPE_TEMP);
+}
+
+double get_min_rpm(struct psensor **sensors) {
+  return get_min_value(sensors, SENSOR_TYPE_FAN);
+}
+
+double get_max_rpm(struct psensor **sensors) {
+  return get_max_value(sensors, SENSOR_TYPE_FAN);
+}
+
+double get_max_temp(struct psensor **sensors) {
+  return get_max_value(sensors, SENSOR_TYPE_TEMP);
+}
+
+const char *psensor_type_to_str(unsigned int type) {
+  if (type & SENSOR_TYPE_NVCTRL) {
+    if (type & SENSOR_TYPE_TEMP)
+      return "Temperature";
+    else if (type & SENSOR_TYPE_GRAPHICS)
+      return "Graphics usage";
+    else if (type & SENSOR_TYPE_VIDEO)
+      return "Video usage";
+    else if (type & SENSOR_TYPE_MEMORY)
+      return "Memory usage";
+    else if (type & SENSOR_TYPE_PCIE)
+      return "PCIe usage";
+
+    return "NVIDIA GPU";
+  }
+
+  if (type & SENSOR_TYPE_ATIADL) {
+    if (type & SENSOR_TYPE_TEMP)
+      return "AMD GPU Temperature";
+    else if (type & SENSOR_TYPE_RPM)
+      return "AMD GPU Fan Speed";
+    /*else type & SENSOR_TYPE_USAGE */
+    return "AMD GPU Usage";
+  }
+
+  if ((type & SENSOR_TYPE_HDD_TEMP) == SENSOR_TYPE_HDD_TEMP)
+    return "HDD Temperature";
+
+  if ((type & SENSOR_TYPE_CPU_USAGE) == SENSOR_TYPE_CPU_USAGE)
+    return "CPU Usage";
+
+  if (type & SENSOR_TYPE_TEMP)
+    return "Temperature";
+
+  if (type & SENSOR_TYPE_RPM)
+    return "Fan";
+
+  if (type & SENSOR_TYPE_CPU)
+    return "CPU";
+
+  if (type & SENSOR_TYPE_REMOTE)
+    return "Remote";
+
+  if (type & SENSOR_TYPE_MEMORY)
+    return "Memory";
+
+  return "N/A";
+}
+
+const char *psensor_type_to_unit_str(unsigned int type, int use_celsius) {
+  if (is_temp_type(type)) {
+    if (use_celsius)
+      return "\302\260C";
+    return "\302\260F";
+  } else if (type & SENSOR_TYPE_RPM) {
+    return _("RPM");
+  } else if (type & SENSOR_TYPE_PERCENT) {
+    return _("%");
+  }
+  return _("N/A");
+}
+
+void psensor_log_measures(struct psensor **sensors) {
+  if (log_level == LOG_DEBUG) {
+    if (!sensors)
+      return;
+
+    while (*sensors) {
+      log_debug("Measure: %s %.2f", (*sensors)->name,
+                psensor_get_current_value(*sensors));
+
+      sensors++;
+    }
+  }
+}
+
+struct psensor **psensor_list_copy(struct psensor **sensors) {
+  struct psensor **result;
+  int n, i;
+
+  n = psensor_list_size(sensors);
+  result = malloc((n + 1) * sizeof(struct psensor *));
+  for (i = 0; i < n; i++)
+    result[i] = sensors[i];
+  result[n] = NULL;
+
+  return result;
+}
+
+char *psensor_current_value_to_str(const struct psensor *s,
+                                   unsigned int use_celsius) {
+  return psensor_value_to_str(s->type, psensor_get_current_value(s),
+                              use_celsius);
+}
+
+// MARK: New Stuff added
+
+int isFanInput(const char *filename)
+{
+  if (strncmp(filename, "fan", 3) == 0 && isdigit(filename[3]) && strcmp(filename + 4, "_input") == 0)
+  {
+    return 1;
+  }
+  return 0;
+}
+
+// Search for pwm<digit> and pwm<digit>_enable files
+void getPwmF(psensor_fan *list, const char *directory, int fan_number)
+{
+  char pwmFile[SMALL_BUF_SIZE];
+  char pwmEnableFile[SMALL_BUF_SIZE];
+  char pwmPath[SMALL_BUF_SIZE];
+  char pwmEnablePath[SMALL_BUF_SIZE];
+
+  snprintf(pwmFile, SMALL_BUF_SIZE, "pwm%d", fan_number);
+  snprintf(pwmEnableFile, SMALL_BUF_SIZE, "pwm%d_enable", fan_number);
+
+  snprintf(pwmPath, SMALL_BUF_SIZE, "%s/%s", directory, pwmFile);
+  snprintf(pwmEnablePath, SMALL_BUF_SIZE, "%s/%s", directory, pwmEnableFile);
+
+  if (access(pwmPath, F_OK) == 0)
+  {
+    list->pwmFiles[list->fanInputCount] = strdup(pwmPath);
+  }
+  else
+  {
+    list->pwmFiles[list->fanInputCount] = NULL;
+  }
+
+  if (access(pwmEnablePath, F_OK) == 0)
+  {
+    list->pwmEnableFiles[list->fanInputCount] = strdup(pwmEnablePath);
+  }
+  else
+  {
+    list->pwmEnableFiles[list->fanInputCount] = NULL;
+  }
+  list->fanInputCount++;
+}
+
+// The actual fan detection function
+psensor_fan *psensor_detectFans()
+{
+  DIR *dir = opendir("/sys/class/hwmon");
+  struct dirent *entry;
+
+  if (!dir)
+  {
+    log_err("Failed to open sysfs directory!");
+    return NULL;
+  }
+
+  psensor_fan *list = malloc(sizeof(psensor_fan));
+  list->pwmFiles = NULL;
+  list->pwmEnableFiles = NULL;
+  list->fanInputCount = 0;
+
+  // Read all available directories
+  while ((entry = readdir(dir)) != NULL)
+  {
+    // Skip                    this                           and that
+    if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+      continue;
+
+    char full_path[SMALL_BUF_SIZE];
+    snprintf(full_path, sizeof(full_path), "%s/%s", "/sys/class/hwmon", entry->d_name);
+
+    struct stat statbuf;
+    if (stat(full_path, &statbuf) == 0 && S_ISDIR(statbuf.st_mode))
+    {
+      DIR *subdir = opendir(full_path);
+      struct dirent *subdir_entry;
+
+      // Read all subdirectories
+      while ((subdir_entry = readdir(subdir)) != NULL)
+      {
+        // Skip                          this and that again
+        if (strcmp(subdir_entry->d_name, ".") == 0 || strcmp(subdir_entry->d_name, "..") == 0)
+          continue;
+
+        // Check if there's any fan<digit>_input file existing in any of the
+        // hwon directories
+        if (isFanInput(subdir_entry->d_name))
+        {
+          int fan_number = subdir_entry->d_name[3] - '0';
+
+          list->pwmFiles = realloc(list->pwmFiles,(list->fanInputCount + 1) * sizeof(char *));
+          list->pwmEnableFiles = realloc(list->pwmEnableFiles, (list->fanInputCount + 1) * sizeof(char *));
+
+          if (!list->pwmFiles || !list->pwmEnableFiles)
+          {
+            log_err("Failed to re-allocate memory for storing pwm files!");
+            exit(EXIT_FAILURE);
+          }
+          getPwmF(list, full_path, fan_number);
+        }
+      }
+      closedir(subdir);
+    }
+  }
+
+  closedir(dir);
+
+  // Return NULL if no fans exist
+  if (list->fanInputCount == 0)
+  {
+    free(list);
+    return NULL;
+  }
+
+  return list;
+}
+
+int psensor_enable_fan_pwm(const char *hwmnoDirPath, int v)
+{
+  FILE *pwm_enable;
+
+  pwm_enable = fopen(hwmnoDirPath, "w");
+
+  if (pwm_enable == NULL)
+  {
+    log_err("Failed to enable fan PWM at \"%s\"", hwmnoDirPath);
+    return 1;
+  }
+
+  if (v > 1)
+    log_warn("Fan PWM enable value is larger than expected.");
+
+  fprintf(pwm_enable, "%d", v);
+
+  fclose(pwm_enable);
+  return 0;
+}
+
+int psensor_fan_set_pwm(const char *hwClassDir, int PWM)
+{
+  FILE *pwm_ptr;
+
+  pwm_ptr = fopen(hwClassDir, "w");
+
+  if (pwm_ptr == NULL)
+  {
+    log_err("Failed to write to %s", hwClassDir);
+    return 1;
+  }
+  else
+  {
+    if (PWM > 255 || PWM < 0)
+    {
+      log_err("Invalid PWM value: %d", PWM);
+      return 1;
+    }
+    else
+      fprintf(pwm_ptr, "%d", PWM);
+  }
+  fclose(pwm_ptr);
+  return 0;
+}
+
+int psensor_get_last_pwm(const char *path)
+{
+  FILE *pwmFile;
+  char content[10];
+  int Pwm;
+
+  pwmFile = fopen(path, "r");
+
+  if (pwmFile == NULL)
+  {
+    log_err("Failed to open %s for reading last pwm value!", path);
+    return 0;
+  }
+  else
+  {
+    fgets(content, 10, pwmFile);
+    Pwm = atoi(content);
+    return Pwm;
+  }
+
+  return 0;
+}
+
+void clear_previous_line() {
+    printf("\033[A");  // Move cursor up one line
+    printf("\033[2K"); // Clear the entire line
+    printf("\r");      // Move cursor to beginning of the line
+    fflush(stdout);
+}
+
+
+
+int psensor_test_fan(const char *hwmonDir) {
+  for(int i = 0; i < 255; i++)
+  {
+    psensor_fan_set_pwm(hwmonDir, i);
+    //clear_previous_line();
+    //log_printf(LOG_INFO, _("\033[38;5;33m[FAN TEST]\033[0m - Increment pwm: %d at ""\"\033[38;5;14m%s\033[0m\""), i, hwmonDir);
+    log_printf(LOG_INFO, "\033[38;5;33m[FAN TEST]\033[0m - Increment pwm: %d at ""\"\033[38;5;14m%s\033[0m\"", i, hwmonDir);
+    clear_previous_line();
+    usleep(50 * 1000);
+  }
+  sleep(4);
+  for(int i = 255; i >= 0; i--)
+  {
+    psensor_fan_set_pwm(hwmonDir, i);
+    log_printf(LOG_INFO, "\033[38;5;33m[FAN TEST]\033[0m - Decrement pwm: %d at ""\"\033[38;5;14m%s\033[0m\"", i, hwmonDir);
+    clear_previous_line();
+    usleep(50 * 1000);
+  }
+  return 0;
+  sleep(4);
+}
