@@ -5,20 +5,13 @@ The library contains functions used for reading sensor values, scaning sysfs dir
 
 # API
 
-
-
-
-
-
-
-
 - [amd.h](#amd.h)
 - [color.h](#color.h)
 - [hdd.h](#hdd.h)
 - [lmsensor.h](#lmsensor.h)
 - [measure.h](#measure.h)
 - [nvidia.h](#nvidia.h)
-- [pgtop2.h](#pgtop2.h)
+- [pgtop.h](#pgtop.h)
 - [pio.h](#pio.h)
 - [plog.h](#plog.h)
 - [pmutex.h](#pmutex.h)
@@ -29,6 +22,33 @@ The library contains functions used for reading sensor values, scaning sysfs dir
 - [slog.h](#slog.h)
 - [temperature.h](#temperature.h)
 - [url.h](#url.h)
+
+# How to build
+
+## installation requirements
+
+Fedora:
+`sudo dnf install meson ninja-build`
+
+## Dependencies
+```
+sudo dnf install json-c-devel glib2-devel libgtop2-devel libudisks2-devel libatasmart-devel
+```
+
+## Configuring build
+By default the library build is static but you can also build shared library (build_type: shared, static)
+
+In the source directory:
+```
+cd lib
+meson setup builddir
+```
+
+or if you need shared library:
+`meson setup builddir -Dbuild_type=shared`
+
+## Building the library
+`meson compile -C builddir`
 
 <a id="amd.h"></a>
 ### amd.h
@@ -114,7 +134,7 @@ void gtop2_psensor_list_update(struct psensor **);
 void gtop2_psensor_list_append(struct psensor ***, int);
 ```
 
-<a id="pio.h"></a>
+<a ="pio.h"></a>
 ### pio.h
 ```c
 #define P_IO_VER 6
