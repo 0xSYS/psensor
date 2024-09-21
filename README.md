@@ -28,3 +28,63 @@ Psensor is a graphical hardware monitoring application for Linux.
 - [Core library](src/lib/README.md)
 - [GUI Utility](src/GUI/README.md)
 - [Web Server](src/server/README.md)
+
+# Building fromm source
+
+## Installation requirements:
+
+### Meson build
+`sudo dnf install meson ninja-build`
+
+### Dependencies (For all 3 components)
+```
+sudo dnf install gtk3-devel \
+libnotify-devel \
+libcurl-devel \
+libunity-devel \
+libappindicator-devel \
+pango-devel \
+cairo-devel \
+gdk-pixbuf2-devel \
+atk-devel \
+ghc-gi-freetype2-devel \
+harfbuzz-devel \
+glib-devel \
+dbus-devel \
+fribidi-devel \
+libxml2-devel \
+pixman-devel \
+libpng-devel \
+libblkid-devel \
+sysprof-capture-devel \
+p11-kit-devel \
+lm_sensors-devel \
+json-c-devel \
+glib2-devel \
+libgtop2-devel \
+libudisks2-devel \
+libatasmart-devel \
+```
+
+## Step 2
+
+```
+git clone https://github.com/0xSYS/psensor/tree/meson-build-syst?tab=readme-ov-file
+```
+
+Buldding the core library first is an optional step as I added the even the sources to the library.
+So the library and the utilities (GUI and web server) will build at the same time
+
+## Building GUI utility
+```
+cd src/GUI
+meson setup builddir
+meson compile -C build dir
+```
+
+## Building the web server utility
+```
+cd src/server
+meson setup builddir
+meson compile -C builddir
+```
