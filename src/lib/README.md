@@ -18,7 +18,7 @@ The library contains functions used for reading sensor values, scaning sysfs dir
 - [lmsensor.h](#lmsensor.h)
 - [measure.h](#measure.h)
 - [nvidia.h](#nvidia.h)
-- [pgtop.h](#pgtop.h)
+- [pgtop2.h](#pgtop2.h)
 - [pio.h](#pio.h)
 - [plog.h](#plog.h)
 - [pmutex.h](#pmutex.h)
