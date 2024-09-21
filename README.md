@@ -64,6 +64,7 @@ glib2-devel \
 libgtop2-devel \
 libudisks2-devel \
 libatasmart-devel \
+libXNVCtrl-devel \
 ```
 
 ## Step 2
