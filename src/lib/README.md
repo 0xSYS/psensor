@@ -32,7 +32,7 @@ Fedora:
 
 ## Dependencies
 ```
-sudo dnf install json-c-devel glib2-devel libgtop2-devel libudisks2-devel libatasmart-devel
+sudo dnf install json-c-devel glib2-devel libgtop2-devel libudisks2-devel libatasmart-devel libXNVCtrl-devel
 ```
 
 ## Configuring build
