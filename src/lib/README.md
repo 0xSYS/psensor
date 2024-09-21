@@ -464,7 +464,7 @@ bool slog_activate(const char *, struct psensor **, pthread_mutex_t *, int s);
 void slog_close(void);
 ```
 
-<a id="temperature"></a>
+<a id="temperature.h"></a>
 ### temperature.h
 ```c
 double celsius_to_fahrenheit(double c);
