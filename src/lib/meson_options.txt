@@ -1,0 +1,1 @@
+option('build_type', type : 'combo', choices : ['static', 'shared',], value : 'static', description : 'Library type')
