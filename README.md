@@ -73,14 +73,14 @@ libXNVCtrl-devel \
 git clone https://github.com/0xSYS/psensor/tree/meson-build-syst?tab=readme-ov-file
 ```
 
-Buldding the core library first is an optional step as I added the even the sources to the library.
-So the library and the utilities (GUI and web server) will build at the same time
+Bulding the core library first is an optional step as I added the even the sources to the library.
+So the library and the utilities (GUI and web server) will build at the same time and link together
 
 ## Building GUI utility
 ```
 cd src/GUI
 meson setup builddir
-meson compile -C build dir
+meson compile -C builddir
 ```
 
 ## Building the web server utility
