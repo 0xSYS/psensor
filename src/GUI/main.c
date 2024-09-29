@@ -43,6 +43,7 @@
 #include <psensor/pgtop2.h>
 #include <psensor/pmutex.h>
 #include <psensor/psensor.h>
+#include <psensor/precord.h>
 #include <psensor/pio.h>
 #include <psensor/pudisks2.h>
 #include "rsensor.h"
@@ -128,13 +129,15 @@ static void tests()
 
 	//printTest();
 
-	printf("Loading...");
-    fflush(stdout); // Ensures "Loading..." is printed immediately
-
-    sleep(2); // Simulate some processing delay
-
-    printf("\rCompleted!   \n");  // \r brings the cursor to the start of the line
-    fflush(stdout);  // Force immediate output
+//	printf("Loading...");
+//    fflush(stdout); // Ensures "Loading..." is printed immediately
+//
+//    sleep(2); // Simulate some processing delay
+//
+//    printf("\rCompleted!   \n");  // \r brings the cursor to the start of the line
+//    fflush(stdout);  // Force immediate output
+//
+  psr_init("CMPTest3.cmp");
 }
 
 /*
