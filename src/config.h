@@ -151,3 +151,4 @@
 
 #define PSENSOR_DESKTOP_FILE "psensor.desktop"
 #define DATADIR "/usr/share/local/"
+#define DEFAULT_WWW_DIR "/usr/share/psensor/www"
