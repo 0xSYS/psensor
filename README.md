@@ -64,7 +64,6 @@ glib2-devel \
 libgtop2-devel \
 libudisks2-devel \
 libatasmart-devel \
-libXNVCtrl-devel \
 ```
 
 ## Step 2
@@ -73,14 +72,14 @@ libXNVCtrl-devel \
 git clone https://github.com/0xSYS/psensor/tree/meson-build-syst?tab=readme-ov-file
 ```
 
-Building the core library first is an optional step as I added the even the sources to the library.
-So the library and the utilities (GUI and web server) will build at the same time and link together
+Buldding the core library first is an optional step as I added the even the sources to the library.
+So the library and the utilities (GUI and web server) will build at the same time
 
 ## Building GUI utility
 ```
 cd src/GUI
 meson setup builddir
-meson compile -C builddir
+meson compile -C build dir
 ```
 
 ## Building the web server utility
@@ -89,3 +88,8 @@ cd src/server
 meson setup builddir
 meson compile -C builddir
 ```
+
+> [!NOTE]
+> Some features of psensor can be enabled or disabled before setting up the
+> build directories by changing the values of [config.h](src/config.h)
+> ### The config is used by all 3 components
