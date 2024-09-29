@@ -29,12 +29,14 @@ sources = \
   'pudisks2.c', \
   'slog.c', \
   'temperature.c', \
-  'url.c'\
+  'url.c', \
+  'precord.c', \
+  'ext_lib/CMessagePack/cmp.c' \
 ]
 
 buildType = get_option('build_type')
 
-#By default the build if the core library is static
+#By default the build of the core library is static
 if buildType == 'static'
   static_library('psensor', sources, dependencies : deps, link_args : ['-lXNVCtrl', '-lsensors'])
 elif buildType == 'shared'
