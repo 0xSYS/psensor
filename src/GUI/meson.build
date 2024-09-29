@@ -28,7 +28,9 @@ psensorLibSrc = \
   '../lib/pudisks2.c', \
   '../lib/slog.c', \
   '../lib/temperature.c', \
-  '../lib/url.c'\
+  '../lib/url.c', \
+  '../lib/ext_lib/CMessagePack/cmp.c', \
+  '../lib/precord.c' \
 ]
 
 psensorGuiDeps = \
@@ -79,7 +81,7 @@ psensorGuiSrc = \
   'ui_sensorpref.c', \
   'ui_status.c', \
   'ui_unity.c', \
-  'main.c'\
+  'main.c' \
 ]
 
 psensorLib = static_library('psensor', psensorLibSrc, dependencies : psensorLibDeps)
