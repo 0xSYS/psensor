@@ -86,6 +86,12 @@ meson setup builddir
 meson compile -C build dir
 ```
 
+> [!IMPORTANT]
+> Before executing the binary you need to run `sudo bash scripts/install-resources`. \
+> - Copies all glade files needed by psensor in `/usr/local/share/psensor`
+> - Copies the psensor.gschema.xml file to `/usr/share/glib-2.0/schemas`
+> - Updates gschemas.compiled file
+
 ## Building the web server utility
 ```
 cd src/server
