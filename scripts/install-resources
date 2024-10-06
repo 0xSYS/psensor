@@ -1,0 +1,68 @@
+#! bin/bash
+echo "==== [Resources installer] ===="
+
+G_SCHEMA_SETTINGS="/usr/share/glib-2.0/schemas/psensor.gschema.xml"
+
+PSENSOR_GLADE="/usr/local/share/psensor/psensor.glade"
+PSENSOR_PREF_GLADE="/usr/local/share/psensor/psensor-pref.glade"
+PSENSOR_APP_INDICATOR_GLADE="/usr/local/share/psensor/psensor-appindicator.glade"
+PSENSOR_FAN_CONTROLLER_GLADE="/usr/local/share/psensor/psensor-fan-controller.glade"
+
+
+if [ "$EUID" -ne 0 ]
+  then echo -e "\e[38;5;196mThis script requires to run as root!\e[0m"
+  exit
+fi
+
+
+echo
+echo "Checking for files..."
+
+if test -f "$G_SCHEMA_SETTINGS"
+then 
+    echo -e "\e[38;5;83m[ $G_SCHEMA_SETTINGS ] Found!\e[0m"
+else
+    echo -e "\e[38;5;202m[ $G_SCHEMA_SETTINGS ] Not found!!!!\e[0m"
+    cp "../src/GUI/psensor.gschema.xml" /usr/share/glib-2.0/schemas
+    glib-compile-schemas /usr/share/glib-2.0/schemas/
+fi
+
+if test -f "/usr/local/share/psensor"
+then
+    echo -e "\e[38;5;83mpsensor directory found!\e[0m"
+else
+    echo -e "\e[38;5;202mpsensor directory not found!\e[0m"
+    mkdir /usr/local/share/psensor
+fi
+
+if test -f "$PSENSOR_GLADE"
+then 
+    echo -e "\e[38;5;83m[ $PSENSOR_GLADE ] Found!\e[0m"
+else
+    echo -e "\e[38;5;202m[ $PSENSOR_GLADE ] Not found!!!\e[0m"
+    cp "../src/GUI/glade/psensor.glade" /usr/local/share/psensor
+fi
+
+if test -f "$PSENSOR_PREF_GLADE"
+then 
+    echo -e "\e[38;5;83m[ $PSENSOR_PREF_GLADE ] Found!\e[0m"
+else
+    echo -e "\e[38;5;202m[ $PSENSOR_PREF_GLADE ] Not found!!!\e[0m"
+    cp "../src/GUI/glade/psensor-pref.glade" /usr/local/share/psensor
+fi
+
+if test -f "$PSENSOR_APP_INDICATOR_GLADE"
+then 
+    echo -e "\e[38;5;83m[ $PSENSOR_APP_INDICATOR_GLADE ] Found!\e[0m"
+else
+    echo -e "\e[38;5;202m[ $PSENSOR_APP_INDICATOR_GLADE ] Not found!!!\e[0m"
+    cp "../src/GUI/glade/psensor-appindicator.glade" /usr/local/share/psensor
+fi
+
+if test -f "$PSENSOR_FAN_CONTROLLER_GLADE"
+then 
+    echo -e "\e[38;5;83m[ $PSENSOR_FAN_CONTROLLER_GLADE ] Found!\e[0m"
+else
+    echo -e "\e[38;5;202m[ $PSENSOR_FAN_CONTROLLER_GLADE ] Not found!!!\e[0m"
+    cp "../src/GUI/glade/psensor-fan-controller.glade" /usr/local/share/psensor
+fi
