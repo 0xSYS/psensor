@@ -31,9 +31,6 @@ Psensor is a graphical hardware monitoring application for Linux.
 
 # Building fromm source
 
-> [!WARNING]
-> The GUI utility will throw an error about missing gschema settings !!! \
-> This happens on ceratain distros like debian / ubuntu and some other ones.
 
 ## Installation requirements:
 
