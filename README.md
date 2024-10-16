@@ -112,7 +112,7 @@ Psensor is a graphical hardware monitoring application for Linux.
 |                 	| libxml2                     	| -                    	|                                                                      	|
 |                 	| pixman                      	| -                    	|                                                                      	|
 |                 	| libpng                      	| -                    	|                                                                      	|
-|                 	| libblkid (Unknown)          	| -                    	|                                                                      	|
+|                 	| util-linux          	| -                    	|                                                                      	|
 |                 	| libsysprof-capture          	| -                    	|                                                                      	|
 |                 	| libp11-kit                  	| -                    	|                                                                      	|
 |                 	| lm_sensors                  	| -                    	|                                                                      	|
