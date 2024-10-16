@@ -97,7 +97,7 @@ Psensor is a graphical hardware monitoring application for Linux.
 |                 	| libxnvctrl-dev              	| libxnvctrl0          	|                                                                      	|
 | Arch linux      	| gtk3                        	| -                    	|                                                                      	|
 |                 	| libnotify                   	| -                    	|                                                                      	|
-|                 	| libcurl (Failed to install) 	| -                    	|                                                                      	|
+|                 	| curl  	| -                    	|                                                                      	|
 |                 	| libunity                    	| -                    	|                                                                      	|
 |                 	| libappindicator-gtk3        	| -                    	|                                                                      	|
 |                 	| pango                       	| -                    	|                                                                      	|
