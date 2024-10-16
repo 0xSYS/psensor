@@ -97,7 +97,7 @@ Psensor is a graphical hardware monitoring application for Linux.
 |                 	| libxnvctrl-dev              	| libxnvctrl0          	|                                                                      	|
 | Arch linux      	| gtk3                        	| -                    	|                                                                      	|
 |                 	| libnotify                   	| -                    	|                                                                      	|
-|                 	| curl  	| -                    	|                                                                      	|
+|                 	| libcurl (Failed to install) 	| -                    	|                                                                      	|
 |                 	| libunity                    	| -                    	|                                                                      	|
 |                 	| libappindicator-gtk3        	| -                    	|                                                                      	|
 |                 	| pango                       	| -                    	|                                                                      	|
@@ -112,7 +112,7 @@ Psensor is a graphical hardware monitoring application for Linux.
 |                 	| libxml2                     	| -                    	|                                                                      	|
 |                 	| pixman                      	| -                    	|                                                                      	|
 |                 	| libpng                      	| -                    	|                                                                      	|
-|                 	| util-linux          	| -                    	|                                                                      	|
+|                 	| libblkid (Unknown)          	| -                    	|                                                                      	|
 |                 	| libsysprof-capture          	| -                    	|                                                                      	|
 |                 	| libp11-kit                  	| -                    	|                                                                      	|
 |                 	| lm_sensors                  	| -                    	|                                                                      	|
@@ -150,14 +150,14 @@ json-c-devel \
 glib2-devel \
 libgtop2-devel \
 libudisks2-devel \
-libatasmart-devel \
+libatasmart-devel
 ```
 
 Debian / Ubuntu:
 ```
 sudo apt update
 sudo apt upgrade
-sudo apt install libglibgtk-3-dev \
+sudo apt install libgtk-3-dev \
 libnotify-dev \
 libcurl4-openssl-dev \
 libunity-dev \
@@ -174,7 +174,7 @@ libfribidi-dev \
 libxml2-dev \
 libpixman-1-dev \
 libpng-dev \
-libblkid-devel \
+libblkid-dev \
 libsysprof-4-dev \
 libp11-kit-dev \
 libsensors-dev \
@@ -183,7 +183,38 @@ libglib2.0-dev \
 libgtop2-dev \
 libudisks2-dev \
 libatasmart-dev \
-libxnvctrl-dev \
+libxnvctrl-dev
+```
+
+Arch Linux:
+```
+sudo pacman -Syu
+sudo pacman -Sy gtk3 \
+libnotify \
+curl \
+libunity \
+libappindicator-gtk3 \
+pango \
+cairo \
+gdk-pixbuf2 \
+at-spi2-core \
+freetype2 \
+harfbuzz \
+glib2 \
+dbus \
+fribidi \
+libxml2 \
+pixman \
+libpng \
+util-linux \
+libsysprof-capture \
+libp11-kit \
+lm_sensors \
+json-c \
+glib2 \
+libgtop \
+udisks2 \
+libatasmart
 ```
 
 ## Step 2
