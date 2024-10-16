@@ -125,6 +125,7 @@ Psensor is a graphical hardware monitoring application for Linux.
 
 Fedora:
 ```
+sudo dnf update
 sudo dnf install gtk3-devel \
 libnotify-devel \
 libcurl-devel \
