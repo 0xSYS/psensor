@@ -70,19 +70,19 @@ static void vlogf(int lvl, const char *fct, const char *fmt, va_list ap)
 
 	switch (lvl) {
 	case LOG_WARN:
-		lvl_str = "\033[38;5;214m[WARN]\033[0m";
+		lvl_str = "[ \033[38;5;214mWARN\033[0m ]";
 		break;
 	case LOG_ERR:
-		lvl_str = "\033[38;5;196m[ERR]\033[0m";
+		lvl_str = "[ \033[38;5;196mERR\033[0m ]";
 		break;
 	case LOG_DEBUG:
-		lvl_str = "\033[38;5;145m[DEBUG]\033[0m";
+		lvl_str = "[ DEBUG ]";
 		break;
 	case LOG_INFO:
-		lvl_str = "\r\033[38;5;50m[INFO]\033[0m";
+		lvl_str = "\r[ \300[38;5;50mINFO\033[0m ]";
 		break;
 	default:
-		lvl_str = "[??]";
+		lvl_str = "[ -- ]";
 	}
 
 	t = get_current_ISO8601_time();
