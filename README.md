@@ -221,7 +221,7 @@ libatasmart
 ## Step 2
 
 ```
-git clone https://github.com/0xSYS/psensor/tree/meson-build-syst?tab=readme-ov-file
+git clone -b meson-build-syst https://github.com/0xSYS/psensor
 ```
 
 Buldding the core library first is an optional step as I added the even the sources to the library.
