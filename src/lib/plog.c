@@ -69,7 +69,7 @@ static void vlogf(int lvl, const char *fct, const char *fmt, va_list ap)
 	buffer[LOG_BUFFER] = '\0';
 
 	switch (lvl) {
-		case LOG_WARN:
+	case LOG_WARN:
 		lvl_str = "[ \033[38;5;214mWARN\033[0m ]";
 		break;
 	case LOG_ERR:
@@ -92,9 +92,9 @@ static void vlogf(int lvl, const char *fct, const char *fmt, va_list ap)
 	if (file && lvl <= log_level) {
 		if (fct)
 			fprintf(file,
-				"[%s] %s %s(): %s\n", t, lvl_str, fct, buffer);
+				"[ %s ] %s %s(): %s\n", t, lvl_str, fct, buffer);
 		else
-			fprintf(file, "[%s] %s %s\n", t, lvl_str, buffer);
+			fprintf(file, "[ %s ] %s %s\n", t, lvl_str, buffer);
 		fflush(file);
 	} else {
 		t = NULL;
@@ -108,9 +108,9 @@ static void vlogf(int lvl, const char *fct, const char *fmt, va_list ap)
 
 		if (fct)
 			fprintf(file,
-				"[%s] %s %s(): %s\n", t, lvl_str, fct, buffer);
+				"[ %s ] %s %s(): %s\n", t, lvl_str, fct, buffer);
 		else
-			fprintf(stdf, "\r[%s] %s %s\n", t, lvl_str, buffer);
+			fprintf(stdf, "\r[ %s ] %s %s\n", t, lvl_str, buffer);
 	}
 
 	free(t);
