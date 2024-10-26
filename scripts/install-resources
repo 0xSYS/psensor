@@ -7,6 +7,7 @@ PSENSOR_GLADE="/usr/local/share/psensor/psensor.glade"
 PSENSOR_PREF_GLADE="/usr/local/share/psensor/psensor-pref.glade"
 PSENSOR_APP_INDICATOR_GLADE="/usr/local/share/psensor/psensor-appindicator.glade"
 PSENSOR_FAN_CONTROLLER_GLADE="/usr/local/share/psensor/psensor-fan-controller.glade"
+PSENSOR_EDIT_GLADE="/usr/local/share/psensor/sensor-edit.glade"
 
 
 if [ "$EUID" -ne 0 ]
@@ -65,4 +66,12 @@ then
 else
     echo -e "\e[38;5;202m[ $PSENSOR_FAN_CONTROLLER_GLADE ] Not found!!!\e[0m"
     cp "../src/GUI/glade/psensor-fan-controller.glade" /usr/local/share/psensor
+fi
+
+if test -f "$PSENSOR_EDIT_GLADE"
+then 
+    echo -e "\e[38;5;83m[ $PSENSOR_EDIT_GLADE ] Found!\e[0m"
+else
+    echo -e "\e[38;5;202m[ $PSENSOR_EDIT_GLADE ] Not found!!!\e[0m"
+    cp "../src/GUI/glade/sensor-edit.glade" /usr/local/share/psensor
 fi
