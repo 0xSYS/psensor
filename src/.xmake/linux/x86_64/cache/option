@@ -1,0 +1,16 @@
+{
+    ["static-lib"] = {
+        description = "Build the psensor library as static",
+        __sourceinfo_showmenu = { },
+        showmenu = true,
+        default = true,
+        __sourceinfo_default = { },
+        __scriptdir = "/home/andre/disks/1_TB_1/Programing/psensor/src",
+        __sourceinfo_description = {
+            ["Build the psensor library as static"] = {
+                file = "./xmake.lua",
+                line = 51
+            }
+        }
+    }
+}
