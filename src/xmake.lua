@@ -1,4 +1,4 @@
-add_rules("mode.debug", "mode.release")
+add_rules("mode.debug", "mode.release", "plugin.compile_commands.autoupdate")
 
 
 
@@ -85,8 +85,10 @@ target("libpsensor")
     add_files("lib/*.c")
 
 
+
+-- GUI
     target("psensor")
-        set_default(false)
+        -- set_default(false)
         set_kind("binary")
 
 
@@ -96,13 +98,29 @@ target("libpsensor")
             "new-gui/ext_deps/nuklear"
         )
         add_linkdirs("lib/build/linux/x64/release") -- Temporarry
+        add_packages(
+            "libxcb",
+            "cairo",
+            "xcb",
+            "xcb-util",
+            "xcb-keysyms",
+            "xkbcommon",
+            "xkbcommon-x11",
+            "freetype2"
+        )
 
-        add_links("psensor")
+        -- add_links("psensor")
 
         add_files(
           "mew-gui/ext_deps/cJSON/*.c",
-          "new-gui/UI/*.c",
-          "new-gui/*.c"
+          "new-gui/*.c",
+          "new-gui/UI/*.c"
         )
+
+
+        after_build(function (target)
+        -- Copy the assets and the css theme next to the build directory
+        os.cp("../assets/Liter-Regular.ttf", target:targetdir())
+    end)
 
         

@@ -2,7 +2,8 @@
 Nuklear defs here...
 */
 
-
+#ifndef NK_DEFS_C
+#define NK_DEFS_C
 
 #define NK_INCLUDE_FIXED_TYPES
 #define NK_INCLUDE_STANDARD_IO
@@ -20,3 +21,7 @@ Nuklear defs here...
 
 
 #include <nuklear.h>
+
+
+
+#endif

@@ -1,0 +1,116 @@
+[
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-Inew-gui/ext_deps/nuklear/backends", "-Inew-gui/ext_deps/nuklear", "-I", "/usr/include/cairo", "-I", "/usr/include/pixman-1", "-I", "/usr/include/freetype2", "-I", "/usr/include/libpng16", "-I", "/usr/include/harfbuzz", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor/linux/x86_64/release/new-gui/main.c.o", "new-gui/main.c"],
+  "file": "new-gui/main.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-Inew-gui/ext_deps/nuklear/backends", "-Inew-gui/ext_deps/nuklear", "-I", "/usr/include/cairo", "-I", "/usr/include/pixman-1", "-I", "/usr/include/freetype2", "-I", "/usr/include/libpng16", "-I", "/usr/include/harfbuzz", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor/linux/x86_64/release/new-gui/UI/nk_defs.c.o", "new-gui/UI/nk_defs.c"],
+  "file": "new-gui/UI/nk_defs.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-Inew-gui/ext_deps/nuklear/backends", "-Inew-gui/ext_deps/nuklear", "-I", "/usr/include/cairo", "-I", "/usr/include/pixman-1", "-I", "/usr/include/freetype2", "-I", "/usr/include/libpng16", "-I", "/usr/include/harfbuzz", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor/linux/x86_64/release/new-gui/UI/ui_main.c.o", "new-gui/UI/ui_main.c"],
+  "file": "new-gui/UI/ui_main.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-Inew-gui/ext_deps/nuklear/backends", "-Inew-gui/ext_deps/nuklear", "-I", "/usr/include/cairo", "-I", "/usr/include/pixman-1", "-I", "/usr/include/freetype2", "-I", "/usr/include/libpng16", "-I", "/usr/include/harfbuzz", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor/linux/x86_64/release/new-gui/UI/style.c.o", "new-gui/UI/style.c"],
+  "file": "new-gui/UI/style.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/psensor_json.c.o", "lib/psensor_json.c"],
+  "file": "lib/psensor_json.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/measure.c.o", "lib/measure.c"],
+  "file": "lib/measure.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/precord.c.o", "lib/precord.c"],
+  "file": "lib/precord.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/amd.c.o", "lib/amd.c"],
+  "file": "lib/amd.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/color.c.o", "lib/color.c"],
+  "file": "lib/color.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/plog.c.o", "lib/plog.c"],
+  "file": "lib/plog.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/lmsensor.c.o", "lib/lmsensor.c"],
+  "file": "lib/lmsensor.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/pudisks2.c.o", "lib/pudisks2.c"],
+  "file": "lib/pudisks2.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/hdd_atasmart.c.o", "lib/hdd_atasmart.c"],
+  "file": "lib/hdd_atasmart.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/nvidia.c.o", "lib/nvidia.c"],
+  "file": "lib/nvidia.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/temperature.c.o", "lib/temperature.c"],
+  "file": "lib/temperature.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/pio.c.o", "lib/pio.c"],
+  "file": "lib/pio.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/pgtop2.c.o", "lib/pgtop2.c"],
+  "file": "lib/pgtop2.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/hdd_hddtemp.c.o", "lib/hdd_hddtemp.c"],
+  "file": "lib/hdd_hddtemp.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/psensor.c.o", "lib/psensor.c"],
+  "file": "lib/psensor.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/slog.c.o", "lib/slog.c"],
+  "file": "lib/slog.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/pmutex.c.o", "lib/pmutex.c"],
+  "file": "lib/pmutex.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/ptime.c.o", "lib/ptime.c"],
+  "file": "lib/ptime.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/libpsensor/linux/x86_64/release/lib/url.c.o", "lib/url.c"],
+  "file": "lib/url.c"
+}]
