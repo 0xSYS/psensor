@@ -28,7 +28,7 @@
 
 #include <psensor/psensor_json.h>
 #include "rsensor.h"
-#include <server/server.h>
+#include <server.h>
 #include <psensor/url.h>
 
 #define is_error(ptr) (ptr == NULL)

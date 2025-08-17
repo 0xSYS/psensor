@@ -85,12 +85,12 @@ void ui_main()
             //i++;
             //printf("Window resized: %d\n", i);
             // Always keep the rendering surface sized as the window
-            printf("Window size: %d x %d\n", xcb_ctx->width, xcb_ctx->height);
+            //printf("Window size: %d x %d\n", xcb_ctx->width, xcb_ctx->height);
             nk_xcb_resize_cairo_surface(xcb_ctx, nk_cairo_surface(cairo_ctx));
         }
 
 
- //#ifdef UI_DEVEL
+ #ifdef UI_DEVEL
         if(nk_begin(ctx, "[Dev] - Demo", nk_rect(1, 1, xcb_ctx->width, xcb_ctx->height), NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
         {
             //
@@ -126,7 +126,9 @@ void ui_main()
         {
             break;
         }
-//#endif
+#endif
+
+       render_main_window(ctx);
 
 
        nk_cairo_render(cairo_ctx, ctx);
