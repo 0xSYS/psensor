@@ -93,6 +93,7 @@ void ui_main()
  //#ifdef UI_DEVEL
         if(nk_begin(ctx, "[Dev] - Demo", nk_rect(1, 1, xcb_ctx->width, xcb_ctx->height), NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
         {
+            //
             enum {EASY, HARD};
             static int op = EASY;
             static int property = 20;
