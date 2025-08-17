@@ -2,7 +2,7 @@
 #define UI_MAIN_H
 
 
-#define DEFAULT_UI_FONT "sdkjsdh"
+#define DEFAULT_UI_FONT "Liter-Regular.ttf"
 
 
 

@@ -20,7 +20,7 @@
 
 
 
-#include "style.c"
+#include "style.h"
 #include "main_window.h"
 
 
@@ -67,7 +67,7 @@ void ui_main()
     
     ui_init();
 
-
+    //int i = 0;
     while(1)
     {
         events = nk_xcb_handle_event(xcb_ctx, ctx);
@@ -82,13 +82,16 @@ void ui_main()
         }
         if(events & NK_XCB_EVENT_RESIZED)
         {
+            //i++;
+            //printf("Window resized: %d\n", i);
             // Always keep the rendering surface sized as the window
+            printf("Window size: %d x %d\n", xcb_ctx->width, xcb_ctx->height);
             nk_xcb_resize_cairo_surface(xcb_ctx, nk_cairo_surface(cairo_ctx));
         }
 
 
- #ifdef UI_DEVEL
-        if(nk_begin(ctx, "[Dev] - Demo", nk_rect(50, 50, 200, 200), NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
+ //#ifdef UI_DEVEL
+        if(nk_begin(ctx, "[Dev] - Demo", nk_rect(1, 1, xcb_ctx->width, xcb_ctx->height), NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE|NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
         {
             enum {EASY, HARD};
             static int op = EASY;
@@ -103,6 +106,8 @@ void ui_main()
             nk_layout_row_dynamic(ctx, 25, 1);
             nk_property_int(ctx, "Compression:", 0, &property, 100, 10, 1);
         }
+        nk_window_set_bounds(ctx, "[Dev] - Demo", 
+            nk_rect(0, 0, xcb_ctx->width, xcb_ctx->height));
         nk_end(ctx);
         if(nk_window_is_hidden(ctx, "[Dev] - Demo"))
         {
@@ -120,7 +125,7 @@ void ui_main()
         {
             break;
         }
-#endif
+//#endif
 
 
        nk_cairo_render(cairo_ctx, ctx);
