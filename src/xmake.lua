@@ -112,7 +112,7 @@ target("psensor-ui")
         "lib/include",
         "new-gui/ext_deps/nuklear/backends",
         "new-gui/ext_deps/nuklear",
-        "new-gui/ext_deps/log_c",
+        "new-gui/ext_deps",
         "new-gui/ext_deps/cJSON"
     )
     add_linkdirs("build/linux/x86_64/release") -- Temporarry

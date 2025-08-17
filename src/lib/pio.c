@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -46,7 +47,7 @@ int is_dir(const char *path)
 
 	int ret = lstat(path, &st);
 
-	if (ret == 0 && S_ISDIR(st.st_mode))
+	if(ret == 0 && S_ISDIR(st.st_mode))
 		return 1;
 
 	return 0;
@@ -58,7 +59,7 @@ int is_file(const char *path)
 
 	int ret = lstat(path, &st);
 
-	if (ret == 0 && S_ISREG(st.st_mode))
+	if(ret == 0 && S_ISREG(st.st_mode))
 		return 1;
 
 	return 0;
@@ -69,14 +70,14 @@ static char *dir_normalize(const char *dpath)
 	char *npath;
 	int n;
 
-	if (!dpath || !strlen(dpath))
+	if(!dpath || !strlen(dpath))
 		return NULL;
 
 	npath = strdup(dpath);
 
 	n = strlen(npath);
 
-	if (n > 1 && npath[n - 1] == '/')
+	if(n > 1 && npath[n - 1] == '/')
 		npath[n - 1] = '\0';
 
 	return npath;
@@ -104,28 +105,32 @@ char **dir_list(const char *dpath, int (*filter) (const char *))
 
 	dir = opendir(dpath);
 
-	if (!dir)
+	if(!dir)
 		return NULL;
 
 	n = 1;
 	paths = malloc(sizeof(void *));
 	*paths = NULL;
 
-	while ((ent = readdir(dir)) != NULL) {
+	while((ent = readdir(dir)) != NULL)
+	{
 		name = ent->d_name;
 
-		if (!strcmp(name, ".") || !strcmp(name, ".."))
+		if(!strcmp(name, ".") || !strcmp(name, ".."))
 			continue;
 
 		path = path_append(dpath, name);
 
-		if (!filter || filter(path)) {
+		if(!filter || filter(path))
+		{
 			tmp = paths_add(paths, n, path);
 			free(paths);
 			paths = tmp;
 
 			n++;
-		} else {
+		}
+		else
+		{
 			free(path);
 		}
 	}
@@ -140,9 +145,9 @@ void paths_free(char **paths)
 	char **paths_cur;
 
 	paths_cur = paths;
-	while (*paths_cur) {
+	while(*paths_cur)
+	{
 		free(*paths_cur);
-
 		paths_cur++;
 	}
 
@@ -156,27 +161,37 @@ char *file_get_content(const char *fpath)
 	char *page;
 
 	size = file_get_size(fpath);
-	if (size == -1) {
+	if(size == -1)
+	{
 		page = NULL;
 
-	} else if (size == 0) {
+	}
+	else if(size == 0)
+	{
 		page = malloc(1);
 		*page = '\0';
 
-	} else {
+	}
+	else
+	{
 		FILE *fp = fopen(fpath, "rb");
-
-		if (fp) {
+		if(fp)
+		{
 			page = malloc(size + 1);
-			if (!page || size != fread(page, 1, size, fp)) {
+			if(!page || size != fread(page, 1, size, fp))
+			{
 				free(page);
 				page = NULL;
-			} else {
+			}
+			else
+			{
 				*(page + size) = '\0';
 			}
 
 			fclose(fp);
-		} else {
+		}
+		else
+		{
 			page = NULL;
 		}
 	}
@@ -189,18 +204,21 @@ long file_get_size(const char *path)
 	FILE *fp;
 	long size;
 
-	if (!is_file(path))
+	if(!is_file(path))
 		return -1;
 
 	fp = fopen(path, "rb");
-	if (fp) {
-		if (fseek(fp, 0, SEEK_END) == -1)
+	if(fp)
+	{
+		if(fseek(fp, 0, SEEK_END) == -1)
 			size = -1;
 		else
 			size = ftell(fp);
 
 		fclose(fp);
-	} else {
+	}
+	else
+	{
 		size = -1;
 	}
 
@@ -214,16 +232,20 @@ static int FILE_copy(FILE *src, FILE *dst)
 	char *buf = malloc(FCOPY_BUF_SZ);
 	int n;
 
-	if (!buf)
+	if(!buf)
 		return FILE_COPY_ERROR_ALLOC_BUFFER;
 
-	while (!ret) {
+	while(!ret)
+	{
 		n = fread(buf, 1, FCOPY_BUF_SZ, src);
-		if (n) {
-			if (fwrite(buf, 1, n, dst) != n)
+		if(n)
+		{
+			if(fwrite(buf, 1, n, dst) != n)
 				ret = FILE_COPY_ERROR_WRITE;
-		} else {
-			if (!feof(src))
+		}
+		else
+		{
+			if(!feof(src))
 				ret = FILE_COPY_ERROR_READ;
 			else
 				break;
@@ -235,8 +257,7 @@ static int FILE_copy(FILE *src, FILE *dst)
 	return ret;
 }
 
-int
-file_copy(const char *src, const char *dst)
+int file_copy(const char *src, const char *dst)
 {
 	FILE *fsrc, *fdst;
 	int ret = 0;
@@ -245,18 +266,24 @@ file_copy(const char *src, const char *dst)
 
 	fsrc = fopen(src, "r");
 
-	if (fsrc) {
+	if(fsrc)
+	{
 		fdst = fopen(dst, "w+");
 
-		if (fdst) {
+		if(fdst)
+		{
 			ret = FILE_copy(fsrc, fdst);
 			fclose(fdst);
-		} else {
+		}
+		else
+		{
 			ret = FILE_COPY_ERROR_OPEN_DST;
 		}
 
 		fclose(fsrc);
-	} else {
+	}
+	else
+	{
 		ret = FILE_COPY_ERROR_OPEN_SRC;
 	}
 
@@ -269,16 +296,20 @@ char *path_append(const char *dir, const char *path)
 
 	ndir = dir_normalize(dir);
 
-	if (!ndir && (!path || !strlen(path)))
+	if(!ndir && (!path || !strlen(path)))
 		ret = NULL;
 
-	else if (!ndir) {
+	else if(!ndir)
+	{
 		ret = strdup(path);
 
-	} else if (!path || !strlen(path)) {
+	}
+	else if(!path || !strlen(path))
+	{
 		return ndir;
-
-	} else {
+	}
+	else
+	{
 		ret = malloc(strlen(ndir) + 1 + strlen(path) + 1);
 		strcpy(ret, ndir);
 		strcat(ret, "/");
@@ -301,8 +332,10 @@ void mkdirs(const char *dirs, mode_t mode)
 	dir = malloc(strlen(dirs) + 1);
 
 	i = 0;
-	while (*c) {
-		if ((*c == DIRSEP || *c == '\0') && c != dirs) {
+	while(*c)
+	{
+		if((*c == DIRSEP || *c == '\0') && c != dirs)
+		{
 			strncpy(dir, dirs, i);
 			dir[i] = '\0';
 			mkdir(dir, mode);
@@ -317,28 +350,28 @@ void mkdirs(const char *dirs, mode_t mode)
 	free(dir);
 }
 
-void
-file_copy_print_error(int code, const char *src, const char *dst)
+void file_copy_print_error(int code, const char *src, const char *dst)
 {
-	switch (code) {
-	case 0:
-		break;
-	case FILE_COPY_ERROR_OPEN_SRC:
-		printf("File copy error: failed to open %s.\n", src);
-		break;
-	case FILE_COPY_ERROR_OPEN_DST:
-		printf("File copy error: failed to open %s.\n", dst);
-		break;
-	case FILE_COPY_ERROR_READ:
-		printf("File copy error: failed to read %s.\n", src);
-		break;
-	case FILE_COPY_ERROR_WRITE:
-		printf("File copy error: failed to write %s.\n", src);
-		break;
-	case FILE_COPY_ERROR_ALLOC_BUFFER:
-		printf("File copy error: failed to allocate buffer.\n");
-		break;
-	default:
-		printf("File copy error: unknown error %d.\n", code);
+	switch(code)
+	{
+	    case 0:
+		    break;
+	    case FILE_COPY_ERROR_OPEN_SRC:
+			printf("File copy error: failed to open %s.\n", src);
+			break;
+	    case FILE_COPY_ERROR_OPEN_DST:
+			printf("File copy error: failed to open %s.\n", dst);
+			break;
+	    case FILE_COPY_ERROR_READ:
+			printf("File copy error: failed to read %s.\n", src);
+			break;
+	    case FILE_COPY_ERROR_WRITE:
+			printf("File copy error: failed to write %s.\n", src);
+			break;
+	    case FILE_COPY_ERROR_ALLOC_BUFFER:
+			printf("File copy error: failed to allocate buffer.\n");
+			break;
+	    default:
+			printf("File copy error: unknown error %d.\n", code);
 	}
 }

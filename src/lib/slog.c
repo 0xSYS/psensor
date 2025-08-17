@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2014 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -52,12 +53,12 @@ static char *time_to_str(time_t *t)
 	struct tm lt;
 	char *str;
 
-	if (!localtime_r(t, &lt))
+	if(!localtime_r(t, &lt))
 		return NULL;
 
 	str = malloc(64);
 
-	if (strftime(str, 64, "%s", &lt))
+	if(strftime(str, 64, "%s", &lt))
 		return str;
 
 	free(str);
@@ -70,7 +71,8 @@ static char *get_default_path(void)
 
 	home = getenv("HOME");
 
-	if (home) {
+	if(home)
+	{
 		dir = malloc(strlen(home)+1+strlen(".psensor")+1);
 		sprintf(dir, "%s/%s", home, ".psensor");
 		mkdir(dir, 0777);
@@ -91,7 +93,8 @@ static bool slog_open(const char *path, struct psensor **sensors)
 {
 	char *lpath, *t;
 
-	if (file) {
+	if(file)
+	{
 		log_err(_("Sensor log file already open."));
 		return 0;
 	}
@@ -100,13 +103,13 @@ static bool slog_open(const char *path, struct psensor **sensors)
 
 	file = fopen(lpath, "a");
 
-	if (!file)
+	if(!file)
 		log_err(_("Cannot open sensor log file: %s."), lpath);
 
-	if (!path)
+	if(!path)
 		free((char *)lpath);
 
-	if (!file)
+	if(!file)
 		return 0;
 
 	st = time(NULL);
@@ -114,7 +117,8 @@ static bool slog_open(const char *path, struct psensor **sensors)
 
 	fprintf(file, "I,%s,%s\n", t, VERSION);
 
-	while (*sensors) {
+	while(*sensors)
+	{
 		fprintf(file, "S,%s,%x\n", (*sensors)->id,  (*sensors)->type);
 		sensors++;
 	}
@@ -131,7 +135,8 @@ static void slog_write_sensors(struct psensor **sensors)
 	struct timeval tv;
 	bool first_call;
 
-	if (!file) {
+	if(!file)
+	{
 		log_debug(_("Sensor log file not open."));
 		return;
 	}
@@ -140,18 +145,22 @@ static void slog_write_sensors(struct psensor **sensors)
 
 	count = psensor_list_size(sensors);
 
-	if (last_values) {
+	if(last_values)
+	{
 		first_call = 0;
-	} else {
+	}
+	else
+	{
 		first_call = 1;
 		last_values = malloc(count * sizeof(double));
 	}
 
 	fprintf(file, "%ld", (long int)(tv.tv_sec - st));
-	for (i = 0; i < count; i++) {
+	for(i = 0; i < count; i++)
+	{
 		v = psensor_get_current_value(sensors[i]);
 
-		if (!first_call && last_values[i] == v)
+		if(!first_call && last_values[i] == v)
 			fputc(',', file);
 		else
 			fprintf(file, ",%.1f", v);
@@ -166,7 +175,8 @@ static void slog_write_sensors(struct psensor **sensors)
 
 static void *slog_routine(void *data)
 {
-	while (1) {
+	while(1)
+	{
 		pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL);
 		pmutex_lock(sensors_mutex);
 		slog_write_sensors(sensors);
@@ -180,22 +190,22 @@ static void *slog_routine(void *data)
 
 void slog_close(void)
 {
-	if (file) {
+	if(file)
+	{
 		pthread_cancel(thread);
 
 		fclose(file);
 		file = NULL;
 		free(last_values);
 		last_values = NULL;
-	} else {
+	}
+	else
+	{
 		log_debug(_("Sensor log not open, cannot close."));
 	}
 }
 
-bool slog_activate(const char *path,
-		   struct psensor **ss,
-		   pthread_mutex_t *mutex,
-		   int p)
+bool slog_activate(const char *path, struct psensor **ss, pthread_mutex_t *mutex, int p)
 {
 	bool ret;
 
@@ -207,7 +217,7 @@ bool slog_activate(const char *path,
 	ret = slog_open(path, sensors);
 	pthread_mutex_unlock(mutex);
 
-	if (ret)
+	if(ret)
 		pthread_create(&thread, NULL, slog_routine, NULL);
 
 	return ret;

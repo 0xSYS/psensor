@@ -1,6 +1,31 @@
 [
 {
   "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-Inew-gui/ext_deps/nuklear/backends", "-Inew-gui/ext_deps/nuklear", "-Inew-gui/ext_deps", "-Inew-gui/ext_deps/cJSON", "-DLOGC__USER_SETTINGS", "-DCJSON_HIDE_SYMBOLS", "-I", "/usr/include/cairo", "-I", "/usr/include/pixman-1", "-I", "/usr/include/freetype2", "-I", "/usr/include/libpng16", "-I", "/usr/include/harfbuzz", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/ext_deps/cJSON/cJSON_Utils.c.o", "new-gui/ext_deps/cJSON/cJSON_Utils.c"],
+  "file": "new-gui/ext_deps/cJSON/cJSON_Utils.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-Inew-gui/ext_deps/nuklear/backends", "-Inew-gui/ext_deps/nuklear", "-Inew-gui/ext_deps", "-Inew-gui/ext_deps/cJSON", "-DLOGC__USER_SETTINGS", "-DCJSON_HIDE_SYMBOLS", "-I", "/usr/include/cairo", "-I", "/usr/include/pixman-1", "-I", "/usr/include/freetype2", "-I", "/usr/include/libpng16", "-I", "/usr/include/harfbuzz", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/ext_deps/cJSON/cJSON.c.o", "new-gui/ext_deps/cJSON/cJSON.c"],
+  "file": "new-gui/ext_deps/cJSON/cJSON.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-Inew-gui/ext_deps/nuklear/backends", "-Inew-gui/ext_deps/nuklear", "-Inew-gui/ext_deps", "-Inew-gui/ext_deps/cJSON", "-DLOGC__USER_SETTINGS", "-DCJSON_HIDE_SYMBOLS", "-I", "/usr/include/cairo", "-I", "/usr/include/pixman-1", "-I", "/usr/include/freetype2", "-I", "/usr/include/libpng16", "-I", "/usr/include/harfbuzz", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/ext_deps/log_c/log.c.o", "new-gui/ext_deps/log_c/log.c"],
+  "file": "new-gui/ext_deps/log_c/log.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-Inew-gui/ext_deps/nuklear/backends", "-Inew-gui/ext_deps/nuklear", "-Inew-gui/ext_deps", "-Inew-gui/ext_deps/cJSON", "-DLOGC__USER_SETTINGS", "-DCJSON_HIDE_SYMBOLS", "-I", "/usr/include/cairo", "-I", "/usr/include/pixman-1", "-I", "/usr/include/freetype2", "-I", "/usr/include/libpng16", "-I", "/usr/include/harfbuzz", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/main.c.o", "new-gui/main.c"],
+  "file": "new-gui/main.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-Inew-gui/ext_deps/nuklear/backends", "-Inew-gui/ext_deps/nuklear", "-Inew-gui/ext_deps", "-Inew-gui/ext_deps/cJSON", "-DLOGC__USER_SETTINGS", "-DCJSON_HIDE_SYMBOLS", "-I", "/usr/include/cairo", "-I", "/usr/include/pixman-1", "-I", "/usr/include/freetype2", "-I", "/usr/include/libpng16", "-I", "/usr/include/harfbuzz", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/UI/ui_main.c.o", "new-gui/UI/ui_main.c"],
+  "file": "new-gui/UI/ui_main.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
   "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/ext_lib/adl_sdk", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor/linux/x86_64/release/lib/ext_lib/CMessagePack/cmp.c.o", "lib/ext_lib/CMessagePack/cmp.c"],
   "file": "lib/ext_lib/CMessagePack/cmp.c"
 },
@@ -188,29 +213,4 @@
   "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
   "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-Iserver", "-IGUI", "-DPCRE2_CODE_UNIT_WIDTH=8", "-I", "/usr/include/unity/unity", "-I", "/usr/include/dee-1.0", "-I", "/usr/include/libappindicator3-0.1", "-I", "/usr/include/libdbusmenu-glib-0.4", "-I", "/usr/include/gtk-3.0", "-I", "/usr/include/cloudproviders", "-I", "/usr/include/pango-1.0", "-I", "/usr/include/cairo", "-I", "/usr/include/gdk-pixbuf-2.0", "-I", "/usr/include/at-spi2-atk/2.0", "-I", "/usr/include/atk-1.0", "-I", "/usr/include/harfbuzz", "-I", "/usr/include/freetype2", "-I", "/usr/include/at-spi-2.0", "-I", "/usr/include/dbus-1.0", "-I", "/usr/lib/dbus-1.0/include", "-I", "/usr/include/fribidi", "-I", "/usr/include/libxml2", "-I", "/usr/include/pixman-1", "-I", "/usr/include/libpng16", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-I", "/usr/include/json-c", "-I", "/usr/include/p11-kit-1", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor-old/linux/x86_64/release/GUI/fan_control_utils.c.o", "GUI/fan_control_utils.c"],
   "file": "GUI/fan_control_utils.c"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-Inew-gui/ext_deps/nuklear/backends", "-Inew-gui/ext_deps/nuklear", "-Inew-gui/ext_deps/log_c", "-Inew-gui/ext_deps/cJSON", "-DLOGC__USER_SETTINGS", "-DCJSON_HIDE_SYMBOLS", "-I", "/usr/include/cairo", "-I", "/usr/include/pixman-1", "-I", "/usr/include/freetype2", "-I", "/usr/include/libpng16", "-I", "/usr/include/harfbuzz", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/ext_deps/cJSON/cJSON_Utils.c.o", "new-gui/ext_deps/cJSON/cJSON_Utils.c"],
-  "file": "new-gui/ext_deps/cJSON/cJSON_Utils.c"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-Inew-gui/ext_deps/nuklear/backends", "-Inew-gui/ext_deps/nuklear", "-Inew-gui/ext_deps/log_c", "-Inew-gui/ext_deps/cJSON", "-DLOGC__USER_SETTINGS", "-DCJSON_HIDE_SYMBOLS", "-I", "/usr/include/cairo", "-I", "/usr/include/pixman-1", "-I", "/usr/include/freetype2", "-I", "/usr/include/libpng16", "-I", "/usr/include/harfbuzz", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/ext_deps/cJSON/cJSON.c.o", "new-gui/ext_deps/cJSON/cJSON.c"],
-  "file": "new-gui/ext_deps/cJSON/cJSON.c"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-Inew-gui/ext_deps/nuklear/backends", "-Inew-gui/ext_deps/nuklear", "-Inew-gui/ext_deps/log_c", "-Inew-gui/ext_deps/cJSON", "-DLOGC__USER_SETTINGS", "-DCJSON_HIDE_SYMBOLS", "-I", "/usr/include/cairo", "-I", "/usr/include/pixman-1", "-I", "/usr/include/freetype2", "-I", "/usr/include/libpng16", "-I", "/usr/include/harfbuzz", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/ext_deps/log_c/log.c.o", "new-gui/ext_deps/log_c/log.c"],
-  "file": "new-gui/ext_deps/log_c/log.c"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-Inew-gui/ext_deps/nuklear/backends", "-Inew-gui/ext_deps/nuklear", "-Inew-gui/ext_deps/log_c", "-Inew-gui/ext_deps/cJSON", "-DLOGC__USER_SETTINGS", "-DCJSON_HIDE_SYMBOLS", "-I", "/usr/include/cairo", "-I", "/usr/include/pixman-1", "-I", "/usr/include/freetype2", "-I", "/usr/include/libpng16", "-I", "/usr/include/harfbuzz", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/main.c.o", "new-gui/main.c"],
-  "file": "new-gui/main.c"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-Inew-gui/ext_deps/nuklear/backends", "-Inew-gui/ext_deps/nuklear", "-Inew-gui/ext_deps/log_c", "-Inew-gui/ext_deps/cJSON", "-DLOGC__USER_SETTINGS", "-DCJSON_HIDE_SYMBOLS", "-I", "/usr/include/cairo", "-I", "/usr/include/pixman-1", "-I", "/usr/include/freetype2", "-I", "/usr/include/libpng16", "-I", "/usr/include/harfbuzz", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/UI/ui_main.c.o", "new-gui/UI/ui_main.c"],
-  "file": "new-gui/UI/ui_main.c"
 }]

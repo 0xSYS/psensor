@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -51,11 +52,11 @@ int is_color(const char *str)
 	int n = strlen(str);
 	int i;
 
-	if (n != 13 || str[0] != '#')
+	if(n != 13 || str[0] != '#')
 		return 0;
 
-	for (i = 1; i < n; i++)
-		if (isxdigit(str[i]) == 0)
+	for(i = 1; i < n; i++)
+		if(isxdigit(str[i]) == 0)
 			return 0;
 
 	return 1;
@@ -66,7 +67,7 @@ struct color *str_to_color(const char *str)
 	char tmp[5];
 	unsigned int red, green, blue;
 
-	if (!is_color(str))
+	if(!is_color(str))
 		return NULL;
 
 	strncpy(tmp, str + 1, 4);
@@ -81,19 +82,14 @@ struct color *str_to_color(const char *str)
 	tmp[4] = '\0';
 	blue = strtol(tmp, NULL, 16);
 
-	return color_new(((double)red)/65535,
-			 ((double)green)/65535,
-			 ((double)blue)/65535);
+	return color_new(((double)red)/65535, ((double)green)/65535, ((double)blue)/65535);
 }
 
 char *color_to_str(const struct color *color)
 {
 	char *str = malloc(1 + 12 + 1);
 
-	sprintf(str, "#%.4x%.4x%.4x",
-		(int)(65535 * color->red),
-		(int)(65535 * color->green),
-		(int)(65535 * color->blue));
+	sprintf(str, "#%.4x%.4x%.4x", (int)(65535 * color->red), (int)(65535 * color->green), (int)(65535 * color->blue));
 
 	return str;
 }

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -35,7 +36,8 @@ static GDBusObjectManager *manager;
 
 static const time_t SMART_UPDATE_INTERVAL = 30;
 
-struct udisks_data {
+struct udisks_data
+{
 	char *path;
 	struct timeval last_smart_update;
 };
@@ -58,32 +60,25 @@ static void smart_update(struct psensor *s, UDisksDriveAta *ata)
 
 	data = s->provider_data;
 
-	if (gettimeofday(&t, NULL) != 0) {
+	if(gettimeofday(&t, NULL) != 0)
+	{
 		log_err("%s: %s", PROVIDER_NAME, _("gettimeofday failed."));
 		return;
 	}
 
-	if (data->last_smart_update.tv_sec
-	    &&
-	    (t.tv_sec - data->last_smart_update.tv_sec < SMART_UPDATE_INTERVAL))
+	if(data->last_smart_update.tv_sec && (t.tv_sec - data->last_smart_update.tv_sec < SMART_UPDATE_INTERVAL))
 		return;
 
 	log_fct("%s: update SMART data for %s", PROVIDER_NAME, data->path);
 
-	variant = g_variant_new_parsed("{'nowakeup': %v}",
-				       g_variant_new_boolean(TRUE));
+	variant = g_variant_new_parsed("{'nowakeup': %v}", g_variant_new_boolean(TRUE));
 
-	ret = udisks_drive_ata_call_smart_update_sync(ata,
-						      variant,
-						      NULL,
-						      NULL);
+	ret = udisks_drive_ata_call_smart_update_sync(ata, variant, NULL, NULL);
 
-	if (!ret)
-		log_fct("%s: SMART update failed for %s",
-			PROVIDER_NAME,
-			data->path);
+	if(!ret)
+		log_fct("%s: SMART update failed for %s", PROVIDER_NAME, data->path);
 
-		data->last_smart_update = t;
+	data->last_smart_update = t;
 }
 
 void udisks2_psensor_list_update(struct psensor **sensors)
@@ -94,29 +89,25 @@ void udisks2_psensor_list_update(struct psensor **sensors)
 	double v;
 	struct udisks_data *data;
 
-	for (; *sensors; sensors++) {
+	for(; *sensors; sensors++)
+	{
 		s = *sensors;
 
-		if (s->type & SENSOR_TYPE_REMOTE)
+		if(s->type & SENSOR_TYPE_REMOTE)
 			continue;
 
-		if (s->type & SENSOR_TYPE_UDISKS2) {
+		if(s->type & SENSOR_TYPE_UDISKS2)
+		{
 			data = (struct udisks_data *)s->provider_data;
-
-			o = g_dbus_object_manager_get_object(manager,
-							     data->path);
-
-			if (!o)
+			o = g_dbus_object_manager_get_object(manager,data->path);
+			
+			if(!o)
 				continue;
 
 			g_object_get(o, "drive-ata", &drive_ata, NULL);
-
 			smart_update(s, drive_ata);
-
 			v = udisks_drive_ata_get_smart_temperature(drive_ata);
-
 			psensor_set_current_value(s, kelvin_to_celsius(v));
-
 			g_object_unref(G_OBJECT(o));
 		}
 	}
@@ -138,7 +129,8 @@ void udisks2_psensor_list_append(struct psensor ***sensors, int values_length)
 
 	client = udisks_client_new_sync(NULL, NULL);
 
-	if (!client) {
+	if(!client)
+	{
 		log_err(_("%s: cannot get the udisks2 client"), PROVIDER_NAME);
 		log_fct_exit();
 		return;
@@ -149,47 +141,55 @@ void udisks2_psensor_list_append(struct psensor ***sensors, int values_length)
 	objects = g_dbus_object_manager_get_objects(manager);
 
 	i = 0;
-	for (cur = objects; cur; cur = cur->next) {
+	for(cur = objects; cur; cur = cur->next)
+	{
 		path = g_dbus_object_get_object_path(cur->data);
 
-		g_object_get(cur->data,
-			     "drive", &drive,
-			     "drive-ata", &drive_ata,
-			     NULL);
+		g_object_get(cur->data, "drive", &drive, "drive-ata", &drive_ata, NULL);
 
-		if (!drive) {
+		if(!drive)
+		{
 			log_fct("Not a drive: %s", path);
 			continue;
 		}
 
-		if (!drive_ata) {
+		if(!drive_ata)
+		{
 			log_fct("Not an ATA drive: %s", path);
 			continue;
 		}
 
-		if (!udisks_drive_ata_get_smart_enabled(drive_ata)) {
+		if(!udisks_drive_ata_get_smart_enabled(drive_ata))
+		{
 			log_fct("SMART not enabled: %s", path);
 			continue;
 		}
 
-		if (!udisks_drive_ata_get_smart_temperature(drive_ata)) {
+		if(!udisks_drive_ata_get_smart_temperature(drive_ata))
+		{
 			log_fct("No temperature available: %s", path);
 			continue;
 		}
 
 		drive_id = udisks_drive_get_id(drive);
-		if (drive_id) {
+		if(drive_id)
+		{
 			id = g_strdup_printf("%s %s", PROVIDER_NAME, drive_id);
-		} else {
+		}
+		else
+		{
 			id = g_strdup_printf("%s %d", PROVIDER_NAME, i);
 			i++;
 		}
 
 		drive_model = udisks_drive_get_model(drive);
-		if (drive_model) {
+		if(drive_model)
+		{
 			name = strdup(drive_model);
 			chip = strdup(drive_model);
-		} else {
+		}
+		else
+		{
 			name = strdup(_("Disk"));
 			chip = strdup(_("Disk"));
 		}

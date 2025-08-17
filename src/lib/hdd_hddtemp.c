@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2014 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -43,7 +44,8 @@ static const char *HDDTEMP_SERVER_IP_ADDRESS = "127.0.0.1";
 static const int HDDTEMP_PORT_NUMBER = 7634;
 static const int HDDTEMP_OUTPUT_BUFFER_LENGTH = 4048;
 
-struct hdd_info {
+struct hdd_info
+{
 	char *name;
 	int temp;
 };
@@ -58,7 +60,8 @@ static char *fetch(void)
 	output_length = 0;
 
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
-	if (sockfd == -1) {
+	if(sockfd == -1)
+	{
 		log_err(_("%s: failed to open socket."), PROVIDER_NAME);
 		return NULL;
 	}
@@ -69,19 +72,16 @@ static char *fetch(void)
 
 	buffer = NULL;
 
-	if (connect(sockfd,
-		    (struct sockaddr *)&address,
-		    (socklen_t) sizeof(address)) == -1) {
+	if(connect(sockfd, (struct sockaddr *)&address, (socklen_t) sizeof(address)) == -1)
 		log_err(_("%s: failed to open connection."), PROVIDER_NAME);
-	} else {
+	
+	else
+	{
 		buffer = malloc(HDDTEMP_OUTPUT_BUFFER_LENGTH);
 
 		pc = buffer;
-		while ((n = read(sockfd,
-				 pc,
-				 HDDTEMP_OUTPUT_BUFFER_LENGTH -
-				 output_length)) > 0) {
-
+		while((n = read(sockfd, pc, HDDTEMP_OUTPUT_BUFFER_LENGTH - output_length)) > 0)
+		{
 			output_length += n;
 			pc = &pc[n];
 		}
@@ -99,14 +99,15 @@ static int str_index(char *str, char d)
 	char *c;
 	int i;
 
-	if (!str || *str == '\0')
+	if(!str || *str == '\0')
 		return -1;
 
 	c = str;
 
 	i = 0;
-	while (*c) {
-		if (*c == d)
+	while(*c)
+	{
+		if(*c == d)
 			return i;
 		i++;
 		c++;
@@ -115,16 +116,13 @@ static int str_index(char *str, char d)
 	return -1;
 }
 
-static struct psensor *
-create_sensor(char *id, char *name, int values_max_length)
+static struct psensor *create_sensor(char *id, char *name, int values_max_length)
 {
 	int t;
 
 	t = SENSOR_TYPE_HDD | SENSOR_TYPE_HDDTEMP | SENSOR_TYPE_TEMP;
 
-	return psensor_create(id, name, strdup(_("Disk")),
-			      t,
-			      values_max_length);
+	return psensor_create(id, name, strdup(_("Disk")), t, values_max_length);
 }
 
 static char *next_hdd_info(char *string, struct hdd_info *info)
@@ -132,8 +130,7 @@ static char *next_hdd_info(char *string, struct hdd_info *info)
 	char *c;
 	int idx_name_n, i, temp;
 
-	if (!string || strlen(string) <= 5	/* at least 5 pipes */
-	    || string[0] != '|')
+	if(!string || strlen(string) <= 5 || string[0] != '|') 	/* at least 5 pipes */
 		return NULL;
 
 	/* skip first pipe */
@@ -142,27 +139,31 @@ static char *next_hdd_info(char *string, struct hdd_info *info)
 	/* name */
 	idx_name_n = str_index(c, '|');
 
-	if (idx_name_n == -1)
+	if(idx_name_n == -1)
 		return NULL;
+	
 	c = c + idx_name_n + 1;
 
 	/* skip label */
 	i = str_index(c, '|');
-	if (i == -1)
+	if(i == -1)
 		return NULL;
+	
 	c = c + i + 1;
 
 	/* temp */
 	i = str_index(c, '|');
-	if (i == -1)
+	if(i == -1)
 		return NULL;
+	
 	temp = atoi(c);
 	c = c + i + 1;
 
 	/* skip unit  */
 	i = str_index(c, '|');
-	if (i == -1)
+	if(i == -1)
 		return NULL;
+	
 	c = c + i + 1;
 
 	info->name = malloc(idx_name_n + 1);
@@ -174,8 +175,7 @@ static char *next_hdd_info(char *string, struct hdd_info *info)
 	return c;
 }
 
-void
-hddtemp_psensor_list_append(struct psensor ***sensors, int values_max_length)
+void hddtemp_psensor_list_append(struct psensor ***sensors, int values_max_length)
 {
 	char *hddtemp_output, *c, *id;
 	struct hdd_info info;
@@ -183,22 +183,20 @@ hddtemp_psensor_list_append(struct psensor ***sensors, int values_max_length)
 
 	hddtemp_output = fetch();
 
-	if (!hddtemp_output)
+	if(!hddtemp_output)
 		return;
 
-	if (hddtemp_output[0] != '|') {
-		log_err(_("%s: wrong string: %s."),
-			PROVIDER_NAME,
-			hddtemp_output);
-
+	if(hddtemp_output[0] != '|')
+	{
+		log_err(_("%s: wrong string: %s."), PROVIDER_NAME, hddtemp_output);
 		free(hddtemp_output);
-
 		return;
 	}
 
 	c = hddtemp_output;
 
-	while (c && (c = next_hdd_info(c, &info))) {
+	while(c && (c = next_hdd_info(c, &info)))
+	{
 		id = malloc(strlen(PROVIDER_NAME) + 1 + strlen(info.name) + 1);
 		sprintf(id, "%s %s", PROVIDER_NAME, info.name);
 
@@ -212,12 +210,10 @@ hddtemp_psensor_list_append(struct psensor ***sensors, int values_max_length)
 
 static void update(struct psensor **sensors, struct hdd_info *info)
 {
-	while (*sensors) {
-		if (!((*sensors)->type & SENSOR_TYPE_REMOTE)
-		    && (*sensors)->type & SENSOR_TYPE_HDDTEMP
-		    && !strcmp((*sensors)->id + 8, info->name))
-			psensor_set_current_value(*sensors,
-						  (double)info->temp);
+	while(*sensors)
+	{
+		if(!((*sensors)->type & SENSOR_TYPE_REMOTE) && (*sensors)->type & SENSOR_TYPE_HDDTEMP && !strcmp((*sensors)->id + 8, info->name))
+			psensor_set_current_value(*sensors, (double)info->temp);
 
 		sensors++;
 	}
@@ -227,14 +223,15 @@ static bool contains_hddtemp_sensor(struct psensor **sensors)
 {
 	struct psensor *s;
 
-	if (!sensors)
+	if(!sensors)
 		return false;
 
-	while (*sensors) {
+	while(*sensors)
+	{
 		s = *sensors;
-		if (!(s->type & SENSOR_TYPE_REMOTE)
-		     && (s->type & SENSOR_TYPE_HDDTEMP))
+		if(!(s->type & SENSOR_TYPE_REMOTE) && (s->type & SENSOR_TYPE_HDDTEMP))
 			return true;
+		
 		sensors++;
 	}
 
@@ -245,31 +242,31 @@ void hddtemp_psensor_list_update(struct psensor **sensors)
 {
 	char *hddtemp_output;
 
-	if (!contains_hddtemp_sensor(sensors))
+	if(!contains_hddtemp_sensor(sensors))
 		return;
 
 	hddtemp_output = fetch();
 
-	if (!hddtemp_output)
+	if(!hddtemp_output)
 		return;
 
-	if (hddtemp_output[0] == '|') {
+	if(hddtemp_output[0] == '|')
+	{
 		char *c = hddtemp_output;
 		struct hdd_info info;
 
 		info.name = NULL;
 		info.temp = 0;
 
-		while (c && (c = next_hdd_info(c, &info))) {
-
+		while(c && (c = next_hdd_info(c, &info)))
+		{
 			update(sensors, &info);
-
 			free(info.name);
 		}
-	} else {
-		log_err(_("%s: wrong string: %s."),
-			PROVIDER_NAME,
-			hddtemp_output);
+	}
+	else
+	{
+		log_err(_("%s: wrong string: %s."), PROVIDER_NAME, hddtemp_output);
 	}
 
 	free(hddtemp_output);

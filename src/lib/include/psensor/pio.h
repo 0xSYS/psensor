@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2010-2016 jeanfi@gmail.com
+ *  Copyright (C) 2025 xsys061@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,7 +56,8 @@ long file_get_size(const char *path);
  */
 char *file_get_content(const char *path);
 
-enum file_copy_error {
+enum file_copy_error
+{
 	FILE_COPY_ERROR_OPEN_SRC = 1,
 	FILE_COPY_ERROR_OPEN_DST,
 	FILE_COPY_ERROR_READ,

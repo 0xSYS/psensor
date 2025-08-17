@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2010-2024 jeanfi@gmail.com, 0xSYS
+ * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -30,7 +31,8 @@
 #define MAX_HWMON_DIRS 9
 #define SMALL_BUF_SIZE 128
 
-enum psensor_type {
+enum psensor_type
+{
 	/* type of sensor values */
 	SENSOR_TYPE_TEMP = 0x00001,
 	SENSOR_TYPE_RPM = 0x00002,
@@ -70,10 +72,11 @@ typedef struct
   char **pwmFiles;
   char **pwmEnableFiles;
   int fanInputCount;  // Number of fanX_input files
-} psensor_fan;
+}psensor_fan;
 
 
-struct psensor {
+struct psensor
+{
 	/* Human readable name of the sensor.  It may not be uniq. */
 	char *name;
 
@@ -123,11 +126,7 @@ struct psensor {
 	void (*provider_data_free_fct)(void *);
 };
 
-struct psensor *psensor_create(char *id,
-			       char *name,
-			       char *chip,
-			       unsigned int type,
-			       int values_max_length);
+struct psensor *psensor_create(char *id, char *name, char *chip, unsigned int type, int values_max_length);
 
 void psensor_values_resize(struct psensor *s, int new_size);
 
@@ -136,8 +135,7 @@ void psensor_free(struct psensor *sensor);
 void psensor_list_free(struct psensor **sensors);
 int psensor_list_size(struct psensor **sensors);
 
-struct psensor *psensor_list_get_by_id(struct psensor **sensors,
-				       const char *id);
+struct psensor *psensor_list_get_by_id(struct psensor **sensors, const char *id);
 
 int is_temp_type(unsigned int type);
 
@@ -153,24 +151,18 @@ double get_max_rpm(struct psensor **sensors);
  * parameter 'type' is SENSOR_TYPE_LMSENSOR_TEMP, SENSOR_TYPE_NVIDIA,
  * or SENSOR_TYPE_LMSENSOR_FAN
  */
-char *psensor_value_to_str(unsigned int type,
-			   double value,
-			   int use_celsius);
+char *psensor_value_to_str(unsigned int type, double value, int use_celsius);
 
-char *psensor_measure_to_str(const struct measure *m,
-			     unsigned int type,
-			     unsigned int use_celsius);
+char *psensor_measure_to_str(const struct measure *m, unsigned int type, unsigned int use_celsius);
 
-struct psensor **psensor_list_add(struct psensor **sensors,
-				  struct psensor *sensor);
+struct psensor **psensor_list_add(struct psensor **sensors, struct psensor *sensor);
 
 void psensor_list_append(struct psensor ***sensors, struct psensor *sensor);
 
 struct psensor **psensor_list_copy(struct psensor **);
 
 void psensor_set_current_value(struct psensor *sensor, double value);
-void psensor_set_current_measure(struct psensor *sensor, double value,
-				 struct timeval tv);
+void psensor_set_current_measure(struct psensor *sensor, double value, struct timeval tv);
 
 double psensor_get_current_value(const struct psensor *);
 

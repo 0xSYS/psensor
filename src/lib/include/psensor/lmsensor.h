@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2014 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -24,7 +25,10 @@
 
 #if defined(HAVE_LIBSENSORS) && HAVE_LIBSENSORS
 
-static inline bool lmsensor_is_supported(void) { return true; }
+static inline bool lmsensor_is_supported(void)
+{
+    return true;
+}
 
 void lmsensor_psensor_list_update(struct psensor **);
 void lmsensor_psensor_list_append(struct psensor ***, int);
@@ -32,7 +36,10 @@ void lmsensor_cleanup(void);
 
 #else
 
-static inline bool lmsensor_is_supported(void) { return false; }
+static inline bool lmsensor_is_supported(void)
+{
+    return false;
+}
 
 static inline void lmsensor_psensor_list_update(struct psensor **s) {}
 static inline void lmsensor_psensor_list_append(struct psensor ***s, int n) {}

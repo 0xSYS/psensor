@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -20,7 +21,8 @@
 #define _PSENSOR_COLOR_H_
 
 /* Represents a RGB color. */
-struct color {
+struct color
+{
 	/* rgb floating 0..1 */
 	double red;
 	double green;

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2014 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -32,7 +33,7 @@ char *url_normalize(const char *url)
 	int n = strlen(url);
 	char *ret = strdup(url);
 
-	if (url[n - 1] == '/')
+	if(url[n - 1] == '/')
 		ret[n - 1] = '\0';
 
 	return ret;
@@ -56,12 +57,13 @@ char *url_encode(const char *str)
 
 	c = (char *)str;
 
-	while (*c) {
+	while(*c)
+	{
 
-		if (isalnum(*c) ||
-		    *c == '.' || *c == '_' || *c == '-' || *c == '~')
+		if(isalnum(*c) || *c == '.' || *c == '_' || *c == '-' || *c == '~')
 			*pbuf++ = *c;
-		else {
+		else
+		{
 			*pbuf++ = '%';
 			*pbuf++ = to_hex(*c >> 4);
 			*pbuf++ = to_hex(*c & 0x0f);

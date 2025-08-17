@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -42,11 +43,7 @@ struct psensor *create_cpu_usage_sensor(int measures_len)
 	label = strdup(_("CPU usage"));
 	type = SENSOR_TYPE_GTOP | SENSOR_TYPE_CPU_USAGE;
 
-	psensor = psensor_create(id,
-				 label,
-				 strdup(_("CPU")),
-				 type,
-				 measures_len);
+	psensor = psensor_create(id, label, strdup(_("CPU")), type, measures_len);
 
 	return psensor;
 }
@@ -59,11 +56,7 @@ static struct psensor *create_mem_free_sensor(int measures_len)
 	id = g_strdup_printf("%s mem free", PROVIDER_NAME);
 	type = SENSOR_TYPE_GTOP | SENSOR_TYPE_MEMORY | SENSOR_TYPE_PERCENT;
 
-	return psensor_create(id,
-			      strdup(_("free memory")),
-			      strdup(_("memory")),
-			      type,
-			      measures_len);
+	return psensor_create(id, strdup(_("free memory")), strdup(_("memory")), type, measures_len);
 }
 
 static double get_usage(void)
@@ -78,7 +71,7 @@ static double get_usage(void)
 
 	dt = cpu.total - last_total;
 
-	if (dt)
+	if(dt)
 		cpu_rate = 100.0 * (used - last_used) / dt;
 	else
 		cpu_rate = UNKNOWN_DBL_VALUE;
@@ -112,7 +105,7 @@ void cpu_usage_sensor_update(struct psensor *s)
 
 	v = get_usage();
 
-	if (v != UNKNOWN_DBL_VALUE)
+	if(v != UNKNOWN_DBL_VALUE)
 		psensor_set_current_value(s, v);
 }
 
@@ -122,7 +115,7 @@ static void mem_free_sensor_update(struct psensor *s)
 
 	v = get_mem_free();
 
-	if (v != UNKNOWN_DBL_VALUE)
+	if(v != UNKNOWN_DBL_VALUE)
 		psensor_set_current_value(s, v);
 }
 
@@ -130,14 +123,15 @@ void gtop2_psensor_list_update(struct psensor **sensors)
 {
 	struct psensor *s;
 
-	while (*sensors) {
+	while(*sensors)
+	{
 		s = *sensors;
 
-		if (!(s->type & SENSOR_TYPE_REMOTE)
-		    && s->type & SENSOR_TYPE_GTOP) {
-			if (s->type & SENSOR_TYPE_CPU)
+		if(!(s->type & SENSOR_TYPE_REMOTE) && s->type & SENSOR_TYPE_GTOP)
+		{
+			if(s->type & SENSOR_TYPE_CPU)
 				cpu_usage_sensor_update(s);
-			else if (s->type & SENSOR_TYPE_MEMORY)
+			else if(s->type & SENSOR_TYPE_MEMORY)
 				mem_free_sensor_update(s);
 		}
 

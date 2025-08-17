@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -29,7 +30,7 @@ int pmutex_lock(pthread_mutex_t *m)
 
 	ret = pthread_mutex_lock(m);
 
-	if (ret)
+	if(ret)
 		log_err("pmutex_lock: %p %d %s", m, ret, strerror(ret));
 
 	return ret;
@@ -41,7 +42,7 @@ int pmutex_unlock(pthread_mutex_t *m)
 
 	ret = pthread_mutex_unlock(m);
 
-	if (ret)
+	if(ret)
 		log_err("pmutex_unlock: %p %d", m, ret);
 
 	return ret;
@@ -57,7 +58,7 @@ int pmutex_init(pthread_mutex_t *m)
 
 	ret = pthread_mutex_init(m, &attr);
 
-	if (ret)
+	if(ret)
 		log_err("pmutex_init: %p %d", m, ret);
 
 	return ret;

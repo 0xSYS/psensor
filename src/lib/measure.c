@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2014 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -29,7 +30,8 @@ struct measure *measures_dbl_create(int size)
 
 	result = malloc(size * sizeof(struct measure));
 
-	for (i = 0; i < size; i++) {
+	for(i = 0; i < size; i++)
+	{
 		result[i].value = UNKNOWN_DBL_VALUE;
 		timerclear(&result[i].time);
 	}

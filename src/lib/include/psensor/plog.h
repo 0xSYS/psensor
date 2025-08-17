@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2010-2016 jeanfi@gmail.com
+ *  Copyright (C) 2025 xsys061@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +22,8 @@
 
 #define P_LOG_VER 3
 
-enum log_level {
+enum log_level
+{
 	LOG_ERR,
 	LOG_WARN,
 	LOG_INFO,

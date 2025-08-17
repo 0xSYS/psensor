@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -25,7 +26,10 @@
 
 //#if defined(HAVE_NVIDIA) && HAVE_NVIDIA
 
-static bool nvidia_is_supported(void) { return true; }
+static bool nvidia_is_supported(void)
+{
+    return true;
+}
 
 void nvidia_psensor_list_update(struct psensor **);
 void nvidia_psensor_list_append(struct psensor ***, int);

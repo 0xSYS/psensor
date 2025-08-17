@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -52,28 +53,21 @@ char *get_product_name(int id, int type)
 	char *name;
 	Bool res;
 
-	if (type & SENSOR_TYPE_FAN)
+	if(type & SENSOR_TYPE_FAN)
 		return strdup("NVIDIA");
 
-	res = XNVCTRLQueryTargetStringAttribute(display,
-						NV_CTRL_TARGET_TYPE_GPU,
-						id,
-						0,
-						NV_CTRL_STRING_PRODUCT_NAME,
-						&name);
-	if (res == True) {
-		if (strcmp(name, "Unknown"))
+	res = XNVCTRLQueryTargetStringAttribute(display, NV_CTRL_TARGET_TYPE_GPU, id, 0, NV_CTRL_STRING_PRODUCT_NAME, &name);
+	if(res == True)
+	{
+		if(strcmp(name, "Unknown"))
 			return name;
 
-		log_err(_("%s: Unknown NVIDIA product name for GPU %d"),
-			PROVIDER_NAME,
-			id);
+		log_err(_("%s: Unknown NVIDIA product name for GPU %d"), PROVIDER_NAME, id);
 		free(name);
-	} else {
-		log_err(_("%s: "
-			  "Failed to retrieve NVIDIA product name for GPU %d"),
-			PROVIDER_NAME,
-			id);
+	}
+	else
+	{
+		log_err(_("%s: "  "Failed to retrieve NVIDIA product name for GPU %d"),PROVIDER_NAME,id);
 	}
 
 	return strdup("NVIDIA");
@@ -86,7 +80,7 @@ double get_att(int target, int id, int att)
 
 	res = XNVCTRLQueryTargetAttribute(display, target, id, 0, att, &temp);
 
-	if (res == True)
+	if(res == True)
 		return temp;
 
 	return UNKNOWN_DBL_VALUE;
@@ -101,11 +95,13 @@ double get_usage_att(char *atts, const char *att)
 	c = atts;
 
 	v = UNKNOWN_DBL_VALUE;
-	while (*c) {
+	while(*c)
+	{
 		s = c;
 		n = 0;
-		while (*c) {
-			if (*c == '=')
+		while(*c)
+		{
+			if(*c == '=')
 				break;
 			c++;
 			n++;
@@ -113,29 +109,30 @@ double get_usage_att(char *atts, const char *att)
 
 		key = strndup(s, n);
 
-		if (*c)
+		if(*c)
 			c++;
 
 		n = 0;
 		s = c;
-		while (*c) {
-			if (*c == ',')
+		while(*c)
+		{
+			if(*c == ',')
 				break;
 			c++;
 			n++;
 		}
 
 		strv = strndup(s, n);
-		if (!strcmp(key, att))
+		if(!strcmp(key, att))
 			v = atoi(strv);
 
 		free(key);
 		free(strv);
 
-		if (v != UNKNOWN_DBL_VALUE)
+		if(v != UNKNOWN_DBL_VALUE)
 			break;
 
-		while (*c && (*c == ' ' || *c == ','))
+		while(*c && (*c == ' ' || *c == ','))
 			c++;
 	}
 
@@ -144,26 +141,27 @@ double get_usage_att(char *atts, const char *att)
 
 const char *get_nvidia_type_str(int type)
 {
-	if (type & SENSOR_TYPE_GRAPHICS)
+	if(type & SENSOR_TYPE_GRAPHICS)
 		return "graphics";
 
-	if (type & SENSOR_TYPE_VIDEO)
+	if(type & SENSOR_TYPE_VIDEO)
 		return "video";
 
-	if (type & SENSOR_TYPE_MEMORY)
+	if(type & SENSOR_TYPE_MEMORY)
 		return "memory";
 
-	if (type & SENSOR_TYPE_PCIE)
+	if(type & SENSOR_TYPE_PCIE)
 		return "PCIe";
 
-	if (type & SENSOR_TYPE_AMBIENT)
+	if(type & SENSOR_TYPE_AMBIENT)
 		return "ambient";
 
-	if (type & SENSOR_TYPE_TEMP)
+	if(type & SENSOR_TYPE_TEMP)
 		return "temp";
 
-	if (type & SENSOR_TYPE_FAN) {
-		if (type & SENSOR_TYPE_RPM)
+	if(type & SENSOR_TYPE_FAN)
+	{
+		if(type & SENSOR_TYPE_RPM)
 			return "fan rpm";
 
 		return "fan level";
@@ -181,17 +179,12 @@ double get_usage(int id, int type)
 
 	stype = get_nvidia_type_str(type);
 
-	if (!stype)
+	if(!stype)
 		return UNKNOWN_DBL_VALUE;
 
-	res = XNVCTRLQueryTargetStringAttribute(display,
-						NV_CTRL_TARGET_TYPE_GPU,
-						id,
-						0,
-						NV_CTRL_STRING_GPU_UTILIZATION,
-						&atts);
+	res = XNVCTRLQueryTargetStringAttribute(display, NV_CTRL_TARGET_TYPE_GPU, id, 0, NV_CTRL_STRING_GPU_UTILIZATION, &atts);
 
-	if (res != True)
+	if(res != True)
 		return UNKNOWN_DBL_VALUE;
 
 	v = get_usage_att(atts, stype);
@@ -205,23 +198,24 @@ double get_value(int id, int type)
 {
 	int att;
 
-	if (type & SENSOR_TYPE_TEMP) {
-		if (type & SENSOR_TYPE_AMBIENT)
+	if(type & SENSOR_TYPE_TEMP)
+	{
+		if(type & SENSOR_TYPE_AMBIENT)
 			att = NV_CTRL_AMBIENT_TEMPERATURE;
 		else
 			att = NV_CTRL_GPU_CORE_TEMPERATURE;
 
 		return get_att(NV_CTRL_TARGET_TYPE_GPU, id, att);
-	} else if (type & SENSOR_TYPE_FAN) {
-		if (type & SENSOR_TYPE_RPM)
-			return get_att(NV_CTRL_TARGET_TYPE_COOLER,
-				       id,
-				       NV_CTRL_THERMAL_COOLER_SPEED);
+	}
+	else if(type & SENSOR_TYPE_FAN)
+	{
+		if(type & SENSOR_TYPE_RPM)
+			return get_att(NV_CTRL_TARGET_TYPE_COOLER, id, NV_CTRL_THERMAL_COOLER_SPEED);
 		else /* SENSOR_TYPE_PERCENT */
-			return get_att(NV_CTRL_TARGET_TYPE_COOLER,
-				       id,
-				       NV_CTRL_THERMAL_COOLER_LEVEL);
-	} else { /* SENSOR_TYPE_PERCENT */
+			return get_att(NV_CTRL_TARGET_TYPE_COOLER, id, NV_CTRL_THERMAL_COOLER_LEVEL);
+	}
+	else
+	{ /* SENSOR_TYPE_PERCENT */
 		return get_usage(id, type);
 	}
 }
@@ -235,12 +229,8 @@ void update(struct psensor *sensor)
 
 	v = get_value(id, sensor->type);
 
-	if (v == UNKNOWN_DBL_VALUE)
-		log_err(_("%s: Failed to retrieve measure of type %x "
-			  "for NVIDIA GPU %d"),
-			PROVIDER_NAME,
-			sensor->type,
-			id);
+	if(v == UNKNOWN_DBL_VALUE)
+		log_err(_("%s: Failed to retrieve measure of type %x "  "for NVIDIA GPU %d"), PROVIDER_NAME, sensor->type, id);
 	psensor_set_current_value(sensor, v);
 }
 
@@ -276,7 +266,7 @@ struct psensor *create_nvidia_sensor(int id, int subtype, int value_len)
 
 	type = SENSOR_TYPE_NVCTRL | subtype;
 
-	if (!check_sensor(id, type))
+	if(!check_sensor(id, type))
 		return NULL;
 
 	pname = get_product_name(id, type);
@@ -294,10 +284,9 @@ struct psensor *create_nvidia_sensor(int id, int subtype, int value_len)
 	s->provider_data = malloc(sizeof(int));
 	set_nvidia_id(s, id);
 
-	if ((type & SENSOR_TYPE_GPU) && (type & SENSOR_TYPE_TEMP)) {
-		v = get_att(NV_CTRL_TARGET_TYPE_GPU,
-			    id,
-			    NV_CTRL_GPU_CORE_THRESHOLD);
+	if((type & SENSOR_TYPE_GPU) && (type & SENSOR_TYPE_TEMP))
+	{
+		v = get_att(NV_CTRL_TARGET_TYPE_GPU, id, NV_CTRL_GPU_CORE_THRESHOLD);
 		s->max = v;
 	}
 
@@ -312,17 +301,16 @@ int init(void)
 
 	display = XOpenDisplay(NULL);
 
-	if (!display) {
-		log_err(_("%s: Cannot open connection to X11 server."),
-			PROVIDER_NAME);
+	if(!display)
+	{
+		log_err(_("%s: Cannot open connection to X11 server."), PROVIDER_NAME);
 		return 0;
 	}
 
-	if (XNVCTRLQueryExtension(display, &evt, &err))
+	if(XNVCTRLQueryExtension(display, &evt, &err))
 		return 1;
 
-	log_err(_("%s: Failed to retrieve NVIDIA information."),
-		PROVIDER_NAME);
+	log_err(_("%s: Failed to retrieve NVIDIA information."), PROVIDER_NAME);
 
 	return 0;
 }
@@ -331,11 +319,11 @@ void nvidia_psensor_list_update(struct psensor **sensors)
 {
 	struct psensor *s;
 
-	while (*sensors) {
+	while(*sensors)
+	{
 		s = *sensors;
 
-		if (!(s->type & SENSOR_TYPE_REMOTE)
-		    && s->type & SENSOR_TYPE_NVCTRL)
+		if(!(s->type & SENSOR_TYPE_REMOTE) && s->type & SENSOR_TYPE_NVCTRL)
 			update(s);
 
 		sensors++;
@@ -348,7 +336,7 @@ void add(struct psensor ***sensors, int id, int type, int values_len)
 
 	s = create_nvidia_sensor(id, type, values_len);
 
-	if (s)
+	if(s)
 		psensor_list_append(sensors, s);
 }
 
@@ -357,16 +345,15 @@ void nvidia_psensor_list_append(struct psensor ***ss, int values_len)
 	int i, n, utype;
 	Bool ret;
 
-	if (!init())
+	if(!init())
 		return;
 
 	ret = XNVCTRLQueryTargetCount(display, NV_CTRL_TARGET_TYPE_GPU, &n);
-	if (ret == True) {
-		for (i = 0; i < n; i++) {
-			add(ss,
-			    i,
-			    SENSOR_TYPE_GPU | SENSOR_TYPE_TEMP,
-			    values_len);
+	if(ret == True)
+	{
+		for(i = 0; i < n; i++)
+		{
+			add(ss, i, SENSOR_TYPE_GPU | SENSOR_TYPE_TEMP, values_len);
 
 			utype = SENSOR_TYPE_GPU | SENSOR_TYPE_PERCENT;
 			add(ss, i, utype | SENSOR_TYPE_AMBIENT, values_len);
@@ -378,26 +365,31 @@ void nvidia_psensor_list_append(struct psensor ***ss, int values_len)
 	}
 
 	ret = XNVCTRLQueryTargetCount(display, NV_CTRL_TARGET_TYPE_COOLER, &n);
-	if (ret == True) {
+	if(ret == True)
+	{
 		log_fct("%s: Number of fans: %d", PROVIDER_NAME, n);
-		for (i = 0; i < n; i++) {
+		for(i = 0; i < n; i++)
+		{
 			utype = SENSOR_TYPE_FAN | SENSOR_TYPE_RPM;
-			if (check_sensor(i, utype))
+			if(check_sensor(i, utype))
 				add(ss, i, utype, values_len);
 
 			utype = SENSOR_TYPE_FAN | SENSOR_TYPE_PERCENT;
-			if (check_sensor(i, utype))
-				add(ss, i, utype, values_len);
+			
+			if(check_sensor(i, utype))
+			    add(ss, i, utype, values_len);
 		}
-	} else {
-		log_err(_("%s: Failed to retrieve number of fans."),
-			PROVIDER_NAME);
+	}
+	else
+	{
+		log_err(_("%s: Failed to retrieve number of fans."), PROVIDER_NAME);
 	}
 }
 
 void nvidia_cleanup(void)
 {
-	if (display) {
+	if(display)
+	{
 		XCloseDisplay(display);
 		display = NULL;
 	}

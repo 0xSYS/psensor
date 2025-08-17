@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -39,13 +40,13 @@ void log_open(const char *path)
 {
 	file = fopen(path, "a");
 
-	if (!file)
+	if(!file)
 		log_printf(LOG_ERR, _("Cannot open log file: %s"), path);
 }
 
 void log_close(void)
 {
-	if (!file)
+	if(!file)
 		return;
 
 	fclose(file);
@@ -62,13 +63,14 @@ static void vlogf(int lvl, const char *fct, const char *fmt, va_list ap)
 	char *lvl_str, *t;
 	FILE *stdf;
 
-	if (lvl > LOG_INFO && (!file || lvl > log_level))
+	if(lvl > LOG_INFO && (!file || lvl > log_level))
 		return;
 
 	vsnprintf(buffer, LOG_BUFFER, fmt, ap);
 	buffer[LOG_BUFFER] = '\0';
 
-	switch (lvl) {
+	switch (lvl)
+	{
 	case LOG_WARN:
 		lvl_str = "[ \033[38;5;214mWARN\033[0m ]";
 		break;
@@ -86,29 +88,31 @@ static void vlogf(int lvl, const char *fct, const char *fmt, va_list ap)
 	}
 
 	t = get_current_ISO8601_time();
-	if (!t)
+	if(!t)
 		return;
 
-	if (file && lvl <= log_level) {
-		if (fct)
-			fprintf(file,
-				"[ %s ] %s %s(): %s\n", t, lvl_str, fct, buffer);
+	if(file && lvl <= log_level)
+	{
+		if(fct)
+			fprintf(file, "[ %s ] %s %s(): %s\n", t, lvl_str, fct, buffer);
 		else
 			fprintf(file, "[ %s ] %s %s\n", t, lvl_str, buffer);
 		fflush(file);
-	} else {
+	}
+	else
+	{
 		t = NULL;
 	}
 
-	if (lvl <= LOG_INFO) {
-		if (lvl == LOG_WARN || lvl == LOG_ERR)
+	if(lvl <= LOG_INFO)
+	{
+		if(lvl == LOG_WARN || lvl == LOG_ERR)
 			stdf = stderr;
 		else
 			stdf = stdout;
 
-		if (fct)
-			fprintf(file,
-				"[ %s ] %s %s(): %s\n", t, lvl_str, fct, buffer);
+		if(fct)
+			fprintf(file, "[ %s ] %s %s(): %s\n", t, lvl_str, fct, buffer);
 		else
 			fprintf(stdf, "\r[ %s ] %s %s\n", t, lvl_str, buffer);
 	}
@@ -129,7 +133,7 @@ void log_debug(const char *fmt, ...)
 {
 	va_list ap;
 
-	if (log_level < LOG_DEBUG)
+	if(log_level < LOG_DEBUG)
 		return;
 
 	va_start(ap, fmt);

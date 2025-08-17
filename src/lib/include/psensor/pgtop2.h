@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -24,7 +25,10 @@
 
 #if defined(HAVE_GTOP) && HAVE_GTOP
 
-static inline bool gtop2_is_supported(void) { return true; }
+static inline bool gtop2_is_supported(void)
+{
+    return true;
+}
 
 struct psensor *create_cpu_usage_sensor(int);
 void cpu_usage_sensor_update(struct psensor *);
@@ -34,9 +38,16 @@ void gtop2_psensor_list_append(struct psensor ***, int);
 
 #else
 
-static inline bool gtop2_is_supported(void) { return false; }
+static inline bool gtop2_is_supported(void)
+{
+    return false;
+}
 
-static inline struct psensor *create_cpu_usage_sensor(int n) { return NULL; }
+static inline struct psensor *create_cpu_usage_sensor(int n)
+{
+    return NULL;
+}
+
 static inline void cpu_usage_sensor_update(struct psensor *s) {}
 
 static inline void gtop2_psensor_list_update(struct psensor **s) {}

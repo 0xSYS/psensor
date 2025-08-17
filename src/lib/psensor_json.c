@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -34,33 +35,26 @@
 #define ATT_MEASURE_VALUE "value"
 #define ATT_MEASURE_TIME "time"
 
-static json_object *
-measure_to_json_object(struct measure *m)
+static json_object *measure_to_json_object(struct measure *m)
 {
 	json_object *o = json_object_new_object();
 
-	json_object_object_add(o,
-			       ATT_MEASURE_VALUE,
-			       json_object_new_double(m->value));
-	json_object_object_add(o, ATT_MEASURE_TIME,
-			       json_object_new_int((m->time).tv_sec));
+	json_object_object_add(o, ATT_MEASURE_VALUE, json_object_new_double(m->value));
+	json_object_object_add(o, ATT_MEASURE_TIME, json_object_new_int((m->time).tv_sec));
 	return o;
 }
 
-static json_object *
-measures_to_json_object(struct psensor *s)
+static json_object *measures_to_json_object(struct psensor *s)
 {
 	json_object *o;
 	int i;
 
 	o = json_object_new_array();
 
-	for (i = 0; i < s->values_max_length; i++)
-		if (s->measures[i].time.tv_sec)
-			json_object_array_add
-				(o, measure_to_json_object(&s->measures[i]));
-
-
+	for(i = 0; i < s->values_max_length; i++)
+		if(s->measures[i].time.tv_sec)
+			json_object_array_add(o, measure_to_json_object(&s->measures[i]));
+	
 	return o;
 }
 
@@ -71,31 +65,17 @@ static json_object *sensor_to_json(struct psensor *s)
 
 	obj = json_object_new_object();
 
-	json_object_object_add(obj,
-			       ATT_SENSOR_ID,
-			       json_object_new_string(s->id));
-	json_object_object_add(obj,
-			       ATT_SENSOR_NAME,
-			       json_object_new_string(s->name));
-	json_object_object_add(obj,
-			       ATT_SENSOR_TYPE, json_object_new_int(s->type));
-	json_object_object_add(obj,
-			       ATT_SENSOR_MIN,
-			       json_object_new_double(s->sess_lowest));
-	json_object_object_add(obj,
-			       ATT_SENSOR_MAX,
-			       json_object_new_double(s->sess_highest));
-	json_object_object_add(obj,
-			       ATT_SENSOR_MEASURES,
-			       measures_to_json_object(s));
+	json_object_object_add(obj, ATT_SENSOR_ID, json_object_new_string(s->id));
+	json_object_object_add(obj, ATT_SENSOR_NAME, json_object_new_string(s->name));
+	json_object_object_add(obj, ATT_SENSOR_TYPE, json_object_new_int(s->type));
+	json_object_object_add(obj, ATT_SENSOR_MIN, json_object_new_double(s->sess_lowest));
+	json_object_object_add(obj, ATT_SENSOR_MAX, json_object_new_double(s->sess_highest));
+	json_object_object_add(obj, ATT_SENSOR_MEASURES, measures_to_json_object(s));
 
 	m = psensor_get_current_measure(s);
 	mo = json_object_new_object();
-	json_object_object_add(mo,
-			       ATT_MEASURE_VALUE,
-			       json_object_new_double(m->value));
-	json_object_object_add(mo, ATT_MEASURE_TIME,
-			       json_object_new_int((m->time).tv_sec));
+	json_object_object_add(mo, ATT_MEASURE_VALUE, json_object_new_double(m->value));
+	json_object_object_add(mo, ATT_MEASURE_TIME, json_object_new_int((m->time).tv_sec));
 	json_object_object_add(obj, ATT_SENSOR_LAST_MEASURE, mo);
 
 	return obj;
@@ -119,14 +99,14 @@ char *sensors_to_json_string(struct psensor **sensors)
 	char *str;
 	json_object *obj = json_object_new_array();
 
-	if (sensors) {
+	if(sensors)
+	{
 		sensors_cur = sensors;
 
-		while (*sensors_cur) {
+		while(*sensors_cur)
+		{
 			struct psensor *s = *sensors_cur;
-
 			json_object_array_add(obj, sensor_to_json(s));
-
 			sensors_cur++;
 		}
 	}
@@ -138,9 +118,7 @@ char *sensors_to_json_string(struct psensor **sensors)
 	return str;
 }
 
-struct psensor *psensor_new_from_json(json_object *o,
-				      const char *sensors_url,
-				      int values_max_length)
+struct psensor *psensor_new_from_json(json_object *o, const char *sensors_url, int values_max_length)
 {
 	json_object *oid, *oname, *otype;
 	struct psensor *s;
@@ -154,11 +132,7 @@ struct psensor *psensor_new_from_json(json_object *o,
 	url = malloc(strlen(sensors_url) + 1 + strlen(eid) + 1);
 	sprintf(url, "%s/%s", sensors_url, eid);
 
-	s = psensor_create(strdup(url),
-			   strdup(json_object_get_string(oname)),
-			   NULL,
-			   json_object_get_int(otype) | SENSOR_TYPE_REMOTE,
-			   values_max_length);
+	s = psensor_create(strdup(url), strdup(json_object_get_string(oname)), NULL, json_object_get_int(otype) | SENSOR_TYPE_REMOTE, values_max_length);
 	s->provider_data = url;
 
 	free(eid);

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -36,7 +37,5 @@ char *sensors_to_json_string(struct psensor **sensors);
  * Creates a new allocated psensor corresponding to a given json
  * representation.
  */
-struct psensor *psensor_new_from_json(json_object *o,
-				      const char *sensors_url,
-				      int values_max_length);
+struct psensor *psensor_new_from_json(json_object *o, const char *sensors_url, int values_max_length);
 #endif

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -25,9 +26,9 @@
 
 #define UNKNOWN_DBL_VALUE DBL_MIN
 
-struct measure {
+struct measure
+{
 	double value;
-
 	struct timeval time;
 };
 

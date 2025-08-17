@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -31,7 +32,7 @@ char *time_to_ISO8601_time(time_t *t)
 	struct tm lt;
 
 	memset(&lt, 0, sizeof(struct tm));
-	if (!gmtime_r(t, &lt))
+	if(!gmtime_r(t, &lt))
 		return NULL;
 
 	return tm_to_ISO8601_time(&lt);
@@ -42,7 +43,7 @@ char *time_to_ISO8601_date(time_t *t)
 	struct tm lt;
 
 	memset(&lt, 0, sizeof(struct tm));
-	if (!gmtime_r(t, &lt))
+	if(!gmtime_r(t, &lt))
 		return NULL;
 
 	return tm_to_ISO8601_date(&lt);
@@ -54,7 +55,7 @@ char *tm_to_ISO8601_date(struct tm *tm)
 
 	str = malloc(ISO8601_DATE_LENGTH + 1);
 
-	if (strftime(str, ISO8601_DATE_LENGTH + 1, "%F", tm))
+	if(strftime(str, ISO8601_DATE_LENGTH + 1, "%F", tm))
 		return str;
 
 	free(str);
@@ -67,7 +68,7 @@ char *tm_to_ISO8601_time(struct tm *tm)
 
 	str = malloc(ISO8601_TIME_LENGTH + 1);
 
-	if (strftime(str, ISO8601_TIME_LENGTH + 1, "%FT%T", tm))
+	if(strftime(str, ISO8601_TIME_LENGTH + 1, "%FT%T", tm))
 		return str;
 
 	free(str);
