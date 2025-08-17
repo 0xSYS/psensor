@@ -1,7 +1,0 @@
-{
-    cmdlines = {
-        "xmake r",
-        "xmake r",
-        "xmake r"
-    }
-}
