@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -24,19 +25,22 @@
 #include <psensor/bool.h>
 #include <psensor/color.h>
 
-enum temperature_unit {
+enum temperature_unit
+{
 	CELSIUS,
 	FAHRENHEIT
 };
 
-enum sensorlist_position {
+enum sensorlist_position
+{
 	SENSORLIST_POSITION_RIGHT,
 	SENSORLIST_POSITION_LEFT,
 	SENSORLIST_POSITION_TOP,
 	SENSORLIST_POSITION_BOTTOM
 };
 
-struct config {
+struct config
+{
 	struct color *graph_bgcolor;
 	struct color *graph_fgcolor;
 

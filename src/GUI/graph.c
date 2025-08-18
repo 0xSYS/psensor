@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2024 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -39,7 +40,8 @@ static const int GRAPH_V_PADDING = 4;
 
 bool is_smooth_curves_enabled;
 
-struct graph_info {
+struct graph_info
+{
 	/* Horizontal position of the central area (curves) */
 	int g_xoff;
 	/* Vertical position of the central area (curves) */
@@ -66,12 +68,8 @@ static void update_theme(GtkWidget *w)
 {
 	style = gtk_widget_get_style_context(w);
 
-	gtk_style_context_get_background_color(style,
-					       GTK_STATE_FLAG_NORMAL,
-					       &theme_bg_color);
-	gtk_style_context_get_color(style,
-				    GTK_STATE_FLAG_NORMAL,
-				    &theme_fg_color);
+	gtk_style_context_get_background_color(style, GTK_STATE_FLAG_NORMAL, &theme_bg_color);
+	gtk_style_context_get_color(style, GTK_STATE_FLAG_NORMAL, &theme_fg_color);
 }
 
 static struct psensor **list_filter_graph_enabled(struct psensor **sensors)
@@ -79,16 +77,17 @@ static struct psensor **list_filter_graph_enabled(struct psensor **sensors)
 	int n, i;
 	struct psensor **result, **cur, *s;
 
-	if (!sensors)
+	if(!sensors)
 		return NULL;
 
 	n = psensor_list_size(sensors);
 	result = malloc((n+1) * sizeof(struct psensor *));
 
-	for (cur = sensors, i = 0; *cur; cur++) {
+	for(cur = sensors, i = 0; *cur; cur++)
+	{
 		s = *cur;
 
-		if (config_is_sensor_graph_enabled(s->id))
+		if(config_is_sensor_graph_enabled(s->id))
 			result[i++] = s;
 	}
 
@@ -110,25 +109,32 @@ static time_t get_graph_end_time_s(struct psensor **sensors)
 	int i, n;
 
 	ret = 0;
-	while (*sensors) {
+	while(*sensors)
+	{
 		s = *sensors;
 		measures = s->measures;
 
-		if (is_smooth_curves_enabled)
+		if(is_smooth_curves_enabled)
 			n = 2;
 		else
 			n = 0;
 
-		for (i = s->values_max_length - 1; i >= 0; i--) {
-			if (measures[i].value != UNKNOWN_DBL_VALUE) {
-				if (!n) {
+		for(i = s->values_max_length - 1; i >= 0; i--)
+		{
+			if(measures[i].value != UNKNOWN_DBL_VALUE)
+			{
+				if(!n)
+				{
 					t = measures[i].time.tv_sec;
 
-					if (t > ret) {
+					if(t > ret)
+					{
 						ret = t;
 						break;
 					}
-				} else {
+				}
+				else
+				{
 					n--;
 				}
 			}
@@ -143,14 +149,13 @@ static time_t get_graph_end_time_s(struct psensor **sensors)
 
 static time_t get_graph_begin_time_s(struct config *cfg, time_t etime)
 {
-	if (!etime)
+	if(!etime)
 		return 0;
 
 	return etime - cfg->graph_monitoring_duration * 60;
 }
 
-static double
-compute_y(double value, double min, double max, int height, int off)
+static double compute_y(double value, double min, double max, int height, int off)
 {
 	double t = value - min;
 
@@ -163,7 +168,7 @@ static char *time_to_str(time_t s)
 	/* note: localtime returns a static field, no free required */
 	struct tm *tm = localtime(&s);
 
-	if (!tm)
+	if(!tm)
 		return NULL;
 
 	str = malloc(6);
@@ -174,72 +179,38 @@ static char *time_to_str(time_t s)
 
 static void draw_left_region(cairo_t *cr, struct graph_info *info)
 {
-	cairo_set_source_rgb(cr,
-			     theme_bg_color.red,
-			     theme_bg_color.green,
-			     theme_bg_color.blue);
-
+	cairo_set_source_rgb(cr, theme_bg_color.red, theme_bg_color.green, theme_bg_color.blue);
 	cairo_rectangle(cr, 0, 0, info->g_xoff, info->height);
 	cairo_fill(cr);
 }
 
 static void draw_right_region(cairo_t *cr, struct graph_info *info)
 {
-	cairo_set_source_rgb(cr,
-			     theme_bg_color.red,
-			     theme_bg_color.green,
-			     theme_bg_color.blue);
-
-
-	cairo_rectangle(cr,
-			info->g_xoff + info->g_width,
-			0,
-			info->g_xoff + info->g_width + GRAPH_H_PADDING,
-			info->height);
+	cairo_set_source_rgb(cr, theme_bg_color.red, theme_bg_color.green, theme_bg_color.blue);
+	cairo_rectangle(cr, info->g_xoff + info->g_width, 0, info->g_xoff + info->g_width + GRAPH_H_PADDING, info->height);
 	cairo_fill(cr);
 }
 
-static void
-draw_graph_background(cairo_t *cr,
-		      struct config *config,
-		      struct graph_info *info)
+static void draw_graph_background(cairo_t *cr, struct config *config, struct graph_info *info)
 {
 	struct color *bgcolor;
 
 	bgcolor = config->graph_bgcolor;
 
-	if (config->alpha_channel_enabled)
-		cairo_set_source_rgba(cr,
-				      theme_bg_color.red,
-				      theme_bg_color.green,
-				      theme_bg_color.blue,
-				      config->graph_bg_alpha);
+	if(config->alpha_channel_enabled)
+		cairo_set_source_rgba(cr, theme_bg_color.red, theme_bg_color.green, theme_bg_color.blue, config->graph_bg_alpha);
 	else
-		cairo_set_source_rgb(cr,
-				     theme_bg_color.red,
-				     theme_bg_color.green,
-				     theme_bg_color.blue);
+		cairo_set_source_rgb(cr, theme_bg_color.red, theme_bg_color.green, theme_bg_color.blue);
 
 	cairo_rectangle(cr, info->g_xoff, 0, info->g_width, info->height);
 	cairo_fill(cr);
 
-	if (config->alpha_channel_enabled)
-		cairo_set_source_rgba(cr,
-				      bgcolor->red,
-				      bgcolor->green,
-				      bgcolor->blue,
-				      config->graph_bg_alpha);
+	if(config->alpha_channel_enabled)
+		cairo_set_source_rgba(cr, bgcolor->red, bgcolor->green, bgcolor->blue, config->graph_bg_alpha);
 	else
-		cairo_set_source_rgb(cr,
-				     bgcolor->red,
-				     bgcolor->green,
-				     bgcolor->blue);
+		cairo_set_source_rgb(cr, bgcolor->red, bgcolor->green, bgcolor->blue);
 
-	cairo_rectangle(cr,
-			info->g_xoff,
-			info->g_yoff,
-			info->g_width,
-			info->g_height);
+	cairo_rectangle(cr, info->g_xoff, info->g_yoff, info->g_width, info->g_height);
 	cairo_fill(cr);
 }
 
@@ -250,10 +221,7 @@ static double dashes[] = {
 };
 static int ndash = ARRAY_SIZE(dashes);
 
-static void draw_background_lines(cairo_t *cr,
-				  int min, int max,
-				  struct config *config,
-				  struct graph_info *info)
+static void draw_background_lines(cairo_t *cr, int min, int max, struct config *config, struct graph_info *info)
 {
 	int i;
 	double x, y;
@@ -267,20 +235,19 @@ static void draw_background_lines(cairo_t *cr,
 	cairo_set_source_rgb(cr, color->red, color->green, color->blue);
 
 	/* vertical lines representing time steps */
-	for (i = 0; i <= 5; i++) {
+	for(i = 0; i <= 5; i++)
+	{
 		x = i * ((double)info->g_width / 5) + info->g_xoff;
 		cairo_move_to(cr, x, info->g_yoff);
 		cairo_line_to(cr, x, info->g_yoff + info->g_height);
 	}
 
 	/* horizontal lines draws a line for each 10C step */
-	for (i = min; i < max; i++) {
-		if (i % 10 == 0) {
-			y = compute_y(i,
-				      min,
-				      max,
-				      info->g_height,
-				      info->g_yoff);
+	for(i = min; i < max; i++)
+	{
+		if(i % 10 == 0)
+		{
+			y = compute_y(i, min, max, info->g_height, info->g_yoff);
 
 			cairo_move_to(cr, info->g_xoff, y);
 			cairo_line_to(cr, info->g_xoff + info->g_width, y);
@@ -300,33 +267,21 @@ static void draw_background_lines(cairo_t *cr,
  */
 static GHashTable *times;
 
-static void draw_sensor_smooth_curve(struct psensor *s,
-				     cairo_t *cr,
-				     double min,
-				     double max,
-				     int bt,
-				     int et,
-				     struct graph_info *info)
+static void draw_sensor_smooth_curve(struct psensor *s, cairo_t *cr, double min, double max, int bt, int et, struct graph_info *info)
 {
 	int i, dt, vdt, j, k, found;
 	double x[4], y[4], v;
 	time_t t, t0, *stimes;
 	GdkRGBA *color;
 
-	if (!times)
-		times = g_hash_table_new_full(g_str_hash,
-					      g_str_equal,
-					      free,
-					      free);
+	if(!times)
+		times = g_hash_table_new_full(g_str_hash, g_str_equal, free, free);
 
 	stimes = g_hash_table_lookup(times, s->id);
 
 	color = config_get_sensor_color(s->id);
 
-	cairo_set_source_rgb(cr,
-			     color->red,
-			     color->green,
-			     color->blue);
+	cairo_set_source_rgb(cr, color->red, color->green, color->blue);
 	gdk_rgba_free(color);
 
 	/* search the index of the first measure used as a start point
@@ -335,16 +290,21 @@ static void draw_sensor_smooth_curve(struct psensor *s,
 	 * of the graph.
 	 */
 	i = 0;
-	if (stimes) {
-		while (i < s->values_max_length) {
+	if(stimes)
+	{
+		while(i < s->values_max_length)
+		{
 			t = s->measures[i].time.tv_sec;
 			v = s->measures[i].value;
 
 			found = 0;
-			if (v != UNKNOWN_DBL_VALUE && t) {
+			if(v != UNKNOWN_DBL_VALUE && t)
+			{
 				k = 0;
-				while (stimes[k]) {
-					if (t == stimes[k]) {
+				while(stimes[k])
+				{
+					if(t == stimes[k])
+					{
 						found = 1;
 						break;
 					}
@@ -352,7 +312,7 @@ static void draw_sensor_smooth_curve(struct psensor *s,
 				}
 			}
 
-			if (found)
+			if(found)
 				break;
 
 			i++;
@@ -363,19 +323,22 @@ static void draw_sensor_smooth_curve(struct psensor *s,
 	memset(stimes, 0, (s->values_max_length + 1) * sizeof(time_t));
 	g_hash_table_insert(times, strdup(s->id), stimes);
 
-	if (i == s->values_max_length)
+	if(i == s->values_max_length)
 		i = 0;
 
 	k = 0;
 	dt = et - bt;
-	while (i < s->values_max_length) {
+	while(i < s->values_max_length)
+	{
 		j = 0;
 		t = 0;
-		while (i < s->values_max_length && j < 4) {
+		while(i < s->values_max_length && j < 4)
+		{
 			t = s->measures[i].time.tv_sec;
 			v = s->measures[i].value;
 
-			if (v == UNKNOWN_DBL_VALUE || !t) {
+			if(v == UNKNOWN_DBL_VALUE || !t)
+			{
 				i++;
 				continue;
 			}
@@ -384,20 +347,17 @@ static void draw_sensor_smooth_curve(struct psensor *s,
 
 			x[0 + j] = ((double)vdt * info->g_width)
 				/ dt + info->g_xoff;
-			y[0 + j] = compute_y(v,
-					     min,
-					     max,
-					     info->g_height,
-					     info->g_yoff);
+			y[0 + j] = compute_y(v, min, max, info->g_height, info->g_yoff);
 
-			if (j == 0)
+			if(j == 0)
 				t0 = t;
 
 			i++;
 			j++;
 		}
 
-		if (j == 4) {
+		if(j == 4)
+		{
 			cairo_move_to(cr, x[0], y[0]);
 			cairo_curve_to(cr, x[1], y[1], x[2], y[3], x[3], y[3]);
 			stimes[k++] = t0;
@@ -408,32 +368,24 @@ static void draw_sensor_smooth_curve(struct psensor *s,
 	cairo_stroke(cr);
 }
 
-static void draw_sensor_curve(struct psensor *s,
-			      cairo_t *cr,
-			      double min,
-			      double max,
-			      int bt,
-			      int et,
-			      struct graph_info *info)
+static void draw_sensor_curve(struct psensor *s, cairo_t *cr, double min, double max, int bt, int et, struct graph_info *info)
 {
 	int first, i, t, dt, vdt;
 	double v, x, y;
 	GdkRGBA *color;
 
 	color = config_get_sensor_color(s->id);
-	cairo_set_source_rgb(cr,
-			     color->red,
-			     color->green,
-			     color->blue);
+	cairo_set_source_rgb(cr, color->red, color->green, color->blue);
 	gdk_rgba_free(color);
 
 	dt = et - bt;
 	first = 1;
-	for (i = 0; i < s->values_max_length; i++) {
+	for(i = 0; i < s->values_max_length; i++)
+	{
 		t = s->measures[i].time.tv_sec;
 		v = s->measures[i].value;
 
-		if (v == UNKNOWN_DBL_VALUE || !t)
+		if(v == UNKNOWN_DBL_VALUE || !t)
 			continue;
 
 		vdt = t - bt;
@@ -442,10 +394,13 @@ static void draw_sensor_curve(struct psensor *s,
 
 		y = compute_y(v, min, max, info->g_height, info->g_yoff);
 
-		if (first) {
+		if(first)
+		{
 			cairo_move_to(cr, x, y);
 			first = 0;
-		} else {
+		}
+		else
+		{
 			cairo_line_to(cr, x, y);
 		}
 
@@ -459,10 +414,7 @@ static void display_no_graphs_warning(cairo_t *cr, int x, int y)
 
 	msg = strdup(_("No graphs enabled"));
 
-	cairo_select_font_face(cr,
-			       "sans-serif",
-			       CAIRO_FONT_SLANT_NORMAL,
-			       CAIRO_FONT_WEIGHT_NORMAL);
+	cairo_select_font_face(cr, "sans-serif", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
 	cairo_set_font_size(cr, 18.0);
 
 	cairo_move_to(cr, x, y);
@@ -471,11 +423,7 @@ static void display_no_graphs_warning(cairo_t *cr, int x, int y)
 	free(msg);
 }
 
-void
-graph_update(struct psensor **sensors,
-	     GtkWidget *w_graph,
-	     struct config *config,
-	     GtkWidget *window)
+void graph_update(struct psensor **sensors, GtkWidget *w_graph, struct config *config, GtkWidget *window)
 {
 	int et, bt, width, height, g_width, g_height;
 	double min_rpm, max_rpm, mint, maxt, min, max;
@@ -490,10 +438,10 @@ graph_update(struct psensor **sensors,
 	GtkAllocation galloc;
 	struct graph_info info;
 
-	if (!gtk_widget_is_drawable(w_graph))
+	if(!gtk_widget_is_drawable(w_graph))
 		return;
 
-	if (!style)
+	if(!style)
 		update_theme(window);
 
 	enabled_sensors = list_filter_graph_enabled(sensors);
@@ -501,7 +449,7 @@ graph_update(struct psensor **sensors,
 	min_rpm = get_min_rpm(enabled_sensors);
 	max_rpm = get_max_rpm(enabled_sensors);
 
-	if (config_get_temperature_unit() == CELSIUS)
+	if(config_get_temperature_unit() == CELSIUS)
 		use_celsius = 1;
 	else
 		use_celsius = 0;
@@ -528,10 +476,7 @@ graph_update(struct psensor **sensors,
 	cst = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
 	cr = cairo_create(cst);
 
-	cairo_select_font_face(cr,
-			       "sans-serif",
-			       CAIRO_FONT_SLANT_NORMAL,
-			       CAIRO_FONT_WEIGHT_NORMAL);
+	cairo_select_font_face(cr, "sans-serif", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
 	cairo_set_font_size(cr, 10.0);
 
 	cairo_text_extents(cr, str_etime, &te_etime);
@@ -543,14 +488,14 @@ graph_update(struct psensor **sensors,
 	info.g_yoff = g_yoff;
 
 	g_height = height - GRAPH_V_PADDING;
-	if (te_etime.height > te_btime.height)
+	if(te_etime.height > te_btime.height)
 		g_height -= GRAPH_V_PADDING + te_etime.height + GRAPH_V_PADDING;
 	else
 		g_height -= GRAPH_V_PADDING + te_btime.height + GRAPH_V_PADDING;
 
 	info.g_height = g_height;
 
-	if (te_min.width > te_max.width)
+	if(te_min.width > te_max.width)
 		g_xoff = (2 * GRAPH_H_PADDING) + te_max.width;
 	else
 		g_xoff = (2 * GRAPH_H_PADDING) + te_min.width;
@@ -563,10 +508,7 @@ graph_update(struct psensor **sensors,
 	draw_graph_background(cr, config, &info);
 
 	/* Set the color for text drawing */
-	cairo_set_source_rgb(cr,
-			     theme_fg_color.red,
-			     theme_fg_color.green,
-			     theme_fg_color.blue);
+	cairo_set_source_rgb(cr, theme_fg_color.red, theme_fg_color.green, theme_fg_color.blue);
 
 	/* draw graph begin time */
 	cairo_move_to(cr, g_xoff, height - GRAPH_V_PADDING);
@@ -574,79 +516,72 @@ graph_update(struct psensor **sensors,
 	free(str_btime);
 
 	/* draw graph end time */
-	cairo_move_to(cr,
-		      width - te_etime.width - GRAPH_H_PADDING,
-		      height - GRAPH_V_PADDING);
+	cairo_move_to(cr, width - te_etime.width - GRAPH_H_PADDING, height - GRAPH_V_PADDING);
 	cairo_show_text(cr, str_etime);
 	free(str_etime);
 
 	draw_background_lines(cr, mint, maxt, config, &info);
 
 	/* .. and finaly draws the temperature graphs */
-	if (bt && et) {
+	if(bt && et)
+	{
 		sensor_cur = enabled_sensors;
 
 		cairo_set_line_join(cr, CAIRO_LINE_JOIN_ROUND);
 		cairo_set_line_width(cr, 1);
 		no_graphs = 1;
-		while (*sensor_cur) {
+		while(*sensor_cur)
+		{
 			struct psensor *s = *sensor_cur;
 
 			no_graphs = 0;
-			if (s->type & SENSOR_TYPE_RPM) {
+			if(s->type & SENSOR_TYPE_RPM)
+			{
 				min = min_rpm;
 				max = max_rpm;
-			} else if (s->type & SENSOR_TYPE_PERCENT) {
+			}
+			else if(s->type & SENSOR_TYPE_PERCENT)
+			{
 				min = 0;
-				max = get_max_value(enabled_sensors,
-						    SENSOR_TYPE_PERCENT);
-			} else {
+				max = get_max_value(enabled_sensors, SENSOR_TYPE_PERCENT);
+			}
+			else
+			{
 				min = mint;
 				max = maxt;
 			}
 
-			if (is_smooth_curves_enabled)
-				draw_sensor_smooth_curve(s, cr,
-							 min, max,
-							 bt, et,
-							 &info);
+			if(is_smooth_curves_enabled)
+				draw_sensor_smooth_curve(s, cr, min, max, bt, et, &info);
 			else
-				draw_sensor_curve(s, cr,
-						  min, max,
-						  bt, et,
-						  &info);
+				draw_sensor_curve(s, cr, min, max, bt, et, &info);
 
 			sensor_cur++;
 		}
 
-		if (no_graphs)
-			display_no_graphs_warning(cr,
-						  g_xoff + 12,
-						  g_height / 2);
+		if(no_graphs)
+			display_no_graphs_warning(cr, g_xoff + 12, g_height / 2);
 	}
 
 	draw_left_region(cr, &info);
 	draw_right_region(cr, &info);
 
 	/* draw min and max temp */
-	cairo_set_source_rgb(cr,
-			     theme_fg_color.red,
-			     theme_fg_color.green,
-			     theme_fg_color.blue);
+	cairo_set_source_rgb(cr, theme_fg_color.red, theme_fg_color.green, theme_fg_color.blue);
 
 	cairo_move_to(cr, GRAPH_H_PADDING, te_max.height + GRAPH_V_PADDING);
 	cairo_show_text(cr, strmax);
 	free(strmax);
 
-	cairo_move_to(cr,
-		      GRAPH_H_PADDING, height - (te_min.height / 2) - g_yoff);
+	cairo_move_to(cr, GRAPH_H_PADDING, height - (te_min.height / 2) - g_yoff);
 	cairo_show_text(cr, strmin);
 	free(strmin);
 
 	cr_pixmap = gdk_cairo_create(gtk_widget_get_window(w_graph));
 
-	if (cr_pixmap) {
-		if (config->alpha_channel_enabled)
+	if(cr_pixmap)
+	{
+		if(config->alpha_channel_enabled)
 			cairo_set_operator(cr_pixmap, CAIRO_OPERATOR_SOURCE);
 
 		cairo_set_source_surface(cr_pixmap, cst, 0, 0);

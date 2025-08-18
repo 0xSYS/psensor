@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -36,7 +37,10 @@ void ui_appindicator_menu_show_cb(GtkMenuItem *, gpointer);
 
 #else
 
-static inline bool is_appindicator_supported(void) { return false; }
+static inline bool is_appindicator_supported(void)
+{
+    return false;
+}
 
 static inline void ui_appindicator_init(struct ui_psensor *ui) {}
 static inline void ui_appindicator_update(struct ui_psensor *ui, bool alert) {}

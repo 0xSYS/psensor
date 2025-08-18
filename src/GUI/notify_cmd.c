@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -31,26 +32,14 @@ void notify_cmd(struct psensor *s)
 
 	script = config_get_notif_script();
 
-	if (script) {
+	if(script)
+	{
 		v = psensor_current_value_to_str(s, 1);
-
-		cmd = malloc(strlen(script)
-			     + 1
-			     + 1
-			     + strlen(s->id)
-			     + 1
-			     + 1
-			     + strlen(v)
-			     + 1);
-
+		cmd = malloc(strlen(script) + 1 + 1 + strlen(s->id) + 1 + 1 + strlen(v) + 1);
 		sprintf(cmd, "%s \"%s\" %s", script, s->id, v);
-
 		log_fct("execute cmd: %s", cmd);
-
 		ret = system(cmd);
-
 		log_fct("cmd returns: %d", ret);
-
 		free(cmd);
 		free(v);
 		free(script);

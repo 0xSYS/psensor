@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -30,16 +31,12 @@ bool ui_change_color(const char *title, GdkRGBA *color, GtkWindow *win)
 	int res;
 	GtkColorChooserDialog *colordlg;
 
-	colordlg = GTK_COLOR_CHOOSER_DIALOG
-		(gtk_color_chooser_dialog_new(title, win));
-
+	colordlg = GTK_COLOR_CHOOSER_DIALOG(gtk_color_chooser_dialog_new(title, win));
 	gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(colordlg), 0);
-
 	gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(colordlg), color);
-
 	res = gtk_dialog_run(GTK_DIALOG(colordlg));
 
-	if (res == GTK_RESPONSE_OK)
+	if(res == GTK_RESPONSE_OK)
 		gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(colordlg), color);
 
 	gtk_widget_destroy(GTK_WIDGET(colordlg));

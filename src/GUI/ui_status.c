@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -25,24 +26,20 @@ static const char *ATTENTION_ICON = "psensor_hot";
 static GtkStatusIcon *status;
 static unsigned int status_attention;
 
-static void cb_activate(GtkStatusIcon *icon,
-			gpointer data)
+static void cb_activate(GtkStatusIcon *icon, gpointer data)
 {
 	log_debug("cb_activate()");
 	ui_window_show((struct ui_psensor *)data);
 }
 
-static void cb_popup_menu(GtkStatusIcon *icon,
-			  guint button,
-			  guint activate_time,
-			  gpointer data)
+static void cb_popup_menu(GtkStatusIcon *icon, guint button, guint activate_time, gpointer data)
 {
 	log_debug("cb_popup_menu()");
 }
 
 void ui_status_init(struct ui_psensor *ui)
 {
-	if (status)
+	if(status)
 		return;
 
 	log_debug("ui_status_create()");
@@ -51,15 +48,9 @@ void ui_status_init(struct ui_psensor *ui)
 	gtk_status_icon_set_from_icon_name(status, ICON);
 	ui_status_set_visible(0);
 
-	g_signal_connect(G_OBJECT(status),
-			 "popup-menu",
-			 G_CALLBACK(cb_popup_menu),
-			 NULL);
+	g_signal_connect(G_OBJECT(status), "popup-menu", G_CALLBACK(cb_popup_menu), NULL);
 
-	g_signal_connect(G_OBJECT(status),
-			 "activate",
-			 G_CALLBACK(cb_activate),
-			 ui);
+	g_signal_connect(G_OBJECT(status), "activate", G_CALLBACK(cb_activate), ui);
 }
 
 int is_status_supported(void)
@@ -71,7 +62,8 @@ void ui_status_cleanup(void)
 {
 	log_debug("ui_status_cleanup()");
 
-	if (status) {
+	if(status)
+	{
 		g_object_unref(G_OBJECT(status));
 		status = NULL;
 	}
@@ -81,9 +73,9 @@ void ui_status_update(struct ui_psensor *ui, unsigned int attention)
 {
 	log_debug("ui_status_update()");
 
-	if (status_attention && !attention)
+	if(status_attention && !attention)
 		gtk_status_icon_set_from_icon_name(status, ICON);
-	else if (!status_attention && attention)
+	else if(!status_attention && attention)
 		gtk_status_icon_set_from_icon_name(status, ATTENTION_ICON);
 
 	status_attention = attention;
@@ -91,7 +83,7 @@ void ui_status_update(struct ui_psensor *ui, unsigned int attention)
 
 GtkStatusIcon *ui_status_get_icon(struct ui_psensor *ui)
 {
-	if (!status)
+	if(!status)
 		ui_status_init(ui);
 
 	return status;
@@ -101,8 +93,9 @@ void ui_status_set_visible(unsigned int visible)
 {
 	log_debug("ui_status_set_visible(%d)", visible);
 
-	if (status) {
-		if (visible)
+	if(status)
+	{
+		if(visible)
 			gtk_status_icon_set_visible(status, TRUE);
 		else
 			gtk_status_icon_set_visible(status, FALSE);

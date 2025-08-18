@@ -35,7 +35,8 @@
 
 #define PSENSOR_ICON "psensor"
 
-struct ui_psensor {
+struct ui_psensor
+{
 	struct psensor **sensors;
 	/* mutex which MUST be used for accessing sensors.*/
 	pthread_mutex_t sensors_mutex;

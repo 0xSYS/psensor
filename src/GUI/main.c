@@ -145,18 +145,16 @@ static void tests()
  * Updates the size of the sensor values if different than the
  * configuration.
  */
-static void
-update_psensor_values_size(struct psensor **sensors, struct config *cfg)
+static void update_psensor_values_size(struct psensor **sensors, struct config *cfg)
 {
 	struct psensor **cur, *s;
 
-	for (cur = sensors; *cur; cur++)
+	for(cur = sensors; *cur; cur++)
 	{
 		s = *cur;
 
-		if (s->values_max_length != cfg->sensor_values_max_length)
-			psensor_values_resize(s,
-														cfg->sensor_values_max_length);
+		if(s->values_max_length != cfg->sensor_values_max_length)
+			psensor_values_resize(s, cfg->sensor_values_max_length);
 	}
 }
 
@@ -170,12 +168,12 @@ static void *update_measures(void *data)
 	ui = (struct ui_psensor *)data;
 	cfg = ui->config;
 
-	while (1)
+	while(1)
 	{
 		pmutex_lock(&ui->sensors_mutex);
 
 		sensors = ui->sensors;
-		if (!sensors)
+		if(!sensors)
 			pthread_exit(NULL);
 
 		update_psensor_values_size(sensors, cfg);
@@ -207,11 +205,11 @@ static void indicators_update(struct ui_psensor *ui)
 
 	attention = false;
 	ss = ui->sensors;
-	while (*ss)
+	while(*ss)
 	{
 		s = *ss;
 
-		if (s->alarm_raised && config_get_sensor_alarm_enabled(s->id))
+		if(s->alarm_raised && config_get_sensor_alarm_enabled(s->id))
 		{
 			attention = true;
 			break;
@@ -220,10 +218,10 @@ static void indicators_update(struct ui_psensor *ui)
 		ss++;
 	}
 
-	if (is_appindicator_supported())
+	if(is_appindicator_supported())
 		ui_appindicator_update(ui, attention);
 
-	if (is_status_supported())
+	if(is_status_supported())
 		ui_status_update(ui, attention);
 }
 
@@ -242,12 +240,12 @@ static gboolean ui_refresh_thread(gpointer data)
 
 	ui_sensorlist_update(ui, 0);
 
-	if (is_appindicator_supported() || is_status_supported())
+	if(is_appindicator_supported() || is_status_supported())
 		indicators_update(ui);
 
 	ui_unity_launcher_entry_update(ui->sensors);
 
-	if (ui->graph_update_interval != cfg->graph_update_interval)
+	if(ui->graph_update_interval != cfg->graph_update_interval)
 	{
 		ui->graph_update_interval = cfg->graph_update_interval;
 		ret = FALSE;
@@ -255,16 +253,15 @@ static gboolean ui_refresh_thread(gpointer data)
 
 	pmutex_unlock(&ui->sensors_mutex);
 
-	if (ret == FALSE)
-		g_timeout_add(1000 * ui->graph_update_interval,
-									ui_refresh_thread, ui);
+	if(ret == FALSE)
+		g_timeout_add(1000 * ui->graph_update_interval, ui_refresh_thread, ui);
 
 	return ret;
 }
 
 static void cb_alarm_raised(struct psensor *sensor, void *data)
 {
-	if (config_get_sensor_alarm_enabled(sensor->id))
+	if(config_get_sensor_alarm_enabled(sensor->id))
 	{
 		ui_notify(sensor, (struct ui_psensor *)data);
 		notify_cmd(sensor);
@@ -280,7 +277,7 @@ associate_cb_alarm_raised(struct psensor **sensors, struct ui_psensor *ui)
 
 	high_temp = config_get_default_high_threshold_temperature();
 
-	while (*sensors)
+	while(*sensors)
 	{
 		s = *sensors;
 
@@ -289,11 +286,11 @@ associate_cb_alarm_raised(struct psensor **sensors, struct ui_psensor *ui)
 
 		ret = config_get_sensor_alarm_high_threshold(s->id, &s->alarm_high_threshold);
 
-		if (!ret)
+		if(!ret)
 		{
-			if (s->max == UNKNOWN_DBL_VALUE)
+			if(s->max == UNKNOWN_DBL_VALUE)
 			{
-				if (s->type & SENSOR_TYPE_TEMP)
+				if(s->type & SENSOR_TYPE_TEMP)
 					s->alarm_high_threshold = high_temp;
 			}
 			else
@@ -304,7 +301,7 @@ associate_cb_alarm_raised(struct psensor **sensors, struct ui_psensor *ui)
 
 		ret = config_get_sensor_alarm_low_threshold(s->id, &s->alarm_low_threshold);
 
-		if (!ret && s->min != UNKNOWN_DBL_VALUE)
+		if(!ret && s->min != UNKNOWN_DBL_VALUE)
 			s->alarm_low_threshold = s->min;
 
 		sensors++;
@@ -315,14 +312,14 @@ static void associate_preferences(struct psensor **sensors)
 {
 	struct psensor **sensor_cur = sensors;
 
-	while (*sensor_cur)
+	while(*sensor_cur)
 	{
 		char *n;
 		struct psensor *s = *sensor_cur;
 
 		n = config_get_sensor_name(s->id);
 
-		if (n)
+		if(n)
 		{
 			free(s->name);
 			s->name = n;
@@ -339,7 +336,7 @@ static void log_init(void)
 
 	dir = get_psensor_user_dir();
 
-	if (!dir)
+	if(!dir)
 		return;
 
 	path = malloc(strlen(dir) + 1 + strlen("log") + 1);
@@ -350,13 +347,15 @@ static void log_init(void)
 	free(path);
 }
 
-static struct option long_options[] = {
-		{"version", no_argument, NULL, 'v'},
-		{"help", no_argument, NULL, 'h'},
-		{"url", required_argument, NULL, 'u'},
-		{"debug", required_argument, NULL, 'd'},
-		{"new-instance", no_argument, NULL, 'n'},
-		{NULL, 0, NULL, 0}};
+static struct option long_options[] =
+{
+    {"version", no_argument, NULL, 'v'},
+    {"help", no_argument, NULL, 'h'},
+    {"url", required_argument, NULL, 'u'},
+    {"debug", required_argument, NULL, 'd'},
+    {"new-instance", no_argument, NULL, 'n'},
+    {NULL, 0, NULL, 0}
+};
 
 static gboolean initial_window_show(gpointer data)
 {
@@ -367,11 +366,10 @@ static gboolean initial_window_show(gpointer data)
 	ui = (struct ui_psensor *)data;
 
 	log_debug("is_status_supported: %d", is_status_supported());
-	log_debug("is_appindicator_supported: %d",
-						is_appindicator_supported());
+	log_debug("is_appindicator_supported: %d", is_appindicator_supported());
 	log_debug("hide_on_startup: %d", ui->config->hide_on_startup);
 
-	if (!ui->config->hide_on_startup || (!is_appindicator_supported() && !is_status_supported()))
+	if(!ui->config->hide_on_startup || (!is_appindicator_supported() && !is_status_supported()))
 		ui_window_show(ui);
 
 	ui_window_update(ui);
@@ -381,19 +379,11 @@ static gboolean initial_window_show(gpointer data)
 
 static void log_glib_info(void)
 {
-	log_debug("Compiled with GLib %d.%d.%d",
-						GLIB_MAJOR_VERSION,
-						GLIB_MINOR_VERSION,
-						GLIB_MICRO_VERSION);
-
-	log_debug("Running with GLib %d.%d.%d",
-						glib_major_version,
-						glib_minor_version,
-						glib_micro_version);
+	log_debug("Compiled with GLib %d.%d.%d", GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION);
+	log_debug("Running with GLib %d.%d.%d", glib_major_version, glib_minor_version, glib_micro_version);
 }
 
-static void cb_activate(GApplication *application,
-												gpointer data)
+static void cb_activate(GApplication *application, gpointer data)
 {
 	ui_window_show((struct ui_psensor *)data);
 }
@@ -434,17 +424,16 @@ static struct psensor **create_sensors_list(const char *url)
 {
 	struct psensor **sensors;
 
-	if (url)
+	if(url)
 	{
-		if (rsensor_is_supported())
+		if(rsensor_is_supported())
 		{
 			rsensor_init();
 			sensors = get_remote_sensors(url, 600);
 		}
 		else
 		{
-			log_err(_("Psensor has not been compiled with remote "
-								"sensor support."));
+			log_err(_("Psensor has not been compiled with remote " "sensor support."));
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -453,25 +442,25 @@ static struct psensor **create_sensors_list(const char *url)
 		sensors = malloc(sizeof(struct psensor *));
 		*sensors = NULL;
 
-		if (config_is_lmsensor_enabled())
+		if(config_is_lmsensor_enabled())
 			lmsensor_psensor_list_append(&sensors, 600);
 
-		if (config_is_hddtemp_enabled())
+		if(config_is_hddtemp_enabled())
 			hddtemp_psensor_list_append(&sensors, 600);
 
-		if (config_is_libatasmart_enabled())
+		if(config_is_libatasmart_enabled())
 			atasmart_psensor_list_append(&sensors, 600);
 
-		if (config_is_nvctrl_enabled())
+		if(config_is_nvctrl_enabled())
 			nvidia_psensor_list_append(&sensors, 600);
 
-		if (config_is_atiadlsdk_enabled())
+		if(config_is_atiadlsdk_enabled())
 			amd_psensor_list_append(&sensors, 600);
 
-		if (config_is_gtop2_enabled())
+		if(config_is_gtop2_enabled())
 			gtop2_psensor_list_append(&sensors, 600);
 
-		if (config_is_udisks2_enabled())
+		if(config_is_udisks2_enabled())
 			udisks2_psensor_list_append(&sensors, 600);
 	}
 
@@ -500,40 +489,44 @@ int main(int argc, char **argv)
 	new_instance = 0;
 
 	cmdok = 1;
-	while ((optc = getopt_long(argc, argv, "vhtd:u:n", long_options,
-														 &opti)) != -1)
+	while((optc = getopt_long(argc, argv, "vhtd:u:n", long_options, &opti)) != -1)
 	{
-		switch (optc)
+		switch(optc)
 		{
-		case 'u':
-			if (optarg)
-				url = strdup(optarg);
-			break;
-		case 'h':
-			print_help();
-			exit(EXIT_SUCCESS);
-		case 't':
-			tests(); // MARK: Test function call
-		case 'v':
-			print_version();
-			exit(EXIT_SUCCESS);
-		case 'd':
-			log_level = atoi(optarg);
-			log_info(_("Enables debug mode."));
-			break;
-		case 'n':
-			new_instance = 1;
-			break;
-		default:
-			cmdok = 0;
-			break;
+		    case 'u':
+	    	    if(optarg)
+			    	url = strdup(optarg);
+	    	break;
+						
+		    case 'h':
+	    	    print_help();
+	    	    exit(EXIT_SUCCESS);
+										
+		    case 't':
+	    	    tests(); // MARK: Test function call
+										
+		    case 'v':
+	    	    print_version();
+	    	    exit(EXIT_SUCCESS);
+										
+		    case 'd':
+	    	    log_level = atoi(optarg);
+	    	    log_info(_("Enables debug mode."));						
+	    	break;
+						
+		        case 'n':
+	    	    new_instance = 1;
+	    	break;
+						
+		        default:
+	    	    cmdok = 0;
+	    	break;
 		}
 	}
 
-	if (!cmdok || optind != argc)
+	if(!cmdok || optind != argc)
 	{
-		fprintf(stderr, _("Try `%s --help' for more information.\n"),
-						program_name);
+		fprintf(stderr, _("Try `%s --help' for more information.\n"), program_name);
 		exit(EXIT_FAILURE);
 	}
 
@@ -543,7 +536,7 @@ int main(int argc, char **argv)
 
 	g_application_register(app, NULL, NULL);
 
-	if (!new_instance && g_application_get_is_remote(app))
+	if(!new_instance && g_application_get_is_remote(app))
 	{
 		g_application_activate(app);
 		log_warn(_("A Psensor instance already exists."));
@@ -571,11 +564,8 @@ int main(int argc, char **argv)
 	ui.sensors = create_sensors_list(url);
 	associate_cb_alarm_raised(ui.sensors, &ui);
 
-	if (ui.config->slog_enabled)
-		slog_activate(NULL,
-									ui.sensors,
-									&ui.sensors_mutex,
-									config_get_slog_interval());
+	if(ui.config->slog_enabled)
+		slog_activate(NULL, ui.sensors, &ui.sensors_mutex, config_get_slog_interval());
 
 	ui_status_init(&ui);
 	ui_status_set_visible(1);
@@ -587,7 +577,7 @@ int main(int argc, char **argv)
 
 	ret = pthread_create(&thread, NULL, update_measures, &ui);
 
-	if (ret)
+	if(ret)
 		log_err(_("Failed to create thread for monitoring sensors"));
 
 	ui.graph_update_interval = ui.config->graph_update_interval;
@@ -605,7 +595,7 @@ int main(int argc, char **argv)
 	 * drawn before determining whether the main window must be
 	 * show.
 	 */
-	if (ui.config->hide_on_startup)
+	if(ui.config->hide_on_startup)
 		g_timeout_add(30000, (GSourceFunc)initial_window_show, &ui);
 	else
 		initial_window_show(&ui);
@@ -619,7 +609,7 @@ int main(int argc, char **argv)
 	log_debug("Quitting...");
 	log_close();
 
-	if (url)
+	if(url)
 		free(url);
 
 	return 0;

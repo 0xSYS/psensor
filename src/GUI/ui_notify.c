@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2025 xsys061@gmail.com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -44,38 +45,36 @@ void ui_notify(struct psensor *sensor, struct ui_psensor *ui)
 
 	log_debug("last_notification %d", last_notification_tv.tv_sec);
 
-	if (gettimeofday(&t, NULL) != 0) {
+	if(gettimeofday(&t, NULL) != 0)
+	{
 		log_err(_("gettimeofday failed."));
 		return;
 	}
 
-	if (!last_notification_tv.tv_sec
-	    || t.tv_sec - last_notification_tv.tv_sec >= 60)
+	if(!last_notification_tv.tv_sec || t.tv_sec - last_notification_tv.tv_sec >= 60)
 		last_notification_tv = t;
 	else
 		return;
 
-	if (notify_is_initted() == FALSE)
+	if(notify_is_initted() == FALSE)
 		notify_init("psensor");
 
-	if (notify_is_initted() == TRUE) {
-		if (config_get_temperature_unit() == CELSIUS)
+	if(notify_is_initted() == TRUE)
+	{
+		if(config_get_temperature_unit() == CELSIUS)
 			use_celsius = 1;
 		else
 			use_celsius = 0;
 
-		svalue = psensor_measure_to_str
-			(psensor_get_current_measure(sensor),
-			 sensor->type,
-			 use_celsius);
+		svalue = psensor_measure_to_str(psensor_get_current_measure(sensor), sensor->type, use_celsius);
 
 		body = malloc(strlen(sensor->name) + 3 + strlen(svalue) + 1);
 		sprintf(body, "%s : %s", sensor->name, svalue);
 		free(svalue);
 
-		if (is_temp_type(sensor->type))
+		if(is_temp_type(sensor->type))
 			summary = _("Temperature alert");
-		else if (sensor->type & SENSOR_TYPE_RPM)
+		else if(sensor->type & SENSOR_TYPE_RPM)
 			summary = _("Fan speed alert");
 		else
 			summary = _("N/A");
@@ -87,17 +86,14 @@ void ui_notify(struct psensor *sensor, struct ui_psensor *ui)
 #if NOTIFY_CHECK_VERSION(0, 7, 0)
 		notif = notify_notification_new(summary, body, PSENSOR_ICON);
 #else
-		notif = notify_notification_new(summary,
-						body,
-						PSENSOR_ICON,
-						GTK_WIDGET(ui->main_window));
+		notif = notify_notification_new(summary, body, PSENSOR_ICON, GTK_WIDGET(ui->main_window));
 #endif
 		log_debug("notif_notification_new %s", body);
-
 		notify_notification_show(notif, NULL);
-
 		g_object_unref(notif);
-	} else {
+	}
+	else
+	{
 		log_err("notify not initialized");
 	}
 }
