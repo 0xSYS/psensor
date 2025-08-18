@@ -193,6 +193,8 @@ static void *update_measures(void *data)
 		period = cfg->sensor_update_interval;
 
 		pmutex_unlock(&ui->sensors_mutex);
+		
+		printf("Measure updated\n");
 
 		sleep(period);
 	}

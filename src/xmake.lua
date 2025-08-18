@@ -126,6 +126,7 @@ target("psensor-ui")
         "xkbcommon-x11",
         "freetype2"
     )
+    add_deps("psensor")
 
     add_defines("LOGC__USER_SETTINGS", "CJSON_HIDE_SYMBOLS")
 
@@ -146,16 +147,22 @@ target("psensor-ui")
 
 target("psensor-old")
     set_kind("binary")
-
     add_includedirs(
         "lib/include",
         "server",
         "GUI"
     )
-
+    add_cxflags("-fvisibility=default", {force = true})
+    add_ldflags("-rdynamic", "-Wl,--as-needed", {force = true})
+    add_defines(
+        "GTK_DISABLE_SINGLE_INCLUDES",
+        "GDK_DISABLE_DEPRECATED",
+        "WITH_GZFILEOP",
+        "GSEAL_ENABLE"
+    )
     add_linkdirs("build/linux/x86_64/release")
     add_deps("psensor") -- Didn't know I had to use add_deps instead ;(
-
+    add_syslinks("pthread", "m")
     add_packages(
         "gtk+-3.0"         ,
         "x11"              ,

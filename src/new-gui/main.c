@@ -34,8 +34,15 @@
 //#include <stdio.h>
 
 
+#define DEV_TEST
 
-#include "UI/ui_main.h"
+
+
+#ifndef DEV_TEST
+    #include "UI/ui_main.h"
+#else
+    #include "tests.h"
+#endif
 
 
 
@@ -43,6 +50,10 @@
 
 int main(int argc, char * argv[])
 {
+#ifndef DEV_TEST
     ui_main();
+#else
+    test_stuff();
+#endif
     return 0;
 }
