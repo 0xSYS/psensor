@@ -47,7 +47,7 @@ void test_stuff()
         for (int i = 0; sensors[i] != NULL; i++)
         {
             struct psensor *s = sensors[i];
-            printf("Sensor Index [%d]: | Name: %s | Chip: %s | Type: %u | Min Value: %f | Max Value: %f | Session High: %f | Session Low: %f\n", i, s->name, s->chip, s->type, s->min, s->max, s->sess_highest, s->sess_lowest);
+            printf("Sensor Index [%d]: | Name: %s | Chip: %s | Type: %u | Current Value : %.2f | Min Value: %f | Max Value: %f | Session High: %f | Session Low: %f\n", i, s->name, s->chip, s->type, psensor_get_current_value(*sensors), s->min, s->max, s->sess_highest, s->sess_lowest);
         }
         printf("\n");
 
