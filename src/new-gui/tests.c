@@ -10,6 +10,7 @@
 #include <psensor/amd.h>
 #include <psensor/pgtop2.h>
 #include <psensor/pudisks2.h>
+#include <psensor/psensor_json.h>
 
 struct psensor **sensors;
 
@@ -46,8 +47,10 @@ void test_stuff()
 		
         for (int i = 0; sensors[i] != NULL; i++)
         {
+            char * jsonified = sensor_to_json_string(sensors[i]);
             struct psensor *s = sensors[i];
-            printf("Sensor Index [%d]: | Name: %s | Chip: %s | Type: %u | Current Value : %.2f | Min Value: %f | Max Value: %f | Session High: %f | Session Low: %f\n", i, s->name, s->chip, s->type, psensor_get_current_value(*sensors), s->min, s->max, s->sess_highest, s->sess_lowest);
+            //printf("Sensor Index [%d]: | Name: %s | Chip: %s | Type: %u | Current Value : %.2f | Min Value: %f | Max Value: %f | Session High: %f | Session Low: %f\n", i, s->name, s->chip, s->type, psensor_get_current_value(*sensors), s->min, s->max, s->sess_highest, s->sess_lowest);
+            printf("%s\n", jsonified);
         }
         printf("\n");
 

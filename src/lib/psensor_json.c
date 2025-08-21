@@ -86,7 +86,11 @@ char *sensor_to_json_string(struct psensor *s)
 	char *str;
 	json_object *obj = sensor_to_json(s);
 
-	str = strdup(json_object_to_json_string(obj));
+#ifdef PSENSOR_JSON_PRETTY
+	str = strdup(json_object_to_json_string_ext(obj, JSON_C_TO_STRING_PRETTY));
+#else
+    str = strdup(json_object_to_json_string(obj));
+#endif
 
 	json_object_put(obj);
 

@@ -67,6 +67,12 @@ option("shared-lib")
     set_description("Build the psensor library as shared")
 
 
+option("pretty-json")
+    set_default(true)
+    set_showmenu(true)
+    set_description("Build the psensor library with pretty JSON output")
+
+
 
 
 target("psensor")
@@ -91,6 +97,7 @@ target("psensor")
     )
 
     add_syslinks("XNVCtrl", "sensors")
+    --add_defines("PSENSOR_JSON_PRETTY")
 
 
 
