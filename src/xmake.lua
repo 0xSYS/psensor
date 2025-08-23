@@ -13,14 +13,18 @@ add_requires("X11"          , {system = true})
 
 
 -- New GUI Dependencies
-add_requires("libxcb"        , {system = true})
-add_requires("cairo"         , {system = true})
-add_requires("xcb"           , {system = true})
-add_requires("xcb-util"      , {system = true})
-add_requires("xcb-keysyms"   , {system = true})
-add_requires("xkbcommon"     , {system = true})
-add_requires("xkbcommon-x11" , {system = true})
-add_requires("freetype2"     , {system = true})
+-- add_requires("libxcb"        , {system = true})
+-- add_requires("cairo"         , {system = true})
+-- add_requires("xcb"           , {system = true})
+-- add_requires("xcb-util"      , {system = true})
+-- add_requires("xcb-keysyms"   , {system = true})
+-- add_requires("xkbcommon"     , {system = true})
+-- add_requires("xkbcommon-x11" , {system = true})
+-- add_requires("freetype2"     , {system = true})
+--add_requires(
+--    "qt6",
+--    {system = true}
+--)
 
 -- Server Dependencies
 add_requires("libmicrohttpd" , {system = true})
@@ -111,44 +115,33 @@ target("psensor")
 
 -- GUI
 target("psensor-ui")
-    --set_default(false)
     set_kind("binary")
+    set_languages("c++17")
 
-
+    -- Qt includes
     add_includedirs(
         "lib/include",
-        "new-gui/ext_deps/nuklear/backends",
-        "new-gui/ext_deps/nuklear",
-        "new-gui/ext_deps",
-        "new-gui/ext_deps/cJSON"
+        "new-gui/ext_deps/"
     )
-    add_linkdirs("build/linux/x86_64/release") -- Temporarry
-    add_packages(
-        "libxcb",
-        "cairo",
-        "xcb",
-        "xcb-util",
-        "xcb-keysyms",
-        "xkbcommon",
-        "xkbcommon-x11",
-        "freetype2"
-    )
+
+    add_linkdirs("/usr/lib")
+    add_links("SDL3")
     add_deps("psensor")
 
-    add_defines("LOGC__USER_SETTINGS", "CJSON_HIDE_SYMBOLS")
+    add_defines("LOGC__USER_SETTINGS")
 
+
+    add_files("new-gui/ext_deps/log_c/*.c")
     add_files(
-      "new-gui/ext_deps/cJSON/*.c",
-      "new-gui/ext_deps/log_c/*.c",
-      "new-gui/*.c",
-      "new-gui/UI/*.c"
+        "new-gui/*.cpp",
+        "new-gui/UI/*.cpp",
+        "new-gui/UI/imgui/*.cpp"
     )
 
-
     after_build(function (target)
-        -- Copy the assets and the css theme next to the build directory
         os.cp("../assets/Liter-Regular.ttf", target:targetdir())
     end)
+
 
 
 

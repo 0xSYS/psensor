@@ -14,6 +14,7 @@
 
 struct psensor **sensors;
 
+/*
 void create_sensor_list()
 {
     sensors = malloc(sizeof(struct psensor *));
@@ -28,10 +29,11 @@ void create_sensor_list()
     udisks2_psensor_list_append(&sensors, 600);
 }
 
-
+*/
 
 void test_stuff()
 {
+    /*
     create_sensor_list();
 	int period;
 	
@@ -57,4 +59,5 @@ void test_stuff()
 	    
 		sleep(1);
 	}
+	*/
 }

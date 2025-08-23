@@ -18,6 +18,7 @@
  */
 
 
+#include <iostream>
 
 
 
@@ -30,20 +31,30 @@
 
 
 
+//#include <stdio.h>
 
 
-#ifndef UI_MAIN_H
-#define UI_MAIN_H
-
-
-#define DEFAULT_UI_FONT "Liter-Regular.ttf"
+//#define DEV_TEST
 
 
 
-
-
-
-
-void ui_main();
-
+#ifndef DEV_TEST
+    #include "ui_entry.hpp"
+#else
+    #include "tests.h"
 #endif
+
+
+
+
+
+int main(int argc, char * argv[])
+{
+#ifndef DEV_TEST
+    ui_main();
+#else
+    test_stuff();
+#endif
+
+    return 0;
+}
