@@ -122,7 +122,7 @@ void ui_main()
     
     float main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
     SDL_WindowFlags window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
-    SDL_Window* window = SDL_CreateWindow("Dear ImGui SDL3+SDL_Renderer example", (int)(1280 * main_scale), (int)(720 * main_scale), window_flags);
+    SDL_Window* window = SDL_CreateWindow("Psensor", (int)(1280 * main_scale), (int)(720 * main_scale), window_flags);
     if(window == nullptr)
     {
         log_error("Error: SDL_CreateWindow(): %s", SDL_GetError());
@@ -193,9 +193,9 @@ void ui_main()
         ImGui_ImplSDL3_NewFrame();
         ImGui::NewFrame();
    
-        RenderNewDemo();
+        //RenderNewDemo();
         
-        RenderSimpleDemo();
+        //RenderSimpleDemo();
         
         RenderFullDemo();
         
