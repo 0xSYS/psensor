@@ -124,9 +124,12 @@ target("psensor-ui")
         "new-gui/ext_deps/"
     )
 
-    add_linkdirs("/usr/lib")
-    add_links("SDL3")
+    add_linkdirs(
+        "/usr/lib",
+        "build/linux/x86_64/release"
+    )
     add_deps("psensor")
+    add_links("SDL3")
 
     add_defines("LOGC__USER_SETTINGS")
 

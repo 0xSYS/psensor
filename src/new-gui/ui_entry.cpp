@@ -5,8 +5,8 @@
 
 #include "ui_entry.hpp"
 #include "UI/ui_dev.hpp"
+#include "UI/ui.hpp"
 
-//#include "UI/imgui_impl_sdl3.h"
 #include "UI/imgui/imgui.h"
 #include "UI/imgui/imgui_impl_sdl3.h"
 #include "UI/imgui/imgui_impl_sdlrenderer3.h"
@@ -26,7 +26,6 @@ void SetDefaultTheme()
 	style.WindowPadding            = ImVec2(12.0f, 12.0f);
 	style.WindowRounding           = 11.5f;
 	style.WindowBorderSize         = 2.0f;
-	style.FrameBorderSize          = 1.0f;
 	style.WindowMinSize            = ImVec2(20.0f, 20.0f);
 	style.WindowTitleAlign         = ImVec2(0.5f, 0.5f);
 	style.WindowMenuButtonPosition = ImGuiDir_Right;
@@ -36,7 +35,7 @@ void SetDefaultTheme()
 	style.PopupBorderSize          = 1.0f;
 	style.FramePadding             = ImVec2(20.0f, 3.400000095367432f);
 	style.FrameRounding            = 11.89999961853027f;
-	style.FrameBorderSize          = 0.0f;
+	style.FrameBorderSize          = 1.0f;
 	style.ItemSpacing              = ImVec2(4.300000190734863f, 5.5f);
 	style.ItemInnerSpacing         = ImVec2(7.099999904632568f, 1.799999952316284f);
 	style.CellPadding              = ImVec2(12.10000038146973f, 9.199999809265137f);
@@ -150,10 +149,6 @@ void ui_main()
     
     io.Fonts->AddFontFromFileTTF("Liter-Regular.ttf", 25.0f);
     
-    // Setup Dear ImGui style
-    //ImGui::StyleColorsDark();
-    //ImGui::StyleColorsLight();
-    
     SetDefaultTheme();
     
     
@@ -203,6 +198,8 @@ void ui_main()
         RenderSimpleDemo();
         
         RenderFullDemo();
+        
+        RenderUI();
            
    
         // Rendering
@@ -212,6 +209,9 @@ void ui_main()
         SDL_RenderClear(renderer);
         ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer);
         SDL_RenderPresent(renderer);
+        
+        if(loop_exit)
+            break;
     }
     
     ImGui_ImplSDLRenderer3_Shutdown();

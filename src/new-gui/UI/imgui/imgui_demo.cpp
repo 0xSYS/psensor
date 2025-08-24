@@ -4326,7 +4326,7 @@ static void DemoWindowLayout()
             ImGui::BeginChild("ChildR", ImVec2(0, 260), ImGuiChildFlags_Borders, window_flags);
             if (!disable_menu && ImGui::BeginMenuBar())
             {
-                if (ImGui::BeginMenu("Menu"))
+                if(ImGui::BeginMenu("Menu"))
                 {
                     ShowExampleMenuFile();
                     ImGui::EndMenu();
