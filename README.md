@@ -60,7 +60,7 @@ then build:
 > [!NOTE]
 > The GTK based desktop GUI will be removed in the future due to old unmaintained dependencies and code bloatware.
 > 
-> New GUI is currently located in `src/new-gui/` and it will serve as the official desktop application of psensor.
+> New GUI is currently located in `src/new-gui/` and it will serve as the official desktop application of psensor fork
 > 
 > Same goes for the old web server which is currently very unsafe to use in terms of security.
  
@@ -111,6 +111,7 @@ then build:
         - ❌ Custom time interval
         - ❌ Sensor list
         - ❌ Sensor record viewer
+    - ❌ Indivitual sensor preferences
     - ❌ Fan controller table
     - ❌ Multiple server connections
     - ❌ Settings
