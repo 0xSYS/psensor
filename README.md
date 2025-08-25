@@ -59,8 +59,10 @@ then build:
 
 > [!NOTE]
 > The GTK based desktop GUI will be removed in the future due to old unmaintained dependencies and code bloatware.
-> New GUI is currently located in src/new-gui/ and it will serve as the official desktop application of psensor.
- > Same goes for the old web server which is currently very unsafe to use in terms of security.
+> 
+> New GUI is currently located in `src/new-gui/` and it will serve as the official desktop application of psensor.
+> 
+> Same goes for the old web server which is currently very unsafe to use in terms of security.
  
  
 # Feature progress
@@ -95,6 +97,7 @@ then build:
         - ❌ Custom time span
         - ❌ Custom time interval
         - ❌ Sensor list
+        - ❌ Sensor record viewer
     - ❌ Indivitual sensor preferences
     - ❌ Custom toast message boxes
     
@@ -103,9 +106,15 @@ then build:
     
 - 🔽 Web Interface
     - ❌ User Auth page
+    - ❌ Sensor plots
+        - ❌ Custom time span
+        - ❌ Custom time interval
+        - ❌ Sensor list
+        - ❌ Sensor record viewer
     - ❌ Fan controller table
     - ❌ Multiple server connections
     - ❌ Settings
     - ❌ Dark mode / Light mode
     - ❌ Save UI layouts
+    - ❌ Save previous connected server users
     
