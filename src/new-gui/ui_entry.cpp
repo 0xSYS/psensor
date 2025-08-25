@@ -161,8 +161,8 @@ void ui_main()
     ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer3_Init(renderer);
     
-    bool show_demo_window = true;
-    bool show_another_window = false;
+    //bool show_demo_window = true;
+    //bool show_another_window = false;
     
     // Main loop
     bool done = false;
@@ -178,6 +178,19 @@ void ui_main()
                 done = true;
             if(event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED && event.window.windowID == SDL_GetWindowID(window))
                 done = true;
+            
+            
+            if(event.type == SDL_EVENT_KEY_DOWN)
+            {
+                SDL_Keycode sym = event.key.key;
+                SDL_Keymod mods = SDL_GetModState();   // <-- get modifiers
+                
+                if((mods & SDL_KMOD_CTRL) && sym == SDLK_D)
+                {
+                    show_demo_window = true;
+                    printf("Ctrl+d -> Devel\n");
+                }
+            }
         }
    
    
@@ -197,7 +210,8 @@ void ui_main()
         
         //RenderSimpleDemo();
         
-        RenderFullDemo();
+        if(show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
         
         RenderUI();
            

@@ -29,7 +29,7 @@ extern "C"
 
 
 
-psensor_fan *PCFans;
+psensor_fan *PCFans = {NULL};
 std::map<int, std::future<void>> fanTestFutures;
 std::once_flag pwm_flag;
 inline std::vector<bool> is_fan_test_running;
@@ -38,13 +38,19 @@ inline std::vector<int> prev_fan_pwm;
 inline std::vector<bool> pwm_set_exe;
 
 
-// MARK: Fan Controller
+// MARK: Internal funcs
 
 void EnableFanPwmOnce()
 {
     std::call_once(pwm_flag, []()
     {
         PCFans = psensor_detectFans();
+        
+        if(!PCFans || PCFans->fanInputCount <= 0)
+        {
+            log_error("Failed to enable fan PWM");
+            return;
+        }
         for(int i = 0; i < PCFans->fanInputCount; i++)
         {
             psensor_enable_fan_pwm(PCFans->pwmEnableFiles[i], 1);
@@ -70,11 +76,10 @@ void SetFanPwmOnce(int index)
     }
 }
 
+// MARK: Windows
 
 void RenderFanControllerWindow()
 {
-    EnableFanPwmOnce();
-    
     ImGuiIO& io = ImGui::GetIO();
     
     ImVec2 center = ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
@@ -107,7 +112,7 @@ void RenderFanControllerWindow()
                 ImGui::TableSetColumnIndex(2);
                 ImGui::PushItemWidth(-FLT_MIN);
             }
-
+            
             static int dummy_f = 0;
             ImGui::PushID(row);
             
@@ -143,7 +148,7 @@ void RenderFanControllerWindow()
                     is_fan_test_running[row] = false;
                     SetFanPwmOnce(row);
                     pwm_set_exe[row] = false; // Reset my brain here
-                    log_info("Fan %d test done!", row);
+                    //log_info("Fan %d test done!", row);
                     fanTestFutures.erase(it);
                 }
                 else if(status == std::future_status::timeout)
@@ -174,7 +179,17 @@ void RenderUI()
             if(ImGui::MenuItem("Fan Controller"))
             {
                 if(Utils::is_root())
-                    fan_controller_open = true;
+                {
+                    // idk why but this feels like it can fail
+                    EnableFanPwmOnce();
+                    if(!PCFans || PCFans->fanInputCount <= 0)
+                    {
+                        log_error("No fans detected.");
+                        no_fc_available_mod = true;
+                    }
+                    else
+                        fan_controller_open = true; 
+                }
                 else
                 {
                     log_error("Not running as root");
@@ -206,9 +221,12 @@ void RenderUI()
     // MARK: Open Modals
     
     if(no_root_open)
-    {
         ImGui::OpenPopup("Fan Controller Error");
-    }
+    
+    
+    if(no_fc_available_mod)
+        ImGui::OpenPopup("Fan Controller Unavailable");
+    
     
     //MARK: Modals
     
@@ -225,11 +243,27 @@ void RenderUI()
     
         ImGui::EndPopup();
     }
+    
+    if(ImGui::BeginPopupModal("Fan Controller Unavailable", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        ImGui::Text("No fans could be detected.\nPlease make sure to load the following kernel modules:\n");
+        ImGui::BulletText("nct6775    (General Super I/O Chips)");
+        ImGui::BulletText("it87              (ITE Chips)");
+        ImGui::BulletText("coretemp (Intel)");
+        ImGui::BulletText("k10temp   (AMD)");
+    
+        ImGui::SetCursorPos(ImVec2(160, 235));
+        if(ImGui::Button("Ok", ImVec2(120, 0)))
+        {
+            no_fc_available_mod = false;
+            ImGui::CloseCurrentPopup();
+        }
+    
+        ImGui::EndPopup();
+    }
 
     
     // MARK: UI Body
     if(fan_controller_open)
-    {
         RenderFanControllerWindow();
-    }
 }
