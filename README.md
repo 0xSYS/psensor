@@ -105,6 +105,7 @@ then build:
     - ❌ User Auth via SSH protocol
     
 - 🔽 Web Interface
+    - ❌ Automatic page opening
     - ❌ User Auth page
     - ❌ Sensor plots
         - ❌ Custom time span
