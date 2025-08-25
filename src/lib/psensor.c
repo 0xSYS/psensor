@@ -641,13 +641,14 @@ int psensor_fan_set_pwm(const char *hwClassDir, int PWM)
     }
     else
     {
-        if(PWM > 255 || PWM < 0)
+        if(PWM > 256 || PWM < 0)
         {
             log_err("Invalid PWM value: %d", PWM);
             return 1;
         }
         else
             fprintf(pwm_ptr, "%d", PWM);
+        
     }
     fclose(pwm_ptr);
     return 0;
@@ -688,7 +689,9 @@ void clear_previous_line()
 
 int psensor_test_fan(const char *hwmonDir)
 {
-    for(int i = 0; i < 255; i++)
+    // Another dumb bug where the test decrements the previous PWM value stored in the GUI
+    // Something I forgot that arrays start from 0 not 1 bruh moment
+    for(int i = 0; i < 256; i++)
     {
         psensor_fan_set_pwm(hwmonDir, i);
         //clear_previous_line();
@@ -698,7 +701,7 @@ int psensor_test_fan(const char *hwmonDir)
         usleep(50 * 1000);
     }
     sleep(4);
-    for(int i = 255; i >= 0; i--)
+    for(int i = 256; i >= 0; i--)
     {
         psensor_fan_set_pwm(hwmonDir, i);
         log_printf(LOG_INFO, "\033[38;5;33m[FAN TEST]\033[0m - Decrement pwm: %d at ""\"\033[38;5;14m%s\033[0m\"", i, hwmonDir);

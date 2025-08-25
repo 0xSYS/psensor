@@ -118,7 +118,6 @@ target("psensor-ui")
     set_kind("binary")
     set_languages("c++17")
 
-    -- Qt includes
     add_includedirs(
         "lib/include",
         "new-gui/ext_deps/"
