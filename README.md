@@ -98,7 +98,7 @@ then build:
         - ❌ Custom time interval
         - ❌ Sensor list
         - ❌ Sensor record viewer
-    - ❌ Indivitual sensor preferences
+    - ❌ Individual sensor preferences
     - ❌ Custom toast message boxes
     
 - 🔽 Server
@@ -111,7 +111,7 @@ then build:
         - ❌ Custom time interval
         - ❌ Sensor list
         - ❌ Sensor record viewer
-    - ❌ Indivitual sensor preferences
+    - ❌ Individual sensor preferences
     - ❌ Fan controller table
     - ❌ Multiple server connections
     - ❌ Settings
