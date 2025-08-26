@@ -164,6 +164,48 @@ void RenderFanControllerWindow()
     ImGui::End();
 }
 
+void RenderAboutWindow()
+{
+    if(about_window)
+    {
+        ImGui::SetNextWindowSizeConstraints(ImVec2(500, 500), ImVec2(FLT_MAX, FLT_MAX));
+        ImGui::Begin("About", &about_window, 0);
+        ImVec2 avail_size = ImGui::GetContentRegionAvail();
+        ImGui::BeginChild("ScrollRegion", avail_size, true, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_AlwaysVerticalScrollbar);
+        ImGui::Text("Psensor");
+        ImGui::Text("A fork of the original Psensor project created by jeanfi@gmail.com");
+        ImGui::Text("This fork aims to provide a new look and feel for the desktop application as well as new features.");
+        ImGui::Text("");
+        ImGui::Text("Source code available on ");
+        ImGui::SameLine();
+        ImGui::TextLinkOpenURL("GitHub", "https://github.com/0xSYS/psensor");
+        ImGui::Text("Psensor %s", VERSION);
+        ImGui::Text("Copyright (C) 2010-2025");
+        ImGui::Text("jeanfi@gmail.com");
+        ImGui::Text("xsys061@gmail.com");
+        ImGui::Text("");
+        ImGui::Text("License: GPLv2");
+        //ImGui::Text("Website: https://psensor.org"); // Not yet
+        //ImGui::End();
+        ImGui::EndChild();
+        ImGui::End();
+    }
+}
+
+void RenderSensorSettings()
+{
+    ImGui::SetNextWindowSizeConstraints(ImVec2(500, 500), ImVec2(FLT_MAX, FLT_MAX));
+    ImGui::Begin("Sensor Settings", &sensor_settings);
+    ImGui::End();
+}
+
+void RenderPreferences()
+{
+    ImGui::SetNextWindowSizeConstraints(ImVec2(500, 500), ImVec2(FLT_MAX, FLT_MAX));
+    ImGui::Begin("Preferences", &preferences);
+    ImGui::End();
+}
+
 void RenderUI()
 {
     // MARK: Main Menu Bar
@@ -173,7 +215,7 @@ void RenderUI()
         {
             if(ImGui::MenuItem("Preferences"))
             {
-                log_info("Preferences");
+                preferences = true;
             }
             
             if(ImGui::MenuItem("Fan Controller"))
@@ -198,7 +240,7 @@ void RenderUI()
             }
             if(ImGui::MenuItem("Sensor Settings"))
             {
-                log_info("Sensor Settings");
+                sensor_settings = true;
             }
             ImGui::Separator();
             if(ImGui::MenuItem("Exit"))
@@ -211,7 +253,7 @@ void RenderUI()
         {
             if(ImGui::MenuItem("About"))
             {
-                log_info("About");
+                about_window = true;
             }
             ImGui::EndMenu();
         }
@@ -266,4 +308,13 @@ void RenderUI()
     // MARK: UI Body
     if(fan_controller_open)
         RenderFanControllerWindow();
+    
+    if(about_window)
+        RenderAboutWindow();
+    
+    if(sensor_settings)
+        RenderSensorSettings();
+    
+    if(preferences)
+        RenderPreferences();
 }

@@ -1,4 +1,5 @@
 #include "tests.h"
+#include "utils.hpp"
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -62,6 +63,9 @@ void test_stuff()
 	*/
 	
 	// **The moment of realization that I had a bug in the core library...**
-	for(int i = 0; i < 256; i++)
-	    printf("Fan PWM %d\n", i);
+	//for(int i = 0; i < 256; i++)
+	//    printf("Fan PWM %d\n", i);
+	
+	// No longer needed anymore, imgui already does this
+	//Utils::open_url("https://github.com/0xSYS/NVi-PFA/blob/my-stuff/app/jni/src/Gui.cxx");
 }
