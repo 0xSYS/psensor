@@ -36,6 +36,11 @@
 },
 {
   "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-Inew-gui/ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/UI/sensor_list.cpp.o", "new-gui/UI/sensor_list.cpp"],
+  "file": "new-gui/UI/sensor_list.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
   "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-Inew-gui/ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/UI/imgui/imgui_impl_sdl3.cpp.o", "new-gui/UI/imgui/imgui_impl_sdl3.cpp"],
   "file": "new-gui/UI/imgui/imgui_impl_sdl3.cpp"
 },

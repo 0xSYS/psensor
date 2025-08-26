@@ -206,6 +206,26 @@ void RenderPreferences()
     ImGui::End();
 }
 
+void RenderSensorList()
+{
+    ImGui::SetNextWindowSizeConstraints(ImVec2(500, 170), ImVec2(FLT_MAX, FLT_MAX));
+    ImGui::Begin("##Sensor List", NULL, ImGuiWindowFlags_NoCollapse);
+
+    
+    if(ImGui::BeginTable("sensor_table", 6, ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY))
+    {
+        ImGui::TableSetupColumn("Plot Display");
+        ImGui::TableSetupColumn("Sensor");
+        ImGui::TableSetupColumn("Current Value");
+        ImGui::TableSetupColumn("Min");
+        ImGui::TableSetupColumn("Max");
+        ImGui::TableSetupColumn("Color");
+        ImGui::TableHeadersRow();
+    }
+    ImGui::EndTable();
+    ImGui::End();
+}
+
 void RenderUI()
 {
     // MARK: Main Menu Bar
@@ -317,4 +337,6 @@ void RenderUI()
     
     if(preferences)
         RenderPreferences();
+    
+    RenderSensorList();
 }

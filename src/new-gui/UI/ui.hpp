@@ -2,6 +2,7 @@
 #define UI_HPP
 
 inline bool loop_exit = false;
+inline bool sensor_list = true;
 inline bool fan_controller_open = false;
 inline bool sensor_settings = false;
 inline bool preferences = false;

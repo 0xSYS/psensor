@@ -13,7 +13,9 @@
 #include <psensor/pudisks2.h>
 #include <psensor/psensor_json.h>
 
-struct psensor **sensors;
+#include "UI/sensor_list.hpp"
+
+//struct psensor **sensors;
 
 /*
 void create_sensor_list()
@@ -68,4 +70,6 @@ void test_stuff()
 	
 	// No longer needed anymore, imgui already does this
 	//Utils::open_url("https://github.com/0xSYS/NVi-PFA/blob/my-stuff/app/jni/src/Gui.cxx");
+	
+	update_sensor_list();
 }
