@@ -194,7 +194,7 @@ static void *update_measures(void *data)
 
 		pmutex_unlock(&ui->sensors_mutex);
 		
-		printf("Measure updated\n");
+		//printf("Measure updated\n");
 
 		sleep(period);
 	}

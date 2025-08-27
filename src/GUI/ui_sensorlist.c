@@ -122,6 +122,7 @@ void ui_sensorlist_update(struct ui_psensor *ui, bool complete)
 		max = psensor_value_to_str(s->type, s->sess_highest, use_celsius);
 
 		gtk_list_store_set(store, &iter, COL_TEMP, value, COL_TEMP_MIN, min, COL_TEMP_MAX, max, -1);
+		printf("Lisst -> Min: %s | Max: %s\n", min, max);
 		free(value);
 		free(min);
 		free(max);
@@ -136,8 +137,7 @@ void ui_sensorlist_update(struct ui_psensor *ui, bool complete)
  *
  * <null> if none.
  */
-static struct psensor *
-get_sensor_at_pos(GtkTreeView *view, int x, int y, struct ui_psensor *ui)
+static struct psensor * get_sensor_at_pos(GtkTreeView *view, int x, int y, struct ui_psensor *ui)
 {
 	GtkTreePath *path;
 	GtkTreeModel *model;

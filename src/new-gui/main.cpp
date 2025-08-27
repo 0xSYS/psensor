@@ -34,7 +34,7 @@
 //#include <stdio.h>
 
 
-//#define DEV_TEST
+#define DEV_TEST
 
 
 
