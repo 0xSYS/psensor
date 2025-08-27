@@ -293,7 +293,7 @@ struct measure *psensor_get_current_measure(struct psensor *sensor)
  * Returns the minimal value of a given 'type' (SENSOR_TYPE_TEMP or
  * SENSOR_TYPE_FAN)
  */
-static double get_min_value(struct psensor **sensors, int type)
+double get_min_value(struct psensor **sensors, int type)
 {
     double m = UNKNOWN_DBL_VALUE;
     struct psensor **s = sensors;
@@ -440,17 +440,17 @@ const char *psensor_type_to_unit_str(unsigned int type, int use_celsius)
     if(is_temp_type(type))
     {
         if(use_celsius)
-            return "\302\260C";
+            return " \302\260C";
         
-        return "\302\260F";
+        return " \302\260F";
     }
     else if(type & SENSOR_TYPE_RPM)
     {
-        return _("RPM");
+        return _(" RPM");
     }
     else if(type & SENSOR_TYPE_PERCENT)
     {
-        return _("%");
+        return _(" %");
     }
     return _("N/A");
 }

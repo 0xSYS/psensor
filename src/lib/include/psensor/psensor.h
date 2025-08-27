@@ -34,36 +34,36 @@
 enum psensor_type
 {
 	/* type of sensor values */
-	SENSOR_TYPE_TEMP = 0x00001,
-	SENSOR_TYPE_RPM = 0x00002,
-	SENSOR_TYPE_PERCENT = 0x00004,
+	SENSOR_TYPE_TEMP     = 0x00001,
+	SENSOR_TYPE_RPM      = 0x00002,
+	SENSOR_TYPE_PERCENT  = 0x00004,
 
 	/* Whether the sensor is remote */
-	SENSOR_TYPE_REMOTE = 0x00008,
+	SENSOR_TYPE_REMOTE   = 0x00008,
 
 	/* Libraries used for retrieving sensor information */
 	SENSOR_TYPE_LMSENSOR = 0x00100,
-	SENSOR_TYPE_NVCTRL = 0x00200,
-	SENSOR_TYPE_GTOP = 0x00400,
-	SENSOR_TYPE_ATIADL = 0x00800,
+	SENSOR_TYPE_NVCTRL   = 0x00200,
+	SENSOR_TYPE_GTOP     = 0x00400,
+	SENSOR_TYPE_ATIADL   = 0x00800,
 	SENSOR_TYPE_ATASMART = 0x01000,
-	SENSOR_TYPE_HDDTEMP = 0x02000,
-	SENSOR_TYPE_UDISKS2 = 0x800000,
+	SENSOR_TYPE_HDDTEMP  = 0x02000,
+	SENSOR_TYPE_UDISKS2  = 0x800000,
 
 	/* Type of HW component */
-	SENSOR_TYPE_HDD = 0x04000,
-	SENSOR_TYPE_CPU = 0x08000,
-	SENSOR_TYPE_GPU = 0x10000,
-	SENSOR_TYPE_FAN = 0x20000,
+	SENSOR_TYPE_HDD      = 0x04000,
+	SENSOR_TYPE_CPU      = 0x08000,
+	SENSOR_TYPE_GPU      = 0x10000,
+	SENSOR_TYPE_FAN      = 0x20000,
 
 	SENSOR_TYPE_GRAPHICS = 0x40000,
-	SENSOR_TYPE_VIDEO = 0x80000,
-	SENSOR_TYPE_PCIE = 0x100000,
-	SENSOR_TYPE_MEMORY = 0x200000,
-	SENSOR_TYPE_AMBIENT = 0x400000,
+	SENSOR_TYPE_VIDEO    = 0x80000,
+	SENSOR_TYPE_PCIE     = 0x100000,
+	SENSOR_TYPE_MEMORY   = 0x200000,
+	SENSOR_TYPE_AMBIENT  = 0x400000,
 
 	/* Combinations */
-	SENSOR_TYPE_HDD_TEMP = (SENSOR_TYPE_HDD | SENSOR_TYPE_TEMP),
+	SENSOR_TYPE_HDD_TEMP  = (SENSOR_TYPE_HDD | SENSOR_TYPE_TEMP),
 	SENSOR_TYPE_CPU_USAGE = (SENSOR_TYPE_CPU | SENSOR_TYPE_PERCENT)
 };
 
@@ -145,6 +145,9 @@ double get_max_temp(struct psensor **sensors);
 double get_min_rpm(struct psensor **sensors);
 double get_max_rpm(struct psensor **sensors);
 
+double get_min_value(struct psensor **sensors, int type);
+double get_max_value(struct psensor **sensors, int type);
+
 /*
  * Converts the value of a sensor to a string.
  *
@@ -172,8 +175,6 @@ struct measure *psensor_get_current_measure(struct psensor *sensor);
 const char *psensor_type_to_str(unsigned int type);
 
 const char *psensor_type_to_unit_str(unsigned int type, int use_celsius);
-
-double get_max_value(struct psensor **sensors, int type);
 
 char *psensor_current_value_to_str(const struct psensor *, unsigned int);
 
