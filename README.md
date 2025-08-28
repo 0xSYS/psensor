@@ -96,7 +96,7 @@ then build:
     - 🔽 Sensor plots
         - ❌ Custom time span
         - ❌ Custom time interval
-        - ❌ Sensor list
+        - ✔️ Sensor list
         - ❌ Sensor record viewer
     - ❌ Individual sensor preferences
     - ❌ Custom toast message boxes
