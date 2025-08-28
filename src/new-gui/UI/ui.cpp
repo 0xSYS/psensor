@@ -72,7 +72,6 @@ void SetFanPwmOnce(int index)
     // I hate to say but it f works ;(
     if(!pwm_set_exe[index])
     {
-        log_trace("Fan PWM %d", prev_fan_pwm[index]);
         psensor_fan_set_pwm(PCFans->pwmFiles[index], prev_fan_pwm[index]);
         fan_pwm[index] = prev_fan_pwm[index]; // sync UI with restored value
         pwm_set_exe[index] = true;
@@ -151,7 +150,6 @@ void RenderFanControllerWindow()
                     is_fan_test_running[row] = false;
                     SetFanPwmOnce(row);
                     pwm_set_exe[row] = false; // Reset my brain here
-                    //log_info("Fan %d test done!", row);
                     fanTestFutures.erase(it);
                 }
                 else if(status == std::future_status::timeout)
@@ -223,8 +221,6 @@ void RenderSensorList()
     ImGui::SetNextWindowSizeConstraints(ImVec2(500, 170), ImVec2(FLT_MAX, FLT_MAX));
     ImGui::Begin("##Sensor List", NULL, ImGuiWindowFlags_NoCollapse);
     
-    //std::cout << "Count: " << sensor_count << std::endl;
-    
     if(ImGui::BeginTable("sensor_table", 6, ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY))
     {
         ImGui::TableSetupColumn("Plot Display");
@@ -259,10 +255,9 @@ void RenderSensorList()
             ImGui::PushID(row);
             
             ImGui::TableSetColumnIndex(0);
-            //ImGui::Checkbox("##Graph_Show", &s.graph_visible);
-            bool b = sensor_graph_enabled[row] != 0;
+            bool b = sensor_graph_enabled[row] != false;
             if (ImGui::Checkbox("##Graph_Show", &b))
-                sensor_graph_enabled[row] = b ? 1 : 0;
+                sensor_graph_enabled[row] = b ? true : false;
             ImGui::PopID();
             
             ImGui::TableSetColumnIndex(1);
@@ -280,9 +275,6 @@ void RenderSensorList()
             
             ImGui::PushID(row);
             ImGui::TableSetColumnIndex(5);
-            //ImGui::ColorButton("MyColor##3b", ImVec4_RGBtoFloat(s.graph_color), ImGuiColorEditFlags_NoAlpha);
-            //ImGui::ColorEdit3("##Graph_Color", ImVec4_RGBtoFloat(s.graph_color), ImGuiColorEditFlags_NoInputs);
-            //ImVec4 color = ImVec4_RGBtoFloat(s.graph_color);
             ImGui::ColorEdit3("##Graph_Color", &sensor_graph_color[row].x, ImGuiColorEditFlags_NoInputs);
             
             ImGui::PopID();

@@ -172,26 +172,22 @@ void ui_main()
     ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer3_Init(renderer);
     
-    //bool show_demo_window = true;
-    //bool show_another_window = false;
-    
     create_sensor_list();
     
     std::thread sensor_update_thr(update_sensor_list, ref(sensor));
     sensor_update_thr.detach();
     
+    // Wait until the sensor count gets an actual value
     while(sensor_count == -1)
     {
         // Blank lmao
     }
     
-    std::cout << "Yes" << sensor_count << std::endl;
     
     sensor_graph_enabled.resize(sensor_count);
     sensor_graph_color.resize(sensor_count);
     for(int i = 0; i < sensor_count; i++)
     {
-        //std::cout << "Sensor " << i << ": " << sensor[i].name << std::endl;
         sensor_graph_enabled[i] = sensor[i].graph_visible;
         sensor_graph_color[i] = ImVec4_RGBtoFloat(sensor[i].graph_color);
     }
@@ -236,10 +232,6 @@ void ui_main()
         ImGui_ImplSDLRenderer3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
         ImGui::NewFrame();
-   
-        //RenderNewDemo();
-        
-        //RenderSimpleDemo();
         
         if(show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
