@@ -223,6 +223,8 @@ void RenderSensorList()
     ImGui::SetNextWindowSizeConstraints(ImVec2(500, 170), ImVec2(FLT_MAX, FLT_MAX));
     ImGui::Begin("##Sensor List", NULL, ImGuiWindowFlags_NoCollapse);
     
+    //std::cout << "Count: " << sensor_count << std::endl;
+    
     if(ImGui::BeginTable("sensor_table", 6, ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY))
     {
         ImGui::TableSetupColumn("Plot Display");
@@ -257,8 +259,12 @@ void RenderSensorList()
             ImGui::PushID(row);
             
             ImGui::TableSetColumnIndex(0);
-            //ImGui::Text("Fan %d", row);
-            ImGui::Checkbox("##Graph_Show", &s.graph_visible);
+            //ImGui::Checkbox("##Graph_Show", &s.graph_visible);
+            bool b = sensor_graph_enabled[row] != 0;
+            if (ImGui::Checkbox("##Graph_Show", &b))
+                sensor_graph_enabled[row] = b ? 1 : 0;
+            ImGui::PopID();
+            
             ImGui::TableSetColumnIndex(1);
             
             ImGui::Text("%s", s.name.c_str());
@@ -272,8 +278,12 @@ void RenderSensorList()
             ImGui::TableSetColumnIndex(4);
             ImGui::Text("%s", psensor_value_to_str(s.sensor_type, s.max, 1));
             
+            ImGui::PushID(row);
             ImGui::TableSetColumnIndex(5);
-            ImGui::ColorButton("MyColor##3b", ImVec4_RGBtoFloat(s.graph_color), ImGuiColorEditFlags_NoAlpha);
+            //ImGui::ColorButton("MyColor##3b", ImVec4_RGBtoFloat(s.graph_color), ImGuiColorEditFlags_NoAlpha);
+            //ImGui::ColorEdit3("##Graph_Color", ImVec4_RGBtoFloat(s.graph_color), ImGuiColorEditFlags_NoInputs);
+            //ImVec4 color = ImVec4_RGBtoFloat(s.graph_color);
+            ImGui::ColorEdit3("##Graph_Color", &sensor_graph_color[row].x, ImGuiColorEditFlags_NoInputs);
             
             ImGui::PopID();
         }

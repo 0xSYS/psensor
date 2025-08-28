@@ -175,15 +175,32 @@ void ui_main()
     //bool show_demo_window = true;
     //bool show_another_window = false;
     
+    create_sensor_list();
+    
     std::thread sensor_update_thr(update_sensor_list, ref(sensor));
     sensor_update_thr.detach();
+    
+    while(sensor_count == -1)
+    {
+        // Blank lmao
+    }
+    
+    std::cout << "Yes" << sensor_count << std::endl;
+    
+    sensor_graph_enabled.resize(sensor_count);
+    sensor_graph_color.resize(sensor_count);
+    for(int i = 0; i < sensor_count; i++)
+    {
+        //std::cout << "Sensor " << i << ": " << sensor[i].name << std::endl;
+        sensor_graph_enabled[i] = sensor[i].graph_visible;
+        sensor_graph_color[i] = ImVec4_RGBtoFloat(sensor[i].graph_color);
+    }
     
     // Main loop
     bool done = false;
     
     while(!done)
     {
-    
         SDL_Event event;
         while(SDL_PollEvent(&event))
         {

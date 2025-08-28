@@ -32,7 +32,12 @@ struct psensor **sensors = nullptr;
 
 ImVec4 ImVec4_RGBtoFloat(ImVec4 c)
 {
-    return ImVec4(c.x / 255.0f, c.y / 255.0f, c.z / 255.0f, c.w / 255.0f);
+    return ImVec4(
+            c.x / 255.0f,   // R
+            c.y / 255.0f,   // G
+            c.z / 255.0f,   // B
+            c.w / 255.0f    // A (optional)
+    );
 }
 
 
@@ -45,12 +50,16 @@ void create_sensor_list()
     amd_psensor_list_append(&sensors, 600);
     gtop2_psensor_list_append(&sensors, 600);
     udisks2_psensor_list_append(&sensors, 600);
+    //for(int i = 0; sensors[i] != nullptr; i++)
+    //{
+    //    sensor_count = i+1;
+    //}
     sensor_list_created = true;
 }
 
 void update_sensor_list(std::vector<ui_sensor>& sl)
 {
-    create_sensor_list(); // Temporary
+    //create_sensor_list(); // Temporary
     if(!sensor_list_created)
     {
         log_error("Sensor list not created");
