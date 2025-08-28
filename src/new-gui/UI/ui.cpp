@@ -264,13 +264,13 @@ void RenderSensorList()
             ImGui::Text("%s", s.name.c_str());
             
             ImGui::TableSetColumnIndex(2);
-            ImGui::Text("%f", s.current_value);
+            ImGui::Text("%s", psensor_value_to_str(s.sensor_type, s.current_value, 1));
             
             ImGui::TableSetColumnIndex(3);
-            ImGui::Text("%f", s.min);
+            ImGui::Text("%s", psensor_value_to_str(s.sensor_type, s.min, 1));
             
             ImGui::TableSetColumnIndex(4);
-            ImGui::Text("%f", s.max);
+            ImGui::Text("%s", psensor_value_to_str(s.sensor_type, s.max, 1));
             
             ImGui::TableSetColumnIndex(5);
             ImGui::ColorButton("MyColor##3b", ImVec4_RGBtoFloat(s.graph_color), ImGuiColorEditFlags_NoAlpha);

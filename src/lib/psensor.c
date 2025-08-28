@@ -218,23 +218,17 @@ int is_temp_type(unsigned int type)
 
 char *psensor_value_to_str(unsigned int type, double value, int use_celsius)
 {
-    char *str;
+    static char buffer[20];
     const char *unit;
-
-    /*
-    * should not be possible to exceed 20 characters with temp or
-    * rpm values the .x part is never displayed
-    */
-    str = malloc(20);
-
+    
     unit = psensor_type_to_unit_str(type, use_celsius);
-
+    
     if(is_temp_type(type) && !use_celsius)
         value = celsius_to_fahrenheit(value);
-
-    sprintf(str, "%.0f%s", value, unit);
-
-    return str;
+    
+    snprintf(buffer, sizeof(buffer), "%.0f%s", value, unit);
+    
+    return buffer;
 }
 
 char *psensor_measure_to_str(const struct measure *m, unsigned int type, unsigned int use_celsius)

@@ -76,6 +76,7 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
                 psensor_get_current_value(s),
                 s->sess_lowest,
                 s->sess_highest,
+                s->type,
                 graph_colors[i],
                 false
             );

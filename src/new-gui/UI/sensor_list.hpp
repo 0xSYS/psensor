@@ -40,11 +40,12 @@ struct ui_sensor
     double current_value;
     double min;
     double max;
+    int sensor_type;
     
     ImVec4 graph_color;
     bool graph_visible;
-    ui_sensor(const std::string& n, double cv, double mn, double mx, const ImVec4& gc, bool gv)
-        : name(n), current_value(cv), min(mn), max(mx), graph_color(gc), graph_visible(gv) {}
+    ui_sensor(const std::string& n, double cv, double mn, double mx, int st, const ImVec4& gc, bool gv)
+        : name(n), current_value(cv), min(mn), max(mx), sensor_type(st), graph_color(gc), graph_visible(gv) {}
 };
 
 ImVec4 ImVec4_RGBtoFloat(ImVec4 c);
