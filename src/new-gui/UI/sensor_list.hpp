@@ -18,7 +18,7 @@ const std::vector <ImVec4> graph_colors=
     {0,   130, 255, 255},
     {231, 227, 44,  255},
     {255, 0,   254, 255},
-    {0,   25,  31,  255},
+    {0,   255, 31,  255},
     {255, 112, 0,   255},
     {180, 0,   255, 255},
     {255, 0,   0,   255},
@@ -47,7 +47,7 @@ struct ui_sensor
         : name(n), current_value(cv), min(mn), max(mx), graph_color(gc), graph_visible(gv) {}
 };
 
-static ImVec4 RGBtoImVec4(int r, int g, int b, int a);
+ImVec4 ImVec4_RGBtoFloat(ImVec4 c);
 
 void create_sensor_list();
 void update_sensor_list(std::vector<ui_sensor>& sl);

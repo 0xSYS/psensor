@@ -17,6 +17,7 @@ extern "C"
 
 
 #include "ui.hpp"
+#include "sensor_list.hpp"
 
 #include "../utils.hpp"
 
@@ -36,6 +37,8 @@ inline std::vector<bool> is_fan_test_running;
 inline std::vector<int> fan_pwm;
 inline std::vector<int> prev_fan_pwm;
 inline std::vector<bool> pwm_set_exe;
+
+
 
 
 // MARK: Internal funcs
@@ -208,9 +211,17 @@ void RenderPreferences()
 
 void RenderSensorList()
 {
+    ImGuiIO& io = ImGui::GetIO();
+    
+    ImVec2 center = ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
+    ImGui::SetNextWindowPos(center, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSizeConstraints(ImVec2(700, 380), ImVec2(FLT_MAX, FLT_MAX));
+    
+    const float TEXT_BASE_WIDTH = ImGui::CalcTextSize("A").x;
+    const float TEXT_BASE_HEIGHT = ImGui::GetTextLineHeightWithSpacing();
+    
     ImGui::SetNextWindowSizeConstraints(ImVec2(500, 170), ImVec2(FLT_MAX, FLT_MAX));
     ImGui::Begin("##Sensor List", NULL, ImGuiWindowFlags_NoCollapse);
-
     
     if(ImGui::BeginTable("sensor_table", 6, ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY))
     {
@@ -221,8 +232,53 @@ void RenderSensorList()
         ImGui::TableSetupColumn("Max");
         ImGui::TableSetupColumn("Color");
         ImGui::TableHeadersRow();
+        
+        std::lock_guard<std::mutex> lock(sensor_list_mutex);
+        for(int row = 0; row < sensor_count; row++)
+        {
+            auto& s = sensor[row];
+            ImGui::TableNextRow();
+            if(row == 0)
+            {
+                ImGui::TableSetColumnIndex(0);
+                ImGui::PushItemWidth(TEXT_BASE_WIDTH * 3.0f);
+                ImGui::TableSetColumnIndex(1);
+                ImGui::PushItemWidth(-FLT_MIN);
+                ImGui::TableSetColumnIndex(2);
+                ImGui::PushItemWidth(-FLT_MIN);
+                ImGui::TableSetColumnIndex(3);
+                ImGui::PushItemWidth(-FLT_MIN);
+                ImGui::TableSetColumnIndex(4);
+                ImGui::PushItemWidth(-FLT_MIN);
+                ImGui::TableSetColumnIndex(5);
+                ImGui::PushItemWidth(-FLT_MIN);
+            }
+            
+            ImGui::PushID(row);
+            
+            ImGui::TableSetColumnIndex(0);
+            //ImGui::Text("Fan %d", row);
+            ImGui::Checkbox("##Graph_Show", &s.graph_visible);
+            ImGui::TableSetColumnIndex(1);
+            
+            ImGui::Text("%s", s.name.c_str());
+            
+            ImGui::TableSetColumnIndex(2);
+            ImGui::Text("%f", s.current_value);
+            
+            ImGui::TableSetColumnIndex(3);
+            ImGui::Text("%f", s.min);
+            
+            ImGui::TableSetColumnIndex(4);
+            ImGui::Text("%f", s.min);
+            
+            ImGui::TableSetColumnIndex(5);
+            ImGui::ColorButton("MyColor##3b", ImVec4_RGBtoFloat(s.graph_color), ImGuiColorEditFlags_NoAlpha);
+            
+            ImGui::PopID();
+        }
+        ImGui::EndTable();
     }
-    ImGui::EndTable();
     ImGui::End();
 }
 

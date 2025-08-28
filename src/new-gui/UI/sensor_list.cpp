@@ -30,9 +30,9 @@ struct psensor **sensors = nullptr;
 
 
 
-ImVec4 RGBtoImVec4(int r, int g, int b, int a)
+ImVec4 ImVec4_RGBtoFloat(ImVec4 c)
 {
-    return ImVec4(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
+    return ImVec4(c.x / 255.0f, c.y / 255.0f, c.z / 255.0f, c.w / 255.0f);
 }
 
 

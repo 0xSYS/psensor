@@ -1,15 +1,26 @@
 #include <SDL3/SDL.h>
 #include <log_c/log.h>
 
+#include <thread>
+#include <mutex>
+
 #include <stdlib.h>
 
 #include "ui_entry.hpp"
 #include "UI/ui_dev.hpp"
 #include "UI/ui.hpp"
+#include "UI/sensor_list.hpp"
 
 #include "UI/imgui/imgui.h"
 #include "UI/imgui/imgui_impl_sdl3.h"
 #include "UI/imgui/imgui_impl_sdlrenderer3.h"
+
+
+
+
+
+
+
 
 
 void SetDefaultTheme()
@@ -163,6 +174,9 @@ void ui_main()
     
     //bool show_demo_window = true;
     //bool show_another_window = false;
+    
+    std::thread sensor_update_thr(update_sensor_list, ref(sensor));
+    sensor_update_thr.detach();
     
     // Main loop
     bool done = false;
