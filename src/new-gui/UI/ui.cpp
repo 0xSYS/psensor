@@ -270,7 +270,7 @@ void RenderSensorList()
             ImGui::Text("%f", s.min);
             
             ImGui::TableSetColumnIndex(4);
-            ImGui::Text("%f", s.min);
+            ImGui::Text("%f", s.max);
             
             ImGui::TableSetColumnIndex(5);
             ImGui::ColorButton("MyColor##3b", ImVec4_RGBtoFloat(s.graph_color), ImGuiColorEditFlags_NoAlpha);
