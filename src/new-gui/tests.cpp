@@ -52,7 +52,7 @@ void read_sensor_list(std::vector<ui_sensor>& sensor)
                           << ", Max: " << s.max << "\n";
             }
         } // <-- Lock is released here before sleeping
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        //std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 }
 

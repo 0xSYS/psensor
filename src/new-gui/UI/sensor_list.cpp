@@ -1,6 +1,4 @@
 #include <vector>
-#include <cstdlib>
-#include <cstdio>
 #include <thread>
 #include <mutex>
 #include <unistd.h>
@@ -28,8 +26,14 @@ extern "C"
 
 
 
-//std::vector<psensor> sensors;
 struct psensor **sensors = nullptr;
+
+
+
+ImVec4 RGBtoImVec4(int r, int g, int b, int a)
+{
+    return ImVec4(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
+}
 
 
 void create_sensor_list()
@@ -78,7 +82,6 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
         }
 
         {
-            // Only lock when assigning to the shared list
             std::lock_guard<std::mutex> lock(sensor_list_mutex);
             sl = std::move(temp_list);
             sensor_count = sl.size();
