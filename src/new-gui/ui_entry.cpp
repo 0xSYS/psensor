@@ -180,7 +180,8 @@ void ui_main()
     // Wait until the sensor count gets an actual value
     while(sensor_count == -1)
     {
-        // Blank lmao
+        // The funny thing is that I can't leave it empty. In releae mode this blocks everything
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
     
     
