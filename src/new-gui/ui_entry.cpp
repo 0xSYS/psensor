@@ -1,3 +1,9 @@
+extern "C"
+{
+    #include <psensor/psensor.h>
+}
+
+
 #include <SDL3/SDL.h>
 #include <log_c/log.h>
 
@@ -5,6 +11,7 @@
 #include <mutex>
 
 #include <stdlib.h>
+
 
 #include "ui_entry.hpp"
 #include "UI/ui_dev.hpp"
@@ -255,6 +262,8 @@ void ui_main()
     ImGui_ImplSDLRenderer3_Shutdown();
     ImGui_ImplSDL3_Shutdown();
     ImGui::DestroyContext();
+    
+    psensor_list_free(sensors);
     
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

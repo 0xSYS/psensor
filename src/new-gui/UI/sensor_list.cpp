@@ -26,9 +26,6 @@ extern "C"
 
 
 
-struct psensor **sensors = nullptr;
-
-
 
 ImVec4 ImVec4_RGBtoFloat(ImVec4 c)
 {
@@ -77,13 +74,13 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
         std::vector<ui_sensor> temp_list;
         for(int i = 0; sensors[i] != nullptr; i++)
         {
-            struct psensor* s = sensors[i];
+            temp_s = sensors[i];
             temp_list.emplace_back(
-                s->name,
-                psensor_get_current_value(s),
-                s->sess_lowest,
-                s->sess_highest,
-                s->type,
+                temp_s->name,
+                psensor_get_current_value(temp_s),
+                temp_s->sess_lowest,
+                temp_s->sess_highest,
+                temp_s->type,
                 graph_colors[i],
                 false
             );

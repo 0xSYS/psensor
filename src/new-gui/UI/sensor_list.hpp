@@ -11,6 +11,8 @@
 inline std::mutex sensor_list_mutex;
 inline bool sensor_list_created = false;
 inline int sensor_count = -1;
+inline struct psensor **sensors = nullptr;
+inline struct psensor* temp_s;
 
 const std::vector <ImVec4> graph_colors=
 {
