@@ -95,8 +95,8 @@ then build:
         - ✔️ User controlled fan speeds
         - ⚠️ Fan speed history
     - 🔽 Sensor plots
-        - ❌ Custom time span
-        - ❌ Custom time interval
+        - ⚠️ Custom time span
+        - ⚠️ Custom time interval
         - ✔️ Sensor list
         - ❌ Sensor record viewer
     - ❌ Individual sensor preferences

@@ -2,6 +2,8 @@
 #define UI_HPP
 
 #include <vector>
+#include <implot/implot.h>
+#include "plot.hpp"
 #include "sensor_list.hpp"
 
 inline bool loop_exit = false;
@@ -15,6 +17,7 @@ inline bool no_fc_available_mod = false;
 inline std::vector<ui_sensor> sensor;
 inline std::vector<bool> sensor_graph_enabled;
 inline std::vector<ImVec4> sensor_graph_color;
+inline std::vector<ScrollingBuffer> sensor_plots;
 
 
 

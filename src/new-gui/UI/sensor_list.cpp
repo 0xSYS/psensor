@@ -90,6 +90,7 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
             std::lock_guard<std::mutex> lock(sensor_list_mutex);
             sl = std::move(temp_list);
             sensor_count = sl.size();
+            plot_update_interval += 0.1f;
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));

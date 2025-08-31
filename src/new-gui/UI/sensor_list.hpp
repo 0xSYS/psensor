@@ -13,6 +13,7 @@ inline bool sensor_list_created = false;
 inline int sensor_count = -1;
 inline struct psensor **sensors = nullptr;
 inline struct psensor* temp_s;
+inline float plot_update_interval = 0.0f;
 
 const std::vector <ImVec4> graph_colors=
 {

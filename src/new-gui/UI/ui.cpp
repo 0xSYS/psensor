@@ -211,8 +211,8 @@ void RenderSensorList()
 {
     ImGuiIO& io = ImGui::GetIO();
     
-    ImVec2 center = ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
-    ImGui::SetNextWindowPos(center, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
+    //ImVec2 center = ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
+    //ImGui::SetNextWindowPos(center, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSizeConstraints(ImVec2(700, 380), ImVec2(FLT_MAX, FLT_MAX));
     
     const float TEXT_BASE_WIDTH = ImGui::CalcTextSize("A").x;
@@ -280,6 +280,52 @@ void RenderSensorList()
             ImGui::PopID();
         }
         ImGui::EndTable();
+    }
+    ImGui::End();
+}
+
+void RenderSensorPlot()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    
+    //ImVec2 center = ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
+    //ImGui::SetNextWindowPos(center, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSizeConstraints(ImVec2(700, 380), ImVec2(FLT_MAX, FLT_MAX));
+    
+    static ImPlotAxisFlags flags = ImPlotAxisFlags_NoTickLabels;
+    
+    
+    static float t = 0;
+    //t += ImGui::GetIO().DeltaTime;
+    t = plot_update_interval;
+    
+    sensor_plots.resize(sensor_count);
+    for(int i = 0; i < sensor_count; i++)
+    {
+        auto& s = sensor[i];
+        sensor_plots[i].AddPoint(t, s.current_value * 0.005f);
+    }
+    
+    ImGui::Begin("##Sensor_Plot", NULL, ImGuiWindowFlags_NoCollapse);
+    
+    if(ImPlot::BeginPlot("##Scrolling", ImVec2(-1,-1)))
+    {
+        ImPlot::SetupAxes(nullptr, nullptr, flags, flags);
+        ImPlot::SetupAxisLimits(ImAxis_X1,t - 30.0f, t, ImGuiCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_Y1,0,1);
+        //ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL,0.5f);
+        for(int i = 0; i < sensor_count; i++)
+        {
+            ImPlot::SetNextLineStyle(sensor_graph_color[i],0.5f);
+            //ImPlot::SetNextFillStyle(sensor_graph_color[i],0.5f);
+            auto& s = sensor[i];
+            ImGui::PushID(i);
+            //auto& s = sensor[i];
+            //ImPlot::PlotLine(s.name.c_str(), sensor_plots[i].data(), sensor_plots[i].size());
+            ImPlot::PlotLine(s.name.c_str(), &sensor_plots[i].Data[0].x, &sensor_plots[i].Data[0].y, sensor_plots[i].Data.size(), 0, sensor_plots[i].Offset, 2*sizeof(float));
+            ImGui::PopID();
+        }
+        ImPlot::EndPlot();
     }
     ImGui::End();
 }
@@ -397,4 +443,5 @@ void RenderUI()
         RenderPreferences();
     
     RenderSensorList();
+    RenderSensorPlot();
 }
