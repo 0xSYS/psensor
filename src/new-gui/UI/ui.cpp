@@ -210,9 +210,6 @@ void RenderPreferences()
 void RenderSensorList()
 {
     ImGuiIO& io = ImGui::GetIO();
-    
-    //ImVec2 center = ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
-    //ImGui::SetNextWindowPos(center, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSizeConstraints(ImVec2(700, 380), ImVec2(FLT_MAX, FLT_MAX));
     
     const float TEXT_BASE_WIDTH = ImGui::CalcTextSize("A").x;
@@ -287,9 +284,6 @@ void RenderSensorList()
 void RenderSensorPlot()
 {
     ImGuiIO& io = ImGui::GetIO();
-    
-    //ImVec2 center = ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
-    //ImGui::SetNextWindowPos(center, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSizeConstraints(ImVec2(700, 380), ImVec2(FLT_MAX, FLT_MAX));
     
     static ImPlotAxisFlags flags = ImPlotAxisFlags_NoTickLabels;
@@ -316,12 +310,10 @@ void RenderSensorPlot()
         //ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL,0.5f);
         for(int i = 0; i < sensor_count; i++)
         {
-            ImPlot::SetNextLineStyle(sensor_graph_color[i],0.5f);
-            //ImPlot::SetNextFillStyle(sensor_graph_color[i],0.5f);
             auto& s = sensor[i];
+            ImPlot::SetNextLineStyle(sensor_graph_color[i],0.5f);
+            
             ImGui::PushID(i);
-            //auto& s = sensor[i];
-            //ImPlot::PlotLine(s.name.c_str(), sensor_plots[i].data(), sensor_plots[i].size());
             ImPlot::PlotLine(s.name.c_str(), &sensor_plots[i].Data[0].x, &sensor_plots[i].Data[0].y, sensor_plots[i].Data.size(), 0, sensor_plots[i].Offset, 2*sizeof(float));
             ImGui::PopID();
         }
