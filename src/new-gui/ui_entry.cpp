@@ -18,9 +18,11 @@ extern "C"
 #include "UI/ui.hpp"
 #include "UI/sensor_list.hpp"
 
-#include "UI/imgui/imgui.h"
-#include "UI/imgui/imgui_impl_sdl3.h"
-#include "UI/imgui/imgui_impl_sdlrenderer3.h"
+#include <imgui/imgui.h>
+#include <imgui/backend/imgui_impl_sdl3.h>
+#include <imgui/backend/imgui_impl_sdlrenderer3.h>
+
+#include <implot/implot.h>
 
 
 
@@ -165,6 +167,10 @@ void ui_main()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     
     
+    ImGui::CreateContext();
+    ImPlot::CreateContext();
+    
+    
     io.Fonts->AddFontFromFileTTF("Liter-Regular.ttf", 25.0f);
     
     SetDefaultTheme();
@@ -223,6 +229,7 @@ void ui_main()
                 if((mods & SDL_KMOD_CTRL) && sym == SDLK_D)
                 {
                     show_demo_window = true;
+                    show_implot_demo = true;
                     printf("Ctrl+d -> Devel\n");
                 }
             }
@@ -243,6 +250,9 @@ void ui_main()
         
         if(show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
+        
+        if(show_implot_demo)
+            ImPlot::ShowDemoWindow(&show_implot_demo);
         
         RenderUI();
            

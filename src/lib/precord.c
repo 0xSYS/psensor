@@ -21,7 +21,7 @@
 
 #include "include/psensor/precord.h"
 #include "include/psensor/plog.h"
-#include "ext_lib/CMessagePack/cmp.h"
+#include <CMessagePack/cmp.h>
 
 #include <stdlib.h>
 #include <stdio.h>

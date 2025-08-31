@@ -106,10 +106,15 @@ target("psensor")
 
 
     add_includedirs(
-      "lib/ext_lib/adl_sdk"
+      "../ext_deps/adl_sdk",
+      "../ext_deps"
     )
 
-    add_files("lib/ext_lib/CMessagePack/*.c", "lib/*.c")
+    add_files(
+        "../ext_deps/CMessagePack/*.c",
+        "../ext_deps/csv/*.c",
+        "lib/*.c"
+    )
 
 
 
@@ -120,7 +125,8 @@ target("psensor-ui")
 
     add_includedirs(
         "lib/include",
-        "new-gui/ext_deps/"
+        "../ext_deps/imgui",
+        "../ext_deps/"
     )
 
     add_linkdirs(
@@ -133,11 +139,13 @@ target("psensor-ui")
     add_defines("LOGC__USER_SETTINGS")
 
 
-    add_files("new-gui/ext_deps/log_c/*.c")
+    add_files("../ext_deps/log_c/*.c")
     add_files(
         "new-gui/*.cpp",
         "new-gui/UI/*.cpp",
-        "new-gui/UI/imgui/*.cpp"
+        "../ext_deps/imgui/*.cpp",
+        "../ext_deps/imgui/backend/*.cpp",
+        "../ext_deps/implot/*.cpp"
     )
 
     after_build(function (target)

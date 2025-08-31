@@ -81,6 +81,7 @@ then build:
             - ❌ Buffered
             - ❌ Instant append
         - Formats
+            - ❌ JSON
             - ❌ CSV
             - ❌ [BSV (Experimental)](https://github.com/Stenway/BSV-Challenge)
     

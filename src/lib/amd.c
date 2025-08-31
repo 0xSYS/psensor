@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "ext_lib/adl_sdk/adl_sdk.h"
+#include <adl_sdk.h>
 
 #include "include/psensor/psensor.h"
 
