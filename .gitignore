@@ -1,3 +1,4 @@
 src/.xmake/
 src/build/
 src/.cache
+src/compile_commands.json
