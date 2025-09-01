@@ -83,9 +83,6 @@ void SetFanPwmOnce(int index)
 void RenderFanControllerWindow()
 {
     ImGuiIO& io = ImGui::GetIO();
-    
-    ImVec2 center = ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
-    ImGui::SetNextWindowPos(center, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSizeConstraints(ImVec2(700, 380), ImVec2(FLT_MAX, FLT_MAX));
     
     const float TEXT_BASE_WIDTH = ImGui::CalcTextSize("A").x;
@@ -169,6 +166,10 @@ void RenderAboutWindow()
 {
     if(about_window)
     {
+        ImGuiIO& io = ImGui::GetIO();
+        
+        ImVec2 center = ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
+        ImGui::SetNextWindowPos(center, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
         ImGui::SetNextWindowSizeConstraints(ImVec2(500, 500), ImVec2(FLT_MAX, FLT_MAX));
         ImGui::Begin("About", &about_window, 0);
         ImVec2 avail_size = ImGui::GetContentRegionAvail();
@@ -253,8 +254,9 @@ void RenderSensorList()
             
             ImGui::TableSetColumnIndex(0);
             bool b = sensor_graph_enabled[row] != false;
-            if (ImGui::Checkbox("##Graph_Show", &b))
+            if(ImGui::Checkbox("##Graph_Show", &b))
                 sensor_graph_enabled[row] = b ? true : false;
+            
             ImGui::PopID();
             
             ImGui::TableSetColumnIndex(1);
@@ -286,7 +288,7 @@ void RenderSensorPlot()
     ImGuiIO& io = ImGui::GetIO();
     ImGui::SetNextWindowSizeConstraints(ImVec2(700, 380), ImVec2(FLT_MAX, FLT_MAX));
     
-    static ImPlotAxisFlags flags = ImPlotAxisFlags_NoTickLabels;
+    static ImPlotAxisFlags flags = ImPlotAxisFlags_LockMin;
     
     
     static float t = 0;
@@ -302,19 +304,19 @@ void RenderSensorPlot()
     
     ImGui::Begin("##Sensor_Plot", NULL, ImGuiWindowFlags_NoCollapse);
     
-    if(ImPlot::BeginPlot("##Scrolling", ImVec2(-1,-1)))
+    if(ImPlot::BeginPlot("##Scrolling", ImVec2(-1,-1), ImPlotFlags_NoLegend))
     {
-        ImPlot::SetupAxes(nullptr, nullptr, flags, flags);
+        ImPlot::SetupAxes("Time", "Values", flags, flags);
         ImPlot::SetupAxisLimits(ImAxis_X1,t - 30.0f, t, ImGuiCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_Y1,0,1);
-        //ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL,0.5f);
+        ImPlot::SetupAxisLimits(ImAxis_Y1,0,10);
         for(int i = 0; i < sensor_count; i++)
         {
             auto& s = sensor[i];
             ImPlot::SetNextLineStyle(sensor_graph_color[i],0.5f);
             
             ImGui::PushID(i);
-            ImPlot::PlotLine(s.name.c_str(), &sensor_plots[i].Data[0].x, &sensor_plots[i].Data[0].y, sensor_plots[i].Data.size(), 0, sensor_plots[i].Offset, 2*sizeof(float));
+            if(sensor_graph_enabled[i])
+                ImPlot::PlotLine(s.name.c_str(), &sensor_plots[i].Data[0].x, &sensor_plots[i].Data[0].y, sensor_plots[i].Data.size(), 0, sensor_plots[i].Offset, 2*sizeof(float));
             ImGui::PopID();
         }
         ImPlot::EndPlot();

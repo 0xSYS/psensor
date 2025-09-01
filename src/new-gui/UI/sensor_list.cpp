@@ -82,7 +82,7 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
                 temp_s->sess_highest,
                 temp_s->type,
                 graph_colors[i],
-                false
+                true
             );
         }
 

@@ -193,7 +193,7 @@ void ui_main()
     // Wait until the sensor count gets an actual value
     while(sensor_count == -1)
     {
-        // The funny thing is that I can't leave it empty. In releae mode this blocks everything
+        // The funny thing is that I can't leave it empty. In release mode this blocks everything
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
     
@@ -237,11 +237,11 @@ void ui_main()
    
    
         // [If using SDL_MAIN_USE_CALLBACKS: all code below would likely be your SDL_AppIterate() function]
-        if(SDL_GetWindowFlags(window) & SDL_WINDOW_MINIMIZED)
-        {
-            SDL_Delay(10);
-            continue;
-        }
+        //if(SDL_GetWindowFlags(window) & SDL_WINDOW_MINIMIZED)
+        //{
+        //    SDL_Delay(10);
+        //    continue;
+        //}
    
         // Start the Dear ImGui frame
         ImGui_ImplSDLRenderer3_NewFrame();

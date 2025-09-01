@@ -101,6 +101,7 @@ then build:
         - ❌ Sensor record viewer
     - ❌ Individual sensor preferences
     - ❌ Custom toast message boxes
+    - ❌ Configuration
     
 - 🔽 Server
     - ❌ User Auth via SSH protocol
