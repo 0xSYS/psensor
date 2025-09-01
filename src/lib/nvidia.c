@@ -19,7 +19,6 @@
  */
 #include <locale.h>
 #include <libintl.h>
-#define _(str) gettext(str)
 
 #include <limits.h>
 #include <math.h>
@@ -33,6 +32,8 @@
 #include <NVCtrlLib.h>
 
 #include "include/psensor/nvidia.h"
+
+#include <log_c/log.h>
 
 Display *display;
 
@@ -62,12 +63,12 @@ char *get_product_name(int id, int type)
 		if(strcmp(name, "Unknown"))
 			return name;
 
-		log_err(_("%s: Unknown NVIDIA product name for GPU %d"), PROVIDER_NAME, id);
+		log_error("%s: Unknown NVIDIA product name for GPU %d", PROVIDER_NAME, id);
 		free(name);
 	}
 	else
 	{
-		log_err(_("%s: "  "Failed to retrieve NVIDIA product name for GPU %d"),PROVIDER_NAME,id);
+		log_error("%s: "  "Failed to retrieve NVIDIA product name for GPU %d", PROVIDER_NAME,id);
 	}
 
 	return strdup("NVIDIA");
@@ -230,7 +231,7 @@ void update(struct psensor *sensor)
 	v = get_value(id, sensor->type);
 
 	if(v == UNKNOWN_DBL_VALUE)
-		log_err(_("%s: Failed to retrieve measure of type %x "  "for NVIDIA GPU %d"), PROVIDER_NAME, sensor->type, id);
+		log_error("%s: Failed to retrieve measure of type %x "  "for NVIDIA GPU %d", PROVIDER_NAME, sensor->type, id);
 	psensor_set_current_value(sensor, v);
 }
 
@@ -303,14 +304,14 @@ int init(void)
 
 	if(!display)
 	{
-		log_err(_("%s: Cannot open connection to X11 server."), PROVIDER_NAME);
+		log_error("%s: Cannot open connection to X11 server.", PROVIDER_NAME);
 		return 0;
 	}
 
 	if(XNVCTRLQueryExtension(display, &evt, &err))
 		return 1;
 
-	log_err(_("%s: Failed to retrieve NVIDIA information."), PROVIDER_NAME);
+	log_error("%s: Failed to retrieve NVIDIA information.", PROVIDER_NAME);
 
 	return 0;
 }
@@ -367,7 +368,7 @@ void nvidia_psensor_list_append(struct psensor ***ss, int values_len)
 	ret = XNVCTRLQueryTargetCount(display, NV_CTRL_TARGET_TYPE_COOLER, &n);
 	if(ret == True)
 	{
-		log_fct("%s: Number of fans: %d", PROVIDER_NAME, n);
+		log_trace("%s: Number of fans: %d", PROVIDER_NAME, n);
 		for(i = 0; i < n; i++)
 		{
 			utype = SENSOR_TYPE_FAN | SENSOR_TYPE_RPM;
@@ -382,7 +383,7 @@ void nvidia_psensor_list_append(struct psensor ***ss, int values_len)
 	}
 	else
 	{
-		log_err(_("%s: Failed to retrieve number of fans."), PROVIDER_NAME);
+		log_error("%s: Failed to retrieve number of fans.", PROVIDER_NAME);
 	}
 }
 

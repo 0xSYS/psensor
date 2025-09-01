@@ -36,6 +36,7 @@
 #include <adl_sdk.h>
 
 #include "include/psensor/psensor.h"
+#include <log_c/log.h>
 
 typedef int(*ADL_MAIN_CONTROL_CREATE)          (ADL_MAIN_MALLOC_CALLBACK, int);
 typedef int(*ADL_MAIN_CONTROL_DESTROY)();
@@ -167,7 +168,7 @@ static int init(void)
 	hdll = dlopen("libatiadlxx.so", RTLD_LAZY|RTLD_GLOBAL);
 	if(!hdll)
 	{
-		log_debug(_("AMD: cannot found ADL library."));
+		log_warn("AMD: cannot found ADL library.");
 		return 0;
 	}
 
@@ -181,7 +182,7 @@ static int init(void)
 	adl_od5_currentactivity_get      = (ADL_OD5_CURRENTACTIVITY_GET)      getprocaddress(hdll, "ADL_Overdrive5_CurrentActivity_Get");
 	if(!adl_main_control_create || !adl_main_control_destroy || !adl_adapter_numberofadapters_get || !adl_adapter_adapterinfo_get || !adl_od5_temperature_get || !adl_od5_fanspeed_get || !adl_od5_currentactivity_get)
 	{
-		log_err(_("AMD: missing ADL's API."));
+		log_error("AMD: missing ADL's API.");
 		return 0;
 	}
 
@@ -192,14 +193,14 @@ static int init(void)
 	 */
 	if(adl_main_control_create(adl_main_memory_alloc, 1) != ADL_OK)
 	{
-		log_err(_("AMD: failed to initialize ADL."));
+		log_error("AMD: failed to initialize ADL.");
 		return 0;
 	}
 	adl_main_control_done = 1;
 
 	if(adl_adapter_numberofadapters_get(&inumberadapters) != ADL_OK)
 	{
-		log_err(_("AMD: cannot get the number of adapters."));
+		log_error("AMD: cannot get the number of adapters.");
 		return 0;
 	}
 
@@ -240,8 +241,8 @@ static int init(void)
 
 	free(lpadapterinfo);
 
-	log_debug(_("Number of AMD/ATI adapters: %d"), inumberadapters);
-	log_debug(_("Number of active AMD/ATI adapters: %d"), inumberadaptersactive);
+	log_info("Number of AMD/ATI adapters: %d", inumberadapters);
+	log_info("Number of active AMD/ATI adapters: %d", inumberadaptersactive);
 
 	return inumberadaptersactive;
 }

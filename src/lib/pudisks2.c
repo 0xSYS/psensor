@@ -30,6 +30,8 @@
 #include "include/psensor/pudisks2.h"
 #include "include/psensor/temperature.h"
 
+#include <log_c/log.h>
+
 static const char *PROVIDER_NAME = "udisks2";
 
 static GDBusObjectManager *manager;
@@ -62,21 +64,21 @@ static void smart_update(struct psensor *s, UDisksDriveAta *ata)
 
 	if(gettimeofday(&t, NULL) != 0)
 	{
-		log_err("%s: %s", PROVIDER_NAME, _("gettimeofday failed."));
+		log_error("%s: %s", PROVIDER_NAME, _("gettimeofday failed."));
 		return;
 	}
 
 	if(data->last_smart_update.tv_sec && (t.tv_sec - data->last_smart_update.tv_sec < SMART_UPDATE_INTERVAL))
 		return;
 
-	log_fct("%s: update SMART data for %s", PROVIDER_NAME, data->path);
+	//log_debug("%s: update SMART data for %s", PROVIDER_NAME, data->path);
 
 	variant = g_variant_new_parsed("{'nowakeup': %v}", g_variant_new_boolean(TRUE));
 
 	ret = udisks_drive_ata_call_smart_update_sync(ata, variant, NULL, NULL);
 
 	if(!ret)
-		log_fct("%s: SMART update failed for %s", PROVIDER_NAME, data->path);
+		log_debug("%s: SMART update failed for %s", PROVIDER_NAME, data->path);
 
 	data->last_smart_update = t;
 }
@@ -125,14 +127,14 @@ void udisks2_psensor_list_append(struct psensor ***sensors, int values_length)
 	struct psensor *s;
 	struct udisks_data *data;
 
-	log_fct_enter();
+	//log_fct_enter();
 
 	client = udisks_client_new_sync(NULL, NULL);
 
 	if(!client)
 	{
-		log_err(_("%s: cannot get the udisks2 client"), PROVIDER_NAME);
-		log_fct_exit();
+		log_error(_("%s: cannot get the udisks2 client"), PROVIDER_NAME);
+		//log_fct_exit();
 		return;
 	}
 
@@ -149,25 +151,25 @@ void udisks2_psensor_list_append(struct psensor ***sensors, int values_length)
 
 		if(!drive)
 		{
-			log_fct("Not a drive: %s", path);
+			log_warn("Not a drive: %s", path);
 			continue;
 		}
 
 		if(!drive_ata)
 		{
-			log_fct("Not an ATA drive: %s", path);
+			log_warn("Not an ATA drive: %s", path);
 			continue;
 		}
 
 		if(!udisks_drive_ata_get_smart_enabled(drive_ata))
 		{
-			log_fct("SMART not enabled: %s", path);
+			log_debug("SMART not enabled: %s", path);
 			continue;
 		}
 
 		if(!udisks_drive_ata_get_smart_temperature(drive_ata))
 		{
-			log_fct("No temperature available: %s", path);
+			log_debug("No temperature available: %s", path);
 			continue;
 		}
 
@@ -212,5 +214,5 @@ void udisks2_psensor_list_append(struct psensor ***sensors, int values_length)
 
 	g_list_free(objects);
 
-	log_fct_exit();
+	//log_fct_exit();
 }

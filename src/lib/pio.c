@@ -27,8 +27,10 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "include/psensor/plog.h"
+//#include "include/psensor/plog.h"
 #include "include/psensor/pio.h"
+
+#include <log_c/log.h>
 
 /* Directory separator is \ when cross-compiling for MS Windows
  * systems
@@ -262,7 +264,7 @@ int file_copy(const char *src, const char *dst)
 	FILE *fsrc, *fdst;
 	int ret = 0;
 
-	log_fct("copy %s to %s", src, dst);
+	log_trace("copy %s to %s", src, dst);
 
 	fsrc = fopen(src, "r");
 
@@ -326,7 +328,7 @@ void mkdirs(const char *dirs, mode_t mode)
 	char *c, *dir;
 	int i;
 
-	log_fct("mkdirs %s", dirs);
+	log_trace("mkdirs %s", dirs);
 
 	c = (char *)dirs;
 	dir = malloc(strlen(dirs) + 1);
@@ -357,21 +359,21 @@ void file_copy_print_error(int code, const char *src, const char *dst)
 	    case 0:
 		    break;
 	    case FILE_COPY_ERROR_OPEN_SRC:
-			printf("File copy error: failed to open %s.\n", src);
+			log_error("File copy error: failed to open %s.", src);
 			break;
 	    case FILE_COPY_ERROR_OPEN_DST:
-			printf("File copy error: failed to open %s.\n", dst);
+			log_error("File copy error: failed to open %s.", dst);
 			break;
 	    case FILE_COPY_ERROR_READ:
-			printf("File copy error: failed to read %s.\n", src);
+			log_error("File copy error: failed to read %s.", src);
 			break;
 	    case FILE_COPY_ERROR_WRITE:
-			printf("File copy error: failed to write %s.\n", src);
+			log_error("File copy error: failed to write %s.", src);
 			break;
 	    case FILE_COPY_ERROR_ALLOC_BUFFER:
-			printf("File copy error: failed to allocate buffer.\n");
+			log_error("File copy error: failed to allocate buffer.");
 			break;
 	    default:
-			printf("File copy error: unknown error %d.\n", code);
+			log_error("File copy error: unknown error %d.", code);
 	}
 }

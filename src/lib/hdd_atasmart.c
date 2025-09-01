@@ -39,7 +39,7 @@
 
 #include "include/psensor/pio.h"
 #include "include/psensor/hdd.h"
-#include "include/psensor/plog.h"
+#include <log_c/log.h>
 
 static const char *PROVIDER_NAME = "atasmart";
 
@@ -82,25 +82,25 @@ static void analyze_disk(const char *dname)
 	struct stat st;
 	uint64_t size;
 
-	log_fct("Analyze %s", dname);
+	log_debug("Analyze %s", dname);
 
 	f = open(dname, O_RDONLY|O_NOCTTY|O_NONBLOCK|O_CLOEXEC);
 
 	if(f < 0)
 	{
-		log_fct("Could not open file %s: %s", dname, strerror(errno));
+		log_warn("Could not open file %s: %s", dname, strerror(errno));
 		goto fail;
 	}
 
 	if(fstat(f, &st) < 0)
 	{
-		log_fct("fstat fails %s: %s", dname, strerror(errno));
+		log_warn("fstat fails %s: %s", dname, strerror(errno));
 		goto fail;
 	}
 
 	if(!S_ISBLK(st.st_mode))
 	{
-		log_fct("!S_ISBLK fails %s", dname);
+		log_warn("!S_ISBLK fails %s", dname);
 		goto fail;
 	}
 
@@ -108,13 +108,13 @@ static void analyze_disk(const char *dname)
 	/* So, it's a block device. Let's make sure the ioctls work */
 	if(ioctl(f, BLKGETSIZE64, &size) < 0)
 	{
-		log_fct("ioctl fails %s: %s", dname, strerror(errno));
+		log_warn("ioctl fails %s: %s", dname, strerror(errno));
 		goto fail;
 	}
 
 	if(size <= 0 || size == (uint64_t) -1)
 	{
-		log_fct("ioctl wrong size %s: %ld", dname, size);
+		log_warn("ioctl wrong size %s: %ld", dname, size);
 		goto fail;
 	}
 
@@ -128,14 +128,14 @@ void atasmart_psensor_list_append(struct psensor ***sensors, int values_max_leng
 	SkDisk *disk;
 	struct psensor *sensor;
 
-	log_fct_enter();
+	//log_fct_enter();
 
 	paths = dir_list("/dev", filter_sd);
 
 	tmp = paths;
 	while(*tmp)
 	{
-		log_fct("Open %s", *tmp);
+		log_debug("Open %s", *tmp);
 
 		if(!sk_disk_open(*tmp, &disk))
 		{
@@ -148,7 +148,7 @@ void atasmart_psensor_list_append(struct psensor ***sensors, int values_max_leng
 		}
 		else
 		{
-			log_err(_("%s: sk_disk_open() failure: %s."), PROVIDER_NAME, *tmp);
+			log_error("%s: sk_disk_open() failure: %s.", PROVIDER_NAME, *tmp);
 			analyze_disk(*tmp);
 		}
 
@@ -157,7 +157,7 @@ void atasmart_psensor_list_append(struct psensor ***sensors, int values_max_leng
 
 	paths_free(paths);
 
-	log_fct_exit();
+	//log_fct_exit();
 }
 
 void atasmart_psensor_list_update(struct psensor **sensors)
@@ -189,7 +189,7 @@ void atasmart_psensor_list_update(struct psensor **sensors)
 				{
 					c = (kelvin - 273150) / 1000;
 					psensor_set_current_value(s, c);
-					log_fct("%s %.2f", s->id, c);
+					//log_debug("%s %.2f", s->id, c);
 				}
 			}
 		}

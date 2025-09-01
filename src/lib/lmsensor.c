@@ -30,6 +30,8 @@
 
 #include "include/psensor/lmsensor.h"
 
+#include <log_c/log.h>
+
 static int init_done;
 
 static const char *PROVIDER_NAME = "lmsensor";
@@ -69,7 +71,7 @@ static double get_value(const sensors_chip_name *name, const sensors_subfeature 
 	err = sensors_get_value(name, sub->number, &val);
 	if(err)
 	{
-		log_err(_("%s: Cannot get value of subfeature %s: %s."), PROVIDER_NAME, sub->name, sensors_strerror(err));
+		log_error("%s: Cannot get value of subfeature %s: %s.", PROVIDER_NAME, sub->name, sensors_strerror(err));
 		val = UNKNOWN_DBL_VALUE;
 	}
 	return val;
@@ -165,7 +167,7 @@ static struct psensor *lmsensor_psensor_create(const sensors_chip_name *chip, co
 	}
 	else
 	{
-		log_err(_("%s: Wrong feature type."), PROVIDER_NAME);
+		log_error("%s: Wrong feature type.", PROVIDER_NAME);
 		return NULL;
 	}
 
@@ -230,7 +232,7 @@ static void lmsensor_init(void)
 
 	if(err)
 	{
-		log_err(_("%s: initialization failure: %s."), PROVIDER_NAME, sensors_strerror(err));
+		log_error("%s: initialization failure: %s.", PROVIDER_NAME, sensors_strerror(err));
 		init_done = 0;
 	}
 	else

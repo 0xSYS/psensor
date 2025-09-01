@@ -20,7 +20,7 @@
 
 #include <stdio.h>
 
-#include "include/psensor/plog.h"
+#include <log_c/log.h>
 #include "include/psensor/pmutex.h"
 #include <string.h>
 
@@ -31,7 +31,7 @@ int pmutex_lock(pthread_mutex_t *m)
 	ret = pthread_mutex_lock(m);
 
 	if(ret)
-		log_err("pmutex_lock: %p %d %s", m, ret, strerror(ret));
+		log_error("pmutex_lock: %p %d %s", m, ret, strerror(ret));
 
 	return ret;
 }
@@ -43,7 +43,7 @@ int pmutex_unlock(pthread_mutex_t *m)
 	ret = pthread_mutex_unlock(m);
 
 	if(ret)
-		log_err("pmutex_unlock: %p %d", m, ret);
+		log_error("pmutex_unlock: %p %d", m, ret);
 
 	return ret;
 }
@@ -59,7 +59,7 @@ int pmutex_init(pthread_mutex_t *m)
 	ret = pthread_mutex_init(m, &attr);
 
 	if(ret)
-		log_err("pmutex_init: %p %d", m, ret);
+		log_error("pmutex_init: %p %d", m, ret);
 
 	return ret;
 }

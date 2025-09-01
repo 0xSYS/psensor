@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#include "include/psensor/plog.h"
+//#include "include/psensor/plog.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -38,6 +38,8 @@
 #include "include/psensor/psensor.h"
 #include "include/psensor/pmod.h"
 #include "include/psensor/temperature.h"
+
+#include <log_c/log.h>
 
 struct psensor *psensor_create(char *id, char *name, char *chip, unsigned int type, int values_max_length)
 {
@@ -452,8 +454,8 @@ const char *psensor_type_to_unit_str(unsigned int type, int use_celsius)
 
 void psensor_log_measures(struct psensor **sensors)
 {
-    if(log_level == LOG_DEBUG)
-    {
+    //if(log_level == LOG_DEBUG)
+    //{
         if(!sensors)
             return;
         
@@ -462,7 +464,7 @@ void psensor_log_measures(struct psensor **sensors)
             log_debug("Measure: %s %.2f", (*sensors)->name, psensor_get_current_value(*sensors));
             sensors++;
         }
-    }
+    //}
 }
 
 struct psensor **psensor_list_copy(struct psensor **sensors)
@@ -547,7 +549,7 @@ psensor_fan *psensor_detectFans()
 
     if(!dir)
     {
-        log_err("Failed to open sysfs directory!");
+        log_error("Failed to open sysfs directory!");
         return NULL;
     }
 
@@ -590,7 +592,7 @@ psensor_fan *psensor_detectFans()
                     
                     if(!list->pwmFiles || !list->pwmEnableFiles)
                     {
-                        log_err("Failed to re-allocate memory for storing pwm files!");
+                        log_error("Failed to re-allocate memory for storing pwm files!");
                         exit(EXIT_FAILURE);
                     }
                     getPwmF(list, full_path, fan_number);
@@ -620,7 +622,7 @@ int psensor_enable_fan_pwm(const char *hwmnoDirPath, int v)
 
     if(pwm_enable == NULL)
     {
-        log_err("Failed to enable fan PWM at \"%s\"", hwmnoDirPath);
+        log_error("Failed to enable fan PWM at \"%s\"", hwmnoDirPath);
         return 1;
     }
 
@@ -641,14 +643,14 @@ int psensor_fan_set_pwm(const char *hwClassDir, int PWM)
 
     if(pwm_ptr == NULL)
     {
-        log_err("Failed to write to %s", hwClassDir);
+        log_error("Failed to write to %s", hwClassDir);
         return 1;
     }
     else
     {
         if(PWM > 256 || PWM < 0)
         {
-            log_err("Invalid PWM value: %d", PWM);
+            log_error("Invalid PWM value: %d", PWM);
             return 1;
         }
         else
@@ -669,7 +671,7 @@ int psensor_get_last_pwm(const char *path)
 
     if(pwmFile == NULL)
     {
-        log_err("Failed to open %s for reading last pwm value!", path);
+        log_error("Failed to open %s for reading last pwm value!", path);
         return 0;
     }
     else
@@ -701,7 +703,7 @@ int psensor_test_fan(const char *hwmonDir)
         psensor_fan_set_pwm(hwmonDir, i);
         //clear_previous_line();
         //log_printf(LOG_INFO, _("\033[38;5;33m[FAN TEST]\033[0m - Increment pwm: %d at ""\"\033[38;5;14m%s\033[0m\""), i, hwmonDir);
-        log_printf(LOG_INFO, "\033[38;5;33m[FAN TEST]\033[0m - Increment pwm: %d at ""\"\033[38;5;14m%s\033[0m\"", i, hwmonDir);
+        log_debug("\033[38;5;33m[FAN TEST]\033[0m - Increment pwm: %d at ""\"\033[38;5;14m%s\033[0m\"", i, hwmonDir);
         clear_previous_line();
         usleep(50 * 1000);
     }
@@ -709,7 +711,7 @@ int psensor_test_fan(const char *hwmonDir)
     for(int i = 256; i >= 0; i--)
     {
         psensor_fan_set_pwm(hwmonDir, i);
-        log_printf(LOG_INFO, "\033[38;5;33m[FAN TEST]\033[0m - Decrement pwm: %d at ""\"\033[38;5;14m%s\033[0m\"", i, hwmonDir);
+        log_debug("\033[38;5;33m[FAN TEST]\033[0m - Decrement pwm: %d at ""\"\033[38;5;14m%s\033[0m\"", i, hwmonDir);
         clear_previous_line();
         usleep(50 * 1000);
     }

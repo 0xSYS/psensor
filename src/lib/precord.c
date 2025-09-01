@@ -20,7 +20,7 @@
 
 
 #include "include/psensor/precord.h"
-#include "include/psensor/plog.h"
+#include <log_c/log.h>
 #include <CMessagePack/cmp.h>
 
 #include <stdlib.h>
@@ -59,7 +59,7 @@ int psr_init(const char * prf_name)
 
     if(prf == NULL)
     {
-        log_err("Failed to initialise PRF writing!");
+        log_error("Failed to initialise PRF writing!");
         fn_stat = 1;
     }
     else
@@ -73,7 +73,7 @@ int psr_init(const char * prf_name)
         if(!cmp_write_str(&prfStruct, "DO NOT EDIT THE FILE, THIS COMPLETELY MAKES IT UNREADBLE!!!", 59))
         {
             fn_stat = 2;
-            log_err("CMP String Err: %s", cmp_strerror(&prfStruct));
+            log_error("CMP String Err: %s", cmp_strerror(&prfStruct));
         }
     }
 

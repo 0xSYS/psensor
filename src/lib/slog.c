@@ -33,7 +33,7 @@
 #include <unistd.h>
 
 #include "include/psensor/bool.h"
-#include "include/psensor/plog.h"
+#include <log_c/log.h>
 #include "include/psensor/pmutex.h"
 #include "include/psensor/ptime.h"
 #include "include/psensor/slog.h"
@@ -95,7 +95,7 @@ static bool slog_open(const char *path, struct psensor **sensors)
 
 	if(file)
 	{
-		log_err(_("Sensor log file already open."));
+		log_error("Sensor log file already open.");
 		return 0;
 	}
 
@@ -104,7 +104,7 @@ static bool slog_open(const char *path, struct psensor **sensors)
 	file = fopen(lpath, "a");
 
 	if(!file)
-		log_err(_("Cannot open sensor log file: %s."), lpath);
+		log_error("Cannot open sensor log file: %s.", lpath);
 
 	if(!path)
 		free((char *)lpath);

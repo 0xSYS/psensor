@@ -20,6 +20,10 @@
 #ifndef _P_LOG_H_
 #define _P_LOG_H_
 
+
+
+#ifdef UNUSED
+
 #define P_LOG_VER 3
 
 enum log_level
@@ -47,5 +51,7 @@ void _log(const char *fct, const char *fmt, ...);
 
 /* level of the log file. */
 extern int log_level;
+
+#endif
 
 #endif

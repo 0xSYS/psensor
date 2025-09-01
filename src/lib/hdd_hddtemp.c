@@ -38,6 +38,8 @@
 #include "include/psensor/hdd.h"
 #include "include/psensor/psensor.h"
 
+#include <log_c/log.h>
+
 static const char *PROVIDER_NAME = "hddtemp";
 
 static const char *HDDTEMP_SERVER_IP_ADDRESS = "127.0.0.1";
@@ -62,7 +64,7 @@ static char *fetch(void)
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if(sockfd == -1)
 	{
-		log_err(_("%s: failed to open socket."), PROVIDER_NAME);
+		log_error("%s: failed to open socket.", PROVIDER_NAME);
 		return NULL;
 	}
 
@@ -73,7 +75,7 @@ static char *fetch(void)
 	buffer = NULL;
 
 	if(connect(sockfd, (struct sockaddr *)&address, (socklen_t) sizeof(address)) == -1)
-		log_err(_("%s: failed to open connection."), PROVIDER_NAME);
+		log_error("%s: failed to open connection.", PROVIDER_NAME);
 	
 	else
 	{
@@ -188,7 +190,7 @@ void hddtemp_psensor_list_append(struct psensor ***sensors, int values_max_lengt
 
 	if(hddtemp_output[0] != '|')
 	{
-		log_err(_("%s: wrong string: %s."), PROVIDER_NAME, hddtemp_output);
+		log_error("%s: wrong string: %s.", PROVIDER_NAME, hddtemp_output);
 		free(hddtemp_output);
 		return;
 	}
@@ -266,7 +268,7 @@ void hddtemp_psensor_list_update(struct psensor **sensors)
 	}
 	else
 	{
-		log_err(_("%s: wrong string: %s."), PROVIDER_NAME, hddtemp_output);
+		log_error("%s: wrong string: %s.", PROVIDER_NAME, hddtemp_output);
 	}
 
 	free(hddtemp_output);

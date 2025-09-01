@@ -21,7 +21,7 @@
 #include <libkmod.h>
 #include <stdlib.h>
 #include "include/psensor/pmod.h"
-#include "include/psensor/plog.h"
+#include <log_c/log.h>
  
  
 struct kmod_ctx *kmod_ctx;
@@ -34,7 +34,7 @@ int create_mod_obj(const char * mod_name, struct kmod_ctx *ctx,  struct kmod_mod
 {
     if(kmod_module_new_from_name(ctx, mod_name, mod) < 0)
     {
-        log_err("Failed to create module object for %s", mod_name);
+        log_error("Failed to create module object for %s", mod_name);
         kmod_unref(ctx);
         return -1;
     }
@@ -51,7 +51,7 @@ void pmod_load_modules()
             if(kmod_module_insert_module(modules[i], 0, NULL) == 0)
                 log_info("Loaded module: %s", required_modules[i]);
             else
-                log_err("Failed to load module: %s", required_modules[i]);
+                log_error("Failed to load module: %s", required_modules[i]);
         }
     }
     
@@ -66,7 +66,7 @@ void pmod_init()
     kmod_ctx = kmod_new(NULL, NULL);
     if(!kmod_ctx)
     {
-        log_err("Failed to create kmod context");
+        log_error("Failed to create kmod context");
         exit(1);
     }
     else
@@ -96,7 +96,7 @@ bool pmod_check_loaded(const char * mod_name)
     }
     else
     {
-        log_err("Module %s is not loaded (state: %d)", mod_name, state);
+        log_error("Module %s is not loaded (state: %d)", mod_name, state);
         kmod_module_unref(m);
         return false;
     }
