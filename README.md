@@ -46,7 +46,8 @@ libgtop-2.0
 gio-unix-2.0
 udisks2
 libatasmart
-X11  
+X11
+libkmod
 ```
 
 ### Build Commands

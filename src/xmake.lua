@@ -10,6 +10,7 @@ add_requires("gio-unix-2.0" , {system = true})
 add_requires("udisks2"      , {system = true})
 add_requires("libatasmart"  , {system = true})
 add_requires("X11"          , {system = true})
+add_requires("libkmod"      , {system = true})
 
 
 -- New GUI Dependencies
@@ -97,7 +98,8 @@ target("psensor")
       "gio-unix-2.0",
       "udisks2",
       "libatasmart",
-      "X11"
+      "X11",
+      "libkmod"
     )
 
     add_syslinks("XNVCtrl", "sensors")

@@ -1,6 +1,7 @@
 extern "C"
 {
     #include <psensor/psensor.h>
+    #include <psensor/pmod.h>
 }
 
 
@@ -184,6 +185,9 @@ void ui_main()
     // Setup Platform/Renderer backends
     ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer3_Init(renderer);
+    
+    pmod_init();
+    pmod_load_modules();
     
     create_sensor_list();
     

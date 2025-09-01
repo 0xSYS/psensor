@@ -36,6 +36,7 @@
 #include "include/psensor/hdd.h"
 #include "include/psensor/pio.h"
 #include "include/psensor/psensor.h"
+#include "include/psensor/pmod.h"
 #include "include/psensor/temperature.h"
 
 struct psensor *psensor_create(char *id, char *name, char *chip, unsigned int type, int values_max_length)
@@ -531,6 +532,16 @@ void getPwmF(psensor_fan *list, const char *directory, int fan_number)
 // The actual fan detection function
 psensor_fan *psensor_detectFans()
 {
+    if(!pmod_check_loaded(required_modules[1]) && !pmod_check_loaded(required_modules[2]) && !pmod_check_loaded(required_modules[3]))
+        return NULL;
+    
+    //else if(!pmod_check_loaded(required_modules[2], mods))
+    //    return NULL;
+    //
+    //else if(!pmod_check_loaded(required_modules[3], mods))
+    //    return NULL;
+    
+    
     DIR *dir = opendir("/sys/class/hwmon");
     struct dirent *entry;
 
@@ -545,7 +556,7 @@ psensor_fan *psensor_detectFans()
     list->pwmEnableFiles = NULL;
     list->fanInputCount = 0;
 
-  // Read all available directories
+    // Read all available directories
     while((entry = readdir(dir)) != NULL)
     {
         // Skip                    this                           and that

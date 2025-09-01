@@ -1,6 +1,96 @@
 [
 {
   "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/log_c/log.c.o", "../ext_deps/log_c/log.c"],
+  "file": "../ext_deps/log_c/log.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/tests.cpp.o", "new-gui/tests.cpp"],
+  "file": "new-gui/tests.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/utils.cpp.o", "new-gui/utils.cpp"],
+  "file": "new-gui/utils.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/ui_entry.cpp.o", "new-gui/ui_entry.cpp"],
+  "file": "new-gui/ui_entry.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/main.cpp.o", "new-gui/main.cpp"],
+  "file": "new-gui/main.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/UI/ui.cpp.o", "new-gui/UI/ui.cpp"],
+  "file": "new-gui/UI/ui.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/UI/ui_dev.cpp.o", "new-gui/UI/ui_dev.cpp"],
+  "file": "new-gui/UI/ui_dev.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/UI/sensor_list.cpp.o", "new-gui/UI/sensor_list.cpp"],
+  "file": "new-gui/UI/sensor_list.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/imgui/imgui_demo.cpp.o", "../ext_deps/imgui/imgui_demo.cpp"],
+  "file": "../ext_deps/imgui/imgui_demo.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/imgui/imgui_draw.cpp.o", "../ext_deps/imgui/imgui_draw.cpp"],
+  "file": "../ext_deps/imgui/imgui_draw.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/imgui/imgui_tables.cpp.o", "../ext_deps/imgui/imgui_tables.cpp"],
+  "file": "../ext_deps/imgui/imgui_tables.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/imgui/imgui.cpp.o", "../ext_deps/imgui/imgui.cpp"],
+  "file": "../ext_deps/imgui/imgui.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/imgui/imgui_widgets.cpp.o", "../ext_deps/imgui/imgui_widgets.cpp"],
+  "file": "../ext_deps/imgui/imgui_widgets.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/imgui/backend/imgui_impl_sdl3.cpp.o", "../ext_deps/imgui/backend/imgui_impl_sdl3.cpp"],
+  "file": "../ext_deps/imgui/backend/imgui_impl_sdl3.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/imgui/backend/imgui_impl_sdlrenderer3.cpp.o", "../ext_deps/imgui/backend/imgui_impl_sdlrenderer3.cpp"],
+  "file": "../ext_deps/imgui/backend/imgui_impl_sdlrenderer3.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/implot/implot_demo.cpp.o", "../ext_deps/implot/implot_demo.cpp"],
+  "file": "../ext_deps/implot/implot_demo.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/implot/implot_items.cpp.o", "../ext_deps/implot/implot_items.cpp"],
+  "file": "../ext_deps/implot/implot_items.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/implot/implot.cpp.o", "../ext_deps/implot/implot.cpp"],
+  "file": "../ext_deps/implot/implot.cpp"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
   "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-I../ext_deps/adl_sdk", "-I../ext_deps", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor/linux/x86_64/release/__/ext_deps/CMessagePack/cmp.c.o", "../ext_deps/CMessagePack/cmp.c"],
   "file": "../ext_deps/CMessagePack/cmp.c"
 },
@@ -96,6 +186,11 @@
 },
 {
   "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-I../ext_deps/adl_sdk", "-I../ext_deps", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor/linux/x86_64/release/lib/pmod.c.o", "lib/pmod.c"],
+  "file": "lib/pmod.c"
+},
+{
+  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
   "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-I../ext_deps/adl_sdk", "-I../ext_deps", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor/linux/x86_64/release/lib/ptime.c.o", "lib/ptime.c"],
   "file": "lib/ptime.c"
 },
@@ -103,96 +198,6 @@
   "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
   "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-I../ext_deps/adl_sdk", "-I../ext_deps", "-I", "/usr/include/json-c", "-I", "/usr/include/libgtop-2.0", "-I", "/usr/include/gio-unix-2.0", "-I", "/usr/include/udisks2", "-I", "/usr/include/libmount", "-I", "/usr/include/blkid", "-I", "/usr/include/glib-2.0", "-I", "/usr/lib/glib-2.0/include", "-I", "/usr/include/sysprof-6", "-pthread", "-DNDEBUG", "-o", "build/.objs/psensor/linux/x86_64/release/lib/url.c.o", "lib/url.c"],
   "file": "lib/url.c"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/tests.cpp.o", "new-gui/tests.cpp"],
-  "file": "new-gui/tests.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/utils.cpp.o", "new-gui/utils.cpp"],
-  "file": "new-gui/utils.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/ui_entry.cpp.o", "new-gui/ui_entry.cpp"],
-  "file": "new-gui/ui_entry.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/main.cpp.o", "new-gui/main.cpp"],
-  "file": "new-gui/main.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/UI/ui.cpp.o", "new-gui/UI/ui.cpp"],
-  "file": "new-gui/UI/ui.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/UI/ui_dev.cpp.o", "new-gui/UI/ui_dev.cpp"],
-  "file": "new-gui/UI/ui_dev.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/new-gui/UI/sensor_list.cpp.o", "new-gui/UI/sensor_list.cpp"],
-  "file": "new-gui/UI/sensor_list.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/imgui/imgui_demo.cpp.o", "../ext_deps/imgui/imgui_demo.cpp"],
-  "file": "../ext_deps/imgui/imgui_demo.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/imgui/imgui_draw.cpp.o", "../ext_deps/imgui/imgui_draw.cpp"],
-  "file": "../ext_deps/imgui/imgui_draw.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/imgui/imgui_tables.cpp.o", "../ext_deps/imgui/imgui_tables.cpp"],
-  "file": "../ext_deps/imgui/imgui_tables.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/imgui/imgui.cpp.o", "../ext_deps/imgui/imgui.cpp"],
-  "file": "../ext_deps/imgui/imgui.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/imgui/imgui_widgets.cpp.o", "../ext_deps/imgui/imgui_widgets.cpp"],
-  "file": "../ext_deps/imgui/imgui_widgets.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/imgui/backend/imgui_impl_sdl3.cpp.o", "../ext_deps/imgui/backend/imgui_impl_sdl3.cpp"],
-  "file": "../ext_deps/imgui/backend/imgui_impl_sdl3.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/imgui/backend/imgui_impl_sdlrenderer3.cpp.o", "../ext_deps/imgui/backend/imgui_impl_sdlrenderer3.cpp"],
-  "file": "../ext_deps/imgui/backend/imgui_impl_sdlrenderer3.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/implot/implot_demo.cpp.o", "../ext_deps/implot/implot_demo.cpp"],
-  "file": "../ext_deps/implot/implot_demo.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/implot/implot_items.cpp.o", "../ext_deps/implot/implot_items.cpp"],
-  "file": "../ext_deps/implot/implot_items.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++17", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/implot/implot.cpp.o", "../ext_deps/implot/implot.cpp"],
-  "file": "../ext_deps/implot/implot.cpp"
-},
-{
-  "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-fvisibility=hidden", "-O3", "-Ilib/include", "-I../ext_deps/imgui", "-I../ext_deps", "-DLOGC__USER_SETTINGS", "-DNDEBUG", "-o", "build/.objs/psensor-ui/linux/x86_64/release/__/ext_deps/log_c/log.c.o", "../ext_deps/log_c/log.c"],
-  "file": "../ext_deps/log_c/log.c"
 },
 {
   "directory": "/home/andre/disks/1_TB_1/Programing/psensor/src",
