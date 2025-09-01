@@ -20,6 +20,8 @@
  
 #include <libkmod.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <string.h>
 #include "include/psensor/pmod.h"
 #include <log_c/log.h>
  
@@ -41,9 +43,33 @@ int create_mod_obj(const char * mod_name, struct kmod_ctx *ctx,  struct kmod_mod
     return 0;
 }
 
+bool is_mod_existing(const char * mod_name)
+{
+    struct kmod_list *list = NULL;
+    int ret = kmod_module_new_from_lookup(kmod_ctx, mod_name, &list);
+    
+    if(ret < 0)
+    {
+        log_error("Lookup failed for module: %s", mod_name);
+        return false;
+    }
+    else if(!list)
+    {
+        log_error("Module %s not found in module directories", mod_name);
+        return false;
+    }
+    else
+    {
+        log_info("Module %s exists on disk", mod_name);
+        kmod_module_unref_list(list);
+    }
+    return true;
+}
+
 void pmod_load_modules()
 {
     // Load necessary modules here
+    /*
     for(int i = 0; module_table[i].name != NULL; i++)
     {
         if(create_mod_obj(module_table[i].name, kmod_ctx, &modules[i]) == 0)
@@ -54,6 +80,37 @@ void pmod_load_modules()
                 log_error("Failed to load module: %s", module_table[i].name);
         }
     }
+    */
+    
+    for(int i = 0; module_table[i].name != NULL; i++)
+        {
+            if(create_mod_obj(module_table[i].name, kmod_ctx, &modules[i]) == 0)
+            {
+                int ret;
+                
+                // Load the module only if it's not already loaded
+                if(is_mod_existing(module_table[i].name) && !pmod_check_loaded(module_table[i].name))
+                {
+                    ret = kmod_module_insert_module(modules[i], 0, module_table[i].opts);
+                    return;
+                }
+                
+                if(ret == 0)
+                {
+                    log_info("Loaded module: %s", module_table[i].name);
+                }
+                else
+                {
+                    log_error("Failed to load module %s via libkmod (%s)", module_table[i].name, strerror(-ret));
+                    //if (fallback_modprobe(module_table[i].name, module_table[i].opts) != 0)
+                    //    log_error("Failed to load module %s via modprobe", module_table[i].name);
+                }
+            }
+            else
+            {
+                log_error("Cannot create module object for %s, skipping", module_table[i].name);
+            }
+        }
     
     // Free stuff
     for(int i = 0; module_table[i].name != NULL; i++)
@@ -96,7 +153,7 @@ bool pmod_check_loaded(const char * mod_name)
     }
     else
     {
-        log_error("Module %s is not loaded (state: %d)", mod_name, state);
+        log_info("Module %s is not loaded (state: %d)", mod_name, state);
         kmod_module_unref(m);
         return false;
     }
