@@ -88,22 +88,39 @@ void pmod_load_modules()
             {
                 int ret;
                 
+                struct kmod_list *deps = kmod_module_get_dependencies(modules[i]);
+                struct kmod_list *itr;
+                
+                kmod_list_foreach(itr, deps) {
+                    struct kmod_module *dep = kmod_module_get_module(itr);
+                    const char *dep_name = kmod_module_get_name(dep);
+                
+                    log_info("Dependency: %s", dep_name);
+                    int ret = kmod_module_insert_module(dep, 0, NULL);
+                    if (ret < 0) {
+                        log_error("Failed to insert dependency %s (%s)", dep_name, strerror(-ret));
+                    }
+                
+                    kmod_module_unref(dep);
+                }
+                
+                kmod_module_unref_list(deps);
+                
                 // Load the module only if it's not already loaded
                 if(is_mod_existing(module_table[i].name) && !pmod_check_loaded(module_table[i].name))
                 {
                     ret = kmod_module_insert_module(modules[i], 0, module_table[i].opts);
-                    return;
-                }
-                
-                if(ret == 0)
-                {
-                    log_info("Loaded module: %s", module_table[i].name);
-                }
-                else
-                {
-                    log_error("Failed to load module %s via libkmod (%s)", module_table[i].name, strerror(-ret));
-                    //if (fallback_modprobe(module_table[i].name, module_table[i].opts) != 0)
-                    //    log_error("Failed to load module %s via modprobe", module_table[i].name);
+                    
+                    if(ret == 0)
+                    {
+                        log_info("Loaded module: %s", module_table[i].name);
+                    }
+                    else
+                    {
+                        log_error("Failed to load module %s via libkmod (%s)", module_table[i].name, strerror(-ret));
+                        //if (fallback_modprobe(module_table[i].name, module_table[i].opts) != 0)
+                        //    log_error("Failed to load module %s via modprobe", module_table[i].name);
+                    }
                 }
             }
             else
