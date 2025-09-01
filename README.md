@@ -75,7 +75,7 @@ then build:
         - ✔️ manual speed control
         - ❌ automatic speed control
         - ✔️ speed test
-        - ❌ Kernel module management
+        - ⚠️ Kernel module management
     - ❌ IPMI Support
     - ❌ Sensor recording
         - Writing modes

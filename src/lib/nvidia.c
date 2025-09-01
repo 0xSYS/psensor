@@ -29,8 +29,8 @@
 
 #include <X11/Xlib.h>
 
-#include <NVCtrl/NVCtrl.h>
-#include <NVCtrl/NVCtrlLib.h>
+#include <NVCtrl.h>
+#include <NVCtrlLib.h>
 
 #include "include/psensor/nvidia.h"
 

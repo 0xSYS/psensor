@@ -102,17 +102,19 @@ target("psensor")
       "libkmod"
     )
 
-    add_syslinks("XNVCtrl", "sensors")
+    add_syslinks("sensors", "Xext")
     --add_defines("PSENSOR_JSON_PRETTY")
 
 
 
     add_includedirs(
       "../ext_deps/adl_sdk",
+      "../ext_deps/NVCtrl",
       "../ext_deps"
     )
 
     add_files(
+        "../ext_deps/NVCtrl/*.c",
         "../ext_deps/CMessagePack/*.c",
         "../ext_deps/csv/*.c",
         "lib/*.c"
