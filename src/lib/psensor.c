@@ -534,7 +534,7 @@ void getPwmF(psensor_fan *list, const char *directory, int fan_number)
 // The actual fan detection function
 psensor_fan *psensor_detectFans()
 {
-    if(!pmod_check_loaded(required_modules[1]) && !pmod_check_loaded(required_modules[2]) && !pmod_check_loaded(required_modules[3]))
+    if(!pmod_check_loaded(module_table[1].name) && !pmod_check_loaded(module_table[2].name) && !pmod_check_loaded(module_table[3].name))
         return NULL;
     
     //else if(!pmod_check_loaded(required_modules[2], mods))

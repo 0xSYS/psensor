@@ -44,19 +44,19 @@ int create_mod_obj(const char * mod_name, struct kmod_ctx *ctx,  struct kmod_mod
 void pmod_load_modules()
 {
     // Load necessary modules here
-    for(int i = 0; required_modules[i] != NULL; i++)
+    for(int i = 0; module_table[i].name != NULL; i++)
     {
-        if(create_mod_obj(required_modules[i], kmod_ctx, &modules[i]) == 0)
+        if(create_mod_obj(module_table[i].name, kmod_ctx, &modules[i]) == 0)
         {
-            if(kmod_module_insert_module(modules[i], 0, NULL) == 0)
-                log_info("Loaded module: %s", required_modules[i]);
+            if(kmod_module_insert_module(modules[i], 0,  module_table[i].opts) == 0)
+                log_info("Loaded module: %s", module_table[i].name);
             else
-                log_error("Failed to load module: %s", required_modules[i]);
+                log_error("Failed to load module: %s", module_table[i].name);
         }
     }
     
     // Free stuff
-    for(int i = 0; required_modules[i] != NULL; i++)
+    for(int i = 0; module_table[i].name != NULL; i++)
         kmod_module_unref(modules[i]);
     
 }

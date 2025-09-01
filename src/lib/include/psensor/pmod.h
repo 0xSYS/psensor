@@ -28,13 +28,20 @@
 
 #define MAX_MODULES 32
 
-static const char *required_modules[] =
+
+typedef struct
 {
-    "coretemp",
-    "nct6775",
-    "k10temp",
-    "it87",
-    NULL
+   const char *name;
+   const char *opts; 
+}pmodule;
+
+static pmodule module_table[MAX_MODULES] =
+{
+    { .name = "coretemp", .opts = NULL },
+    { .name = "nct6775",  .opts = "force_id=0xc333" },
+    { .name = "k10temp",  .opts = NULL },
+    { .name = "it87",     .opts = "force_id=0x8628" },
+    { .name = NULL,       .opts = NULL } // sentinel
 };
 
 void pmod_init();
