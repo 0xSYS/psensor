@@ -25,8 +25,9 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
-#include "include/psensor/pmod.h"
 #include <log_c/log.h>
+
+#include "include/psensor/pmod.h"
 
 
 #define SIO_ADDR 0x2E
@@ -72,63 +73,9 @@ bool is_mod_existing(const char * mod_name)
     return true;
 }
 
-unsigned int read_it87_chip_id() {
-    if (ioperm(SIO_ADDR, 2, 1)) {
-        perror("ioperm");
-        return 0;
-    }
-
-    // Enter config mode
-    outb(0x87, SIO_ADDR);
-    outb(0x87, SIO_ADDR);
-
-    // Select Logical Device Number (LDN) register 0x07 (Super I/O global)
-    outb(0x07, SIO_ADDR);
-    outb(0x04, SIO_DATA);  // 0x04 is LDN for hardware monitoring
-
-    // Read chip ID high and low
-    outb(0x20, SIO_ADDR);
-    unsigned int id_high = inb(SIO_DATA);
-    outb(0x21, SIO_ADDR);
-    unsigned int id_low = inb(SIO_DATA);
-
-    // Exit config mode
-    outb(0xAA, SIO_ADDR);
-
-    return (id_high << 8) | id_low;
-}
-
-unsigned int try_read_chip_id(unsigned short index_port, unsigned short data_port) {
-    if (ioperm(index_port, 2, 1)) return 0;
-
-    outb(0x87, index_port);
-    outb(0x87, index_port);
-
-    outb(0x20, index_port);
-    unsigned int id_high = inb(data_port);
-    outb(0x21, index_port);
-    unsigned int id_low = inb(data_port);
-
-    outb(0xAA, index_port);
-
-    return (id_high << 8) | id_low;
-}
-
 void pmod_load_modules()
 {
     // Load necessary modules here
-    /*
-    for(int i = 0; module_table[i].name != NULL; i++)
-    {
-        if(create_mod_obj(module_table[i].name, kmod_ctx, &modules[i]) == 0)
-        {
-            if(kmod_module_insert_module(modules[i], 0,  module_table[i].opts) == 0)
-                log_info("Loaded module: %s", module_table[i].name);
-            else
-                log_error("Failed to load module: %s", module_table[i].name);
-        }
-    }
-    */
     
     for(int i = 0; module_table[i].name != NULL; i++)
     {
@@ -139,13 +86,14 @@ void pmod_load_modules()
             struct kmod_list *deps = kmod_module_get_dependencies(modules[i]);
             struct kmod_list *itr;
             
+            // Find module dependencies first
             kmod_list_foreach(itr, deps)
             {
                 struct kmod_module *dep = kmod_module_get_module(itr);
                 const char *dep_name = kmod_module_get_name(dep);
             
                 log_info("Dependency: %s", dep_name);
-                int ret = kmod_module_insert_module(dep, 0, NULL);
+                int ret = kmod_module_insert_module(dep, 0, NULL); // And try to load it
                 if(ret < 0)
                     log_error("Failed to insert dependency %s (%s)", dep_name, strerror(-ret));
                 
@@ -161,21 +109,14 @@ void pmod_load_modules()
                 ret = kmod_module_insert_module(modules[i], 0, module_table[i].opts);
                 
                 if(ret == 0)
-                {
                     log_info("MOD_LOADER: Loaded module: %s", module_table[i].name);
-                }
                 else
-                {
                     log_error("MOD_LOADER: Failed to load module %s via libkmod (%s)", module_table[i].name, strerror(-ret));
-                    //if (fallback_modprobe(module_table[i].name, module_table[i].opts) != 0)
-                    //    log_error("Failed to load module %s via modprobe", module_table[i].name);
-                }
             }
         }
         else
-        {
             log_error("MOD_LOADER: Cannot create module object for %s, skipping", module_table[i].name);
-        }
+        
     }
     
     // Free stuff

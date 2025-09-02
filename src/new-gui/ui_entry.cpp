@@ -185,27 +185,6 @@ void ui_main()
     // Setup Platform/Renderer backends
     ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer3_Init(renderer);
-/* 
-    unsigned int chip_id = read_it87_chip_id();
-    if (chip_id) {
-        printf("IT87 Chip ID: 0x%04X\n", chip_id);
-    } else {
-        printf("Failed to read chip ID.\n");
-    }
-    
-    unsigned int chip_id2 = try_read_chip_id(0x2E, 0x2F);
-    if (chip_id2 == 0xFFFF || chip_id2 == 0) {
-        chip_id2 = try_read_chip_id(0x4E, 0x4F);
-    }
-
-    if (chip_id2 && chip_id2 != 0xFFFF) {
-        printf("IT87 Chip ID: 0x%04X\n", chip_id2);
-    } else {
-        printf("Failed to read chip ID\n");
-    }
-    
-*/
-
     
     pmod_init();
     pmod_load_modules();

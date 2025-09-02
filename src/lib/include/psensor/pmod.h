@@ -17,6 +17,11 @@
  * 02110-1301 USA
  */
  
+/*
+Contains functions for loading kernel modules
+Useful for the fan controller
+*/
+ 
  
 #ifndef PSENSOR_PMOD_H
 #define PSENSOR_PMOD_H
@@ -38,16 +43,14 @@ typedef struct
 static pmodule module_table[MAX_MODULES] =
 {
     { .name = "coretemp",     .opts = NULL },
-    { .name = "nct6775",      .opts = "force_id=0xc333" },
+    { .name = "nct6775",      .opts = "force_id=0xc333" }, // This may also cause problems (Not tested yet)
     { .name = "k10temp",      .opts = NULL },
-    { .name = "it87",         .opts = NULL },
-    { .name = NULL,           .opts = NULL } // sentinel
+    { .name = "it87",         .opts = NULL }, // Works fine without forcing id
+    { .name = NULL,           .opts = NULL } // Null termination
 };
 
 void pmod_init();
 void pmod_load_modules();
 bool pmod_check_loaded(const char * mod_name);
-unsigned int read_it87_chip_id();
-unsigned int try_read_chip_id(unsigned short index_port, unsigned short data_port);
 
 #endif 
