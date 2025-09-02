@@ -123,3 +123,7 @@ then build:
     - ❌ Save UI layouts
     - ❌ Save previous connected server users
     
+    
+# Screenshots
+![My Image](screenshots/psensor_pic1.png)
+![My Image](screenshots/psensor_pic2.png)
