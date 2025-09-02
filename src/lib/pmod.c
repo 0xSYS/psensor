@@ -98,6 +98,22 @@ unsigned int read_it87_chip_id() {
     return (id_high << 8) | id_low;
 }
 
+unsigned int try_read_chip_id(unsigned short index_port, unsigned short data_port) {
+    if (ioperm(index_port, 2, 1)) return 0;
+
+    outb(0x87, index_port);
+    outb(0x87, index_port);
+
+    outb(0x20, index_port);
+    unsigned int id_high = inb(data_port);
+    outb(0x21, index_port);
+    unsigned int id_low = inb(data_port);
+
+    outb(0xAA, index_port);
+
+    return (id_high << 8) | id_low;
+}
+
 void pmod_load_modules()
 {
     // Load necessary modules here

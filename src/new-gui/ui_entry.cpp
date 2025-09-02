@@ -192,6 +192,17 @@ void ui_main()
     } else {
         printf("Failed to read chip ID.\n");
     }
+    
+    unsigned int chip_id2 = try_read_chip_id(0x2E, 0x2F);
+    if (chip_id2 == 0xFFFF || chip_id2 == 0) {
+        chip_id2 = try_read_chip_id(0x4E, 0x4F);
+    }
+
+    if (chip_id2 && chip_id2 != 0xFFFF) {
+        printf("IT87 Chip ID: 0x%04X\n", chip_id2);
+    } else {
+        printf("Failed to read chip ID\n");
+    }
 
     
     pmod_init();

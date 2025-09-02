@@ -48,5 +48,6 @@ void pmod_init();
 void pmod_load_modules();
 bool pmod_check_loaded(const char * mod_name);
 unsigned int read_it87_chip_id();
+unsigned int try_read_chip_id(unsigned short index_port, unsigned short data_port);
 
 #endif 
