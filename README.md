@@ -71,7 +71,7 @@ then build:
 - 🔽 Core library
     - ✔️ Sensor reading
     - ✔️ JSON Output of sensor values
-    - 🔽 Fan control
+    - 🔽 Fan controller (!!! WARNING !!! It may not work correctly for any hardware. Be cautious when using it as it can cause GPU / CPU overheating)
         - ✔️ manual speed control
         - ❌ automatic speed control
         - ✔️ speed test
