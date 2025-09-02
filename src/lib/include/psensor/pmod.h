@@ -40,7 +40,7 @@ static pmodule module_table[MAX_MODULES] =
     { .name = "coretemp",     .opts = NULL },
     { .name = "nct6775",      .opts = "force_id=0xc333" },
     { .name = "k10temp",      .opts = NULL },
-    { .name = "it87",         .opts = "force_id=0x8628" },
+    { .name = "it87",         .opts = NULL },
     { .name = NULL,           .opts = NULL } // sentinel
 };
 
