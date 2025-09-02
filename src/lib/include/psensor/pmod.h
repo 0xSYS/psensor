@@ -47,5 +47,6 @@ static pmodule module_table[MAX_MODULES] =
 void pmod_init();
 void pmod_load_modules();
 bool pmod_check_loaded(const char * mod_name);
+unsigned int read_it87_chip_id();
 
 #endif 

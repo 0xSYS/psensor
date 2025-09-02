@@ -20,11 +20,17 @@
  
 #include <libkmod.h>
 #include <stdlib.h>
+#include <sys/io.h>
+#include <stdio.h>
+#include <unistd.h>
 #include <errno.h>
 #include <string.h>
 #include "include/psensor/pmod.h"
 #include <log_c/log.h>
- 
+
+
+#define SIO_ADDR 0x2E
+#define SIO_DATA 0x2F
  
 struct kmod_ctx *kmod_ctx;
 struct kmod_module *modules[MAX_MODULES];
@@ -64,6 +70,32 @@ bool is_mod_existing(const char * mod_name)
         kmod_module_unref_list(list);
     }
     return true;
+}
+
+unsigned int read_it87_chip_id() {
+    if (ioperm(SIO_ADDR, 2, 1)) {
+        perror("ioperm");
+        return 0;
+    }
+
+    // Enter config mode
+    outb(0x87, SIO_ADDR);
+    outb(0x87, SIO_ADDR);
+
+    // Select Logical Device Number (LDN) register 0x07 (Super I/O global)
+    outb(0x07, SIO_ADDR);
+    outb(0x04, SIO_DATA);  // 0x04 is LDN for hardware monitoring
+
+    // Read chip ID high and low
+    outb(0x20, SIO_ADDR);
+    unsigned int id_high = inb(SIO_DATA);
+    outb(0x21, SIO_ADDR);
+    unsigned int id_low = inb(SIO_DATA);
+
+    // Exit config mode
+    outb(0xAA, SIO_ADDR);
+
+    return (id_high << 8) | id_low;
 }
 
 void pmod_load_modules()
