@@ -150,7 +150,7 @@ void ui_main()
         exit(1);
     }
     
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, "vulkan"); // Temporarly using vulkan
     SDL_SetRenderVSync(renderer, 1);
     if(renderer == nullptr)
     {
@@ -246,6 +246,8 @@ void ui_main()
         //    SDL_Delay(10);
         //    continue;
         //}
+        
+        SDL_Delay(10);
    
         // Start the Dear ImGui frame
         ImGui_ImplSDLRenderer3_NewFrame();

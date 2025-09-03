@@ -302,7 +302,7 @@ void RenderSensorPlot()
         sensor_plots[i].AddPoint(t, s.current_value * 0.005f);
     }
     
-    ImGui::Begin("##Sensor_Plot", NULL, ImGuiWindowFlags_NoCollapse);
+    ImGui::Begin("##Sensor_Plot", NULL); // ImGuiWindowFlags_NoCollapse
     
     if(ImPlot::BeginPlot("##Scrolling", ImVec2(-1,-1), ImPlotFlags_NoLegend))
     {
