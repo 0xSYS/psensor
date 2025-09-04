@@ -126,6 +126,9 @@ struct psensor
 	void (*provider_data_free_fct)(void *);
 };
 
+
+void psensor_init();
+
 struct psensor *psensor_create(char *id, char *name, char *chip, unsigned int type, int values_max_length);
 
 void psensor_values_resize(struct psensor *s, int new_size);

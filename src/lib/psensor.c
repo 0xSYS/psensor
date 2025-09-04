@@ -24,11 +24,14 @@
 #include <ctype.h>
 #include <dirent.h>
 #include <regex.h>
+#include <errno.h>
 
 #include <libintl.h>
 #include <locale.h>
 #define _(str) gettext(str)
 
+
+#include <glibtop.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -40,6 +43,14 @@
 #include "include/psensor/temperature.h"
 
 #include <log_c/log.h>
+
+
+
+void psensor_init()
+{
+    pmod_init();
+    glibtop_init();
+}
 
 struct psensor *psensor_create(char *id, char *name, char *chip, unsigned int type, int values_max_length)
 {
@@ -144,6 +155,8 @@ void psensor_list_free(struct psensor **sensors)
         
         sensors = NULL;
     }
+    
+    glibtop_close();
 }
 
 int psensor_list_size(struct psensor **sensors)
@@ -671,7 +684,7 @@ int psensor_get_last_pwm(const char *path)
 
     if(pwmFile == NULL)
     {
-        log_error("Failed to open %s for reading last pwm value!", path);
+        log_error("Failed to open %s for reading last pwm value! errorno: %s", path, strerror(errno));
         return 0;
     }
     else

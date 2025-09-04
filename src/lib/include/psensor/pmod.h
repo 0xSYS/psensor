@@ -43,7 +43,7 @@ typedef struct
 static pmodule module_table[MAX_MODULES] =
 {
     { .name = "coretemp",     .opts = NULL },
-    { .name = "nct6775",      .opts = "force_id=0xc333" }, // This may also cause problems (Not tested yet)
+    { .name = "nct6775",      .opts = NULL }, // This may also cause problems (Not tested yet)
     { .name = "k10temp",      .opts = NULL },
     { .name = "it87",         .opts = NULL }, // Works fine without forcing id
     { .name = NULL,           .opts = NULL } // Null termination

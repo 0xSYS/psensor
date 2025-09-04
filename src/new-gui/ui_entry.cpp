@@ -150,7 +150,7 @@ void ui_main()
         exit(1);
     }
     
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, "vulkan"); // Temporarly using vulkan
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr); // Temporarly using vulkan
     SDL_SetRenderVSync(renderer, 1);
     if(renderer == nullptr)
     {
@@ -186,7 +186,7 @@ void ui_main()
     ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer3_Init(renderer);
     
-    pmod_init();
+    psensor_init();
     pmod_load_modules();
     
     create_sensor_list();
@@ -238,14 +238,6 @@ void ui_main()
                 }
             }
         }
-   
-   
-        // [If using SDL_MAIN_USE_CALLBACKS: all code below would likely be your SDL_AppIterate() function]
-        //if(SDL_GetWindowFlags(window) & SDL_WINDOW_MINIMIZED)
-        //{
-        //    SDL_Delay(10);
-        //    continue;
-        //}
         
         SDL_Delay(10);
    
