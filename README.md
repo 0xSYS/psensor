@@ -77,6 +77,8 @@ then build:
         - ✔️ speed test
         - ⚠️ Kernel module management
     - ❌ IPMI Support
+    - ❌ Individual Core Usage
+    - ❌ Cache Usage
     - ❌ Sensor recording
         - Writing modes
             - ❌ Buffered

@@ -34,12 +34,13 @@
 //#include <stdio.h>
 
 
-//#define DEV_TEST
+#define DEV_TEST
 
 
 
 #ifndef DEV_TEST
     #include "ui_entry.hpp"
+    #include "utils.hpp"
 #else
     #include "tests.h"
 #endif
@@ -51,6 +52,7 @@
 int main(int argc, char * argv[])
 {
 #ifndef DEV_TEST
+    Utils::setup_dirs();
     ui_main();
 #else
     test_stuff();

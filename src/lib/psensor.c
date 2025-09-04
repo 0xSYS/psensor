@@ -684,16 +684,6 @@ int psensor_get_last_pwm(const char *path)
     return 0;
 }
 
-void clear_previous_line()
-{
-    printf("\033[A");  // Move cursor up one line
-    printf("\033[2K"); // Clear the entire line
-    printf("\r");      // Move cursor to beginning of the line
-    fflush(stdout);
-}
-
-
-
 int psensor_test_fan(const char *hwmonDir)
 {
     // Another dumb bug where the test decrements the previous PWM value stored in the GUI
@@ -701,10 +691,7 @@ int psensor_test_fan(const char *hwmonDir)
     for(int i = 0; i < 256; i++)
     {
         psensor_fan_set_pwm(hwmonDir, i);
-        //clear_previous_line();
-        //log_printf(LOG_INFO, _("\033[38;5;33m[FAN TEST]\033[0m - Increment pwm: %d at ""\"\033[38;5;14m%s\033[0m\""), i, hwmonDir);
         log_debug("\033[38;5;33m[FAN TEST]\033[0m - Increment pwm: %d at ""\"\033[38;5;14m%s\033[0m\"", i, hwmonDir);
-        clear_previous_line();
         usleep(50 * 1000);
     }
     sleep(4);
@@ -712,7 +699,6 @@ int psensor_test_fan(const char *hwmonDir)
     {
         psensor_fan_set_pwm(hwmonDir, i);
         log_debug("\033[38;5;33m[FAN TEST]\033[0m - Decrement pwm: %d at ""\"\033[38;5;14m%s\033[0m\"", i, hwmonDir);
-        clear_previous_line();
         usleep(50 * 1000);
     }
     return 0;

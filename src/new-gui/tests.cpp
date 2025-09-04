@@ -15,6 +15,7 @@
 #include <psensor/psensor_json.h>
 
 #include "UI/sensor_list.hpp"
+#include "config_utils.hpp"
 
 //struct psensor **sensors;
 
@@ -92,6 +93,8 @@ void test_stuff()
 	
 	// No longer needed anymore, imgui already does this
 	//Utils::open_url("https://github.com/0xSYS/NVi-PFA/blob/my-stuff/app/jni/src/Gui.cxx");
+	
+/*
 	std::vector<ui_sensor> test1;
 	
 	std::thread t(update_sensor_list, ref(test1));
@@ -99,4 +102,30 @@ void test_stuff()
 	std::thread t2(read_sensor_list, ref(test1));
 	t.join();   // main thread waits here
     t2.join();  // this line is never reached (optional)
+*/
+    pconfig config_test;
+    config_test.provider_gtop = 1;
+    config_test.provider_lmsensors = 1;
+    config_test.provider_udisks2 = 0;
+    config_test.provider_atasmart = 1;
+    config_test.provider_hddtemp = 0;
+    config_test.provider_amd = 0;
+    config_test.provider_nvidia = 1;
+    
+    config_test.window_w = 800;
+    config_test.window_h = 600;
+    
+    config_test.graphics_platform = "vulkan";
+    
+    config_test.save_ui_layout = 1;
+    
+    config_test.scroll_buffer_size = 1500;
+    config_test.scroll_buffer_history = 28.5f;
+    config_test.update_interval = 2;
+    
+    config_test.skip_module_loading = 0;
+    config_test.emergency_cooling = 1;
+    config_test.cooling_preset = "silent_efficiency.json";
+    
+    writeConfig(config_test);
 }
