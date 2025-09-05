@@ -206,7 +206,9 @@ void ui_main()
     ImGui::CreateContext();
     ImPlot::CreateContext();
     
-    io.Fonts->AddFontFromMemoryTTF(&Liter_Regular_ttf, sizeof Liter_Regular_ttf, 25.0f, nullptr, nullptr);
+    ImFontConfig config;
+    config.FontDataOwnedByAtlas = false; // it caused memory freeing issues this whole time (without this config)
+    io.Fonts->AddFontFromMemoryTTF((void*)Liter_Regular_ttf, sizeof(Liter_Regular_ttf), 25.0f, &config);
     
     SetDefaultTheme();
     
