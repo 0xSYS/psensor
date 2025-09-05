@@ -127,5 +127,5 @@ then build:
     
     
 # Screenshots
-![My Image](screenshots/psensor_pic1.png)
-![My Image](screenshots/psensor_pic2.png)
+![psensor_pic1](assets/screenshots/psensor_pic1.png)
+![psensor_pic2](assets/screenshots/psensor_pic2.png)
