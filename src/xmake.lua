@@ -134,9 +134,14 @@ target("psensor-ui")
     )
 
     add_linkdirs(
-        "/usr/lib",
-        "build/linux/x86_64/release"
+        "/usr/lib"
     )
+
+    on_load(function (target)
+        -- Dynamically add the current target's build directory
+        target:add("linkdirs", target:targetdir())
+    end)
+
     add_deps("psensor")
     add_links("SDL3")
 
