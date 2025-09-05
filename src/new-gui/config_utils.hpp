@@ -26,6 +26,7 @@ typedef struct
     
     /* - - - - UI Settings - - - - */
     bool save_ui_layout;
+    float ui_font_size;
     
     /* - - - - Plot Settings - - - - */
     int scroll_buffer_size;

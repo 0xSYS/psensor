@@ -115,12 +115,12 @@ void RenderFanControllerWindow()
             static int dummy_f = 0;
             ImGui::PushID(row);
             
-            fan_pwm[row] = psensor_get_last_pwm(PCFans->pwmFiles[row]);
-            
             ImGui::TableSetColumnIndex(0);
             ImGui::Text("Fan %d", row);
             ImGui::TableSetColumnIndex(1);
             ImGui::BeginDisabled(is_fan_test_running[row]);
+            
+            fan_pwm[row] = psensor_get_last_pwm(PCFans->pwmFiles[row]);
             
             if(ImGui::SliderInt("##SpeedCtrl", &fan_pwm[row], 0, 255))
             {

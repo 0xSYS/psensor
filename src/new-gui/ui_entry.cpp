@@ -15,6 +15,7 @@ extern "C"
 
 
 #include "ui_entry.hpp"
+#include "UI/fonts.h"
 #include "UI/ui_dev.hpp"
 #include "UI/ui.hpp"
 #include "UI/sensor_list.hpp"
@@ -171,8 +172,7 @@ void ui_main()
     ImGui::CreateContext();
     ImPlot::CreateContext();
     
-    
-    io.Fonts->AddFontFromFileTTF("Liter-Regular.ttf", 25.0f);
+    io.Fonts->AddFontFromMemoryTTF(&Liter_Regular_ttf, sizeof Liter_Regular_ttf, 25.0f, nullptr, nullptr);
     
     SetDefaultTheme();
     

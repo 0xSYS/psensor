@@ -44,6 +44,7 @@ pconfig readConfig()
     nlohmann::json ui_settings_obj = json_in["uiSettings"];
     
     out_conf.save_ui_layout = ui_settings_obj["saveUIlayouts"].get<bool>();
+    out_conf.ui_font_size = ui_settings_obj["uiFontSize"].get<float>();
     
     
     nlohmann::json main_window_obj = ui_settings_obj["mainWindow"];
@@ -98,6 +99,7 @@ void writeConfig(const pconfig config)
             "uiSettings",
             {
                 { "saveUIlayouts", config.save_ui_layout },
+                { "uiFontSize",    config.ui_font_size },
                 {
                     "mainWindow",
                     {
@@ -120,7 +122,7 @@ void writeConfig(const pconfig config)
             {
                 { "skipModuleLoading", config.skip_module_loading },
                 { "emergencyCooling",  config.emergency_cooling   },
-                { "coolingPreset",    config.cooling_preset      }
+                { "coolingPreset",     config.cooling_preset      }
             }
         }
     };
@@ -148,7 +150,8 @@ void printConfig(const pconfig config)
     std::cout << "[BOOL] - provider_amd: "           << config.provider_amd << "\n";
     std::cout << "[BOOL] - provider_nvidia: "        << config.provider_nvidia << "\n";
     std::cout << "--------------------------------------------\n";
-    std::cout << "[BOOL] - save_ui_layout: "         << config.save_ui_layout << "\n";
+    std::cout << "[BOOL]  - save_ui_layout: "         << config.save_ui_layout << "\n";
+    std::cout << "[FLOAT] - ui_font_size: "          << config.ui_font_size << "\n";
     std::cout << "--------------------------------------------\n";
     std::cout << "[INT]   - scroll_buffer_size: "    << config.scroll_buffer_size << "\n";
     std::cout << "[FLOAT] - scroll_buffer_history: " << config.scroll_buffer_history << "\n";
