@@ -38,6 +38,37 @@ inline std::vector<int> fan_pwm;
 inline std::vector<int> prev_fan_pwm;
 inline std::vector<bool> pwm_set_exe;
 
+static int selected_graphics_platform = 0;
+static const char * graphics_plaforms[] =
+{
+    "Auto",
+    "Vulkan",
+    "OpenGL",
+    "OpenGLES",
+    "OpenGLES2"
+};
+
+static bool save_ui_layouts = true;
+static bool autosave_settings = true;
+
+static bool cb_provider_lmsensors = true;
+static bool cb_provider_udisks2   = true;
+static bool cb_provider_hddtemp   = true;
+static bool cb_provier_arasmart   = true;
+static bool cb_provider_gtop      = true;
+static bool cb_provider_amd       = true;
+static bool cb_provider_nvidia    = true;
+
+static bool cb_use_celsiustemp = true;
+
+static int sl_plot_buf_size = 12000;
+static float sl_plot_buf_history = 30.0f;
+static int sl_update_interval = 1000;
+
+static bool cb_skip_mod_load = false;
+static bool cb_emergency_cooling = true;
+
+
 
 
 
@@ -205,6 +236,80 @@ void RenderPreferences()
 {
     ImGui::SetNextWindowSizeConstraints(ImVec2(500, 500), ImVec2(FLT_MAX, FLT_MAX));
     ImGui::Begin("Preferences", &preferences);
+    if(ImGui::BeginTabBar("##Settings", 0))
+    {
+        if(ImGui::BeginTabItem("General"))
+        {
+            ImGui::Text("* Graphics Platform: ");
+            ImGui::SameLine();
+            if (ImGui::BeginCombo("##gplat", graphics_plaforms[selected_graphics_platform], ImGuiComboFlags_WidthFitPreview))
+            {
+                for (int n = 0; n < IM_ARRAYSIZE(graphics_plaforms); n++)
+                {
+                    const bool is_selected = (selected_graphics_platform == n);
+                    if (ImGui::Selectable(graphics_plaforms[n], is_selected))
+                        selected_graphics_platform = n;
+    
+                    // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+            ImGui::SameLine();
+            ImGui::TextDisabled("(?)");
+            if (ImGui::BeginItemTooltip())
+            {
+                ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+                ImGui::Text("Set a graphics platform\nAutomatic - tries the available graphics platforms and choses the one that works");
+                ImGui::Text("GUI Rendering can be slow when using the software renderer which can be applied if the rest of the graphics platforms are not available");
+                ImGui::PopTextWrapPos();
+                ImGui::EndTooltip();
+            }
+            ImGui::Checkbox("Save UI layouts", &save_ui_layouts);
+            ImGui::Checkbox("Autosave settings", &autosave_settings);
+            ImGui::EndTabItem();
+        }
+        if(ImGui::BeginTabItem("Providers"))
+        {
+            ImGui::Checkbox("lm_sensors", &cb_provider_lmsensors);
+            ImGui::Checkbox("udisks2",    &cb_provider_udisks2  );
+            ImGui::Checkbox("hddtemp",    &cb_provider_hddtemp  );
+            ImGui::Checkbox("atasmart",   &cb_provier_arasmart  );
+            ImGui::Checkbox("gtop",       &cb_provider_gtop     );
+            ImGui::Checkbox("amd",        &cb_provider_amd      );
+            ImGui::Checkbox("nvidia",     &cb_provider_nvidia   );
+            ImGui::EndTabItem();
+        }
+        if(ImGui::BeginTabItem("Sensor List"))
+        {
+            ImGui::Checkbox("Use Celsius Temperature Unit", &cb_use_celsiustemp);
+            ImGui::EndTabItem();
+        }
+        if(ImGui::BeginTabItem("Plot settings"))
+        {
+            if(ImGui::SliderInt("Plot Buffer Size", &sl_plot_buf_size, 1000, 50000))
+            {
+                log_info("Temp...");
+            }
+            if(ImGui::SliderFloat("Plot History", &sl_plot_buf_history, 10.0f, 60.0f))
+            {
+                log_info("Temp...");
+            }
+            if(ImGui::SliderInt("Update Interval", &sl_update_interval, 500, 5000))
+            {
+                log_info("up interv...");
+            }
+            ImGui::EndTabItem();
+        }
+        if(ImGui::BeginTabItem("Fan Controller"))
+        {
+            ImGui::Checkbox("Skip kernel module loading", &cb_skip_mod_load);
+            ImGui::Checkbox("Emergency Cooling", &cb_emergency_cooling);
+            ImGui::EndTabItem();
+        }
+        ImGui::EndTabBar();
+    }
     ImGui::End();
 }
 

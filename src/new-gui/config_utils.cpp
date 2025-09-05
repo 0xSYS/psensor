@@ -28,6 +28,12 @@ pconfig readConfig()
     nlohmann::json general_obj = json_in["general"];
     
     out_conf.graphics_platform = general_obj["graphicsPlatform"].get<std::string>();
+    out_conf.autosave_settings = general_obj["autosaveSettings"].get<bool>();
+    
+    
+    nlohmann::json sensor_list_obj = json_in["sensorList"];
+    
+    out_conf.use_celsius_temp_unit = sensor_list_obj["useCelsiusTempUnit"].get<bool>();
     
     
     nlohmann::json providers_obj = json_in["providers"];
@@ -80,7 +86,8 @@ void writeConfig(const pconfig config)
         { 
             "general",
             {
-                { "graphicsPlatform", config.graphics_platform }
+                { "graphicsPlatform", config.graphics_platform },
+                { "autosaveSettings", config.autosave_settings }
             }
         },
         {
@@ -93,6 +100,12 @@ void writeConfig(const pconfig config)
                 { "hddtemp",   config.provider_hddtemp   },
                 { "amd",       config.provider_amd       },
                 { "nvidia",    config.provider_nvidia    }
+            }
+        },
+        {
+            "sensorList",
+            {
+                { "useCelsiusTempUnit", config.use_celsius_temp_unit }
             }
         },
         {
@@ -139,6 +152,7 @@ void printConfig(const pconfig config)
     std::cout << "settings from struct:\n";
     std::cout << "[INT] - window_w: "                << config.window_w << "\n";
     std::cout << "[INT] - window_h: "                << config.window_h << "\n";
+    std::cout << "[BOOL] - autosave_settings: "      << config.autosave_settings << "\n";
     std::cout << "--------------------------------------------\n";
     std::cout << "[STRING] - graphics_platform: "    << config.graphics_platform << "\n";
     std::cout << "--------------------------------------------\n";
@@ -152,6 +166,8 @@ void printConfig(const pconfig config)
     std::cout << "--------------------------------------------\n";
     std::cout << "[BOOL]  - save_ui_layout: "         << config.save_ui_layout << "\n";
     std::cout << "[FLOAT] - ui_font_size: "          << config.ui_font_size << "\n";
+    std::cout << "--------------------------------------------\n";
+    std::cout << "[BOOL] - use_celsius_temp_unit: "  << config.use_celsius_temp_unit << "\n";
     std::cout << "--------------------------------------------\n";
     std::cout << "[INT]   - scroll_buffer_size: "    << config.scroll_buffer_size << "\n";
     std::cout << "[FLOAT] - scroll_buffer_history: " << config.scroll_buffer_history << "\n";

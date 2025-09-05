@@ -14,6 +14,7 @@ typedef struct
     int window_w;
     int window_h;
     std::string graphics_platform;
+    bool autosave_settings;
     
     /* - - - - Psensor Providers - - - - */
     bool provider_gtop;
@@ -27,6 +28,9 @@ typedef struct
     /* - - - - UI Settings - - - - */
     bool save_ui_layout;
     float ui_font_size;
+    
+    /* - - - - Sensor List - - - - */
+    bool use_celsius_temp_unit;
     
     /* - - - - Plot Settings - - - - */
     int scroll_buffer_size;

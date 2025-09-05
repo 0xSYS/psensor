@@ -156,7 +156,7 @@ void psensor_list_free(struct psensor **sensors)
         sensors = NULL;
     }
     
-    glibtop_close();
+    //glibtop_close();
 }
 
 int psensor_list_size(struct psensor **sensors)
