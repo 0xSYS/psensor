@@ -20,6 +20,8 @@ extern "C"
 #include "UI/ui.hpp"
 #include "UI/sensor_list.hpp"
 
+#include "config_utils.hpp"
+
 #include <imgui/imgui.h>
 #include <imgui/backend/imgui_impl_sdl3.h>
 #include <imgui/backend/imgui_impl_sdlrenderer3.h>
@@ -133,6 +135,29 @@ void SetDefaultTheme()
 
 
 
+void sdl_graphics_picker(SDL_Renderer*& r, SDL_Window* w)
+{
+    for(int i = 0; sdl_graphics_platforms[i] != nullptr; i++)
+    {
+        r = SDL_CreateRenderer(w, sdl_graphics_platforms[i]);
+        if(r == nullptr)
+        {
+            log_warn("[%s] Unavailable Graphics Platform | SDL Error: %s", sdl_graphics_platforms[i], SDL_GetError());
+        }
+        else
+        {
+            if(r == nullptr)
+            {
+                log_error("Failed to create renderer | SDL Error: %s", SDL_GetError());
+                exit(1);
+            }
+            log_info("Render created using %s graphics", sdl_graphics_platforms[i]);
+            break;
+        }
+    }
+}
+
+
 
 void ui_main()
 {
@@ -151,13 +176,20 @@ void ui_main()
         exit(1);
     }
     
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr); // Temporarly using vulkan
+    SDL_Renderer* renderer;
+    
+    /*
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr);
     SDL_SetRenderVSync(renderer, 1);
     if(renderer == nullptr)
     {
         SDL_Log("Error: SDL_CreateRenderer(): %s\n", SDL_GetError());
         exit(1);
     }
+    */
+    
+    sdl_graphics_picker(renderer, window);
+    SDL_SetRenderVSync(renderer, 1);
     SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
     SDL_ShowWindow(window);
     

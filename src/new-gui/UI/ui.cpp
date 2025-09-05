@@ -44,7 +44,6 @@ static const char * graphics_plaforms[] =
     "Auto",
     "Vulkan",
     "OpenGL",
-    "OpenGLES",
     "OpenGLES2"
 };
 
@@ -58,6 +57,7 @@ static bool cb_provier_arasmart   = true;
 static bool cb_provider_gtop      = true;
 static bool cb_provider_amd       = true;
 static bool cb_provider_nvidia    = true;
+static bool cb_provider_ipmi      = true;
 
 static bool cb_use_celsiustemp = true;
 
@@ -279,6 +279,9 @@ void RenderPreferences()
             ImGui::Checkbox("gtop",       &cb_provider_gtop     );
             ImGui::Checkbox("amd",        &cb_provider_amd      );
             ImGui::Checkbox("nvidia",     &cb_provider_nvidia   );
+            ImGui::BeginDisabled();
+            ImGui::Checkbox("IPMI (Soon...)",      &cb_provider_ipmi   );
+            ImGui::EndDisabled();
             ImGui::EndTabItem();
         }
         if(ImGui::BeginTabItem("Sensor List"))

@@ -3,5 +3,15 @@
 
 
 
+static const char * sdl_graphics_platforms[] =
+{
+    "vulkan",
+    "opengl",
+    "opengles",
+    "software",
+    nullptr
+};
+
+
 void ui_main();
 #endif
