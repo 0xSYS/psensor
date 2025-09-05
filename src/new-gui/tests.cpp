@@ -103,6 +103,8 @@ void test_stuff()
 	t.join();   // main thread waits here
     t2.join();  // this line is never reached (optional)
 */
+
+
     pconfig config_test;
     config_test.provider_gtop = 1;
     config_test.provider_lmsensors = 1;
@@ -128,4 +130,12 @@ void test_stuff()
     config_test.cooling_preset = "silent_efficiency.json";
     
     writeConfig(config_test);
+
+
+/*
+    pconfig read_test;
+    read_test = readConfig();
+    
+    printConfig(read_test);
+*/
 }
