@@ -152,6 +152,8 @@ void sdl_graphics_picker(SDL_Renderer*& r, SDL_Window* w)
                 exit(1);
             }
             log_info("Render created using %s graphics", sdl_graphics_platforms[i]);
+            const char* name = SDL_GetRendererName(r);
+            printf("Renderer in use: %s\n", name);
             break;
         }
     }
