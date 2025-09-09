@@ -691,6 +691,7 @@ int psensor_get_last_pwm(const char *path)
     {
         fgets(content, 10, pwmFile);
         Pwm = atoi(content);
+        fclose(pwmFile);
         return Pwm;
     }
 
