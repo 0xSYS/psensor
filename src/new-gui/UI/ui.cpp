@@ -327,8 +327,9 @@ void RenderSensorList()
     ImGui::SetNextWindowSizeConstraints(ImVec2(500, 170), ImVec2(FLT_MAX, FLT_MAX));
     ImGui::Begin("##Sensor List", NULL, ImGuiWindowFlags_NoCollapse);
     
-    if(ImGui::BeginTable("sensor_table", 6, ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY))
+    if(ImGui::BeginTable("sensor_table", 6, ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY | ImGuiTableFlags_RowBg))
     {
+        ImGui::TableSetupScrollFreeze(0, 1);
         ImGui::TableSetupColumn("Plot Display");
         ImGui::TableSetupColumn("Sensor");
         ImGui::TableSetupColumn("Current Value");

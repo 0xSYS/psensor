@@ -89,8 +89,6 @@ target("psensor")
         set_kind("static")
     end
 
-    --add_syslinks("udisks2", "XNVCtrl", "sensors")
-
     add_packages(
       "json-c",
       "glib-2.0",
