@@ -2,6 +2,7 @@
 extern "C"
 {
     #include <psensor/psensor.h>
+    #include <psensor/fan_control.h>
 }
 
 #include <vector>
@@ -33,6 +34,7 @@ extern "C"
 psensor_fan *PCFans = {NULL};
 std::map<int, std::future<void>> fanTestFutures;
 std::once_flag pwm_flag;
+std::once_flag fc_close_flag;
 inline std::vector<bool> is_fan_test_running;
 inline std::vector<int> fan_pwm;
 inline std::vector<int> prev_fan_pwm;
@@ -80,6 +82,8 @@ void EnableFanPwmOnce()
     {
         PCFans = psensor_detectFans();
         
+        psensor_fan_open(PCFans);
+        
         if(!PCFans || PCFans->fanInputCount <= 0)
         {
             log_error("Failed to enable fan PWM");
@@ -87,7 +91,7 @@ void EnableFanPwmOnce()
         }
         for(int i = 0; i < PCFans->fanInputCount; i++)
         {
-            psensor_enable_fan_pwm(PCFans->pwmEnableFiles[i], 1);
+            psensor_enable_fan_pwm(PCFans, i, 1);
         }
         
         fan_pwm.resize(PCFans->fanInputCount, 0);
@@ -97,13 +101,22 @@ void EnableFanPwmOnce()
     });
 }
 
+void CloseFanControllerOnce()
+{
+    std::call_once(fc_close_flag, []()
+    {
+        if(PCFans != NULL)
+            psensor_fan_close(PCFans);
+    });
+}
+
 void SetFanPwmOnce(int index)
 {
     // Ewww That's ugly
     // I hate to say but it f works ;(
     if(!pwm_set_exe[index])
     {
-        psensor_fan_set_pwm(PCFans->pwmFiles[index], prev_fan_pwm[index]);
+        psensor_fan_set_pwm(PCFans, index, prev_fan_pwm[index]);
         fan_pwm[index] = prev_fan_pwm[index]; // sync UI with restored value
         pwm_set_exe[index] = true;
     }
@@ -151,11 +164,11 @@ void RenderFanControllerWindow()
             ImGui::TableSetColumnIndex(1);
             ImGui::BeginDisabled(is_fan_test_running[row]);
             
-            fan_pwm[row] = psensor_get_last_pwm(PCFans->pwmFiles[row]);
+            fan_pwm[row] = psensor_get_last_pwm(PCFans, row);
             
             if(ImGui::SliderInt("##SpeedCtrl", &fan_pwm[row], 0, 255))
             {
-                psensor_fan_set_pwm(PCFans->pwmFiles[row], fan_pwm[row]);
+                psensor_fan_set_pwm(PCFans, row, fan_pwm[row]);
             }
             
             ImGui::TableSetColumnIndex(2);
@@ -164,7 +177,7 @@ void RenderFanControllerWindow()
                 prev_fan_pwm[row] = fan_pwm[row];
                 fanTestFutures[row] = std::async(std::launch::async, [row]()
                 {
-                    psensor_test_fan(PCFans->pwmFiles[row]);
+                    psensor_test_fan(PCFans, row);
                 });
             }
             
@@ -535,6 +548,8 @@ void RenderUI()
     // MARK: UI Body
     if(fan_controller_open)
         RenderFanControllerWindow();
+    else
+        CloseFanControllerOnce();
     
     if(about_window)
         RenderAboutWindow();
