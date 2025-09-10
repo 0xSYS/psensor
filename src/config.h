@@ -140,7 +140,7 @@
 #define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "1.2.0"
+#define VERSION "1.2.1 Beta"
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 /* #undef _FILE_OFFSET_BITS */
