@@ -135,8 +135,9 @@ void RenderFanControllerWindow()
     ImGui::Begin("Fan Controller", &fan_controller_open);
     
     
-    if(ImGui::BeginTable("table_item_width", 3, ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY))
+    if(ImGui::BeginTable("##FanCtrlTable", 3, ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY))
     {
+        ImGui::TableSetupScrollFreeze(0, 1);
         ImGui::TableSetupColumn("Fan Index");
         ImGui::TableSetupColumn("Speed (PWM)");
         ImGui::TableSetupColumn("Speed Test");
