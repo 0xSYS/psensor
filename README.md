@@ -125,6 +125,12 @@ then build:
     - ❌ Save UI layouts
     - ❌ Save previous connected server users
     
+
+> [!NOTE]
+> On wayland psensor-ui can fail with `ERROR new-gui/ui_entry.cpp:168: Error: SDL_Init(): No available video device`
+> To fix this simply pass the -E flag to sudo like this: `sudo -E psensor-ui`
+> This preserves the environment variables
+    
     
 # Screenshots
 ![psensor_pic1](assets/screenshots/psensor_pic1.png)
