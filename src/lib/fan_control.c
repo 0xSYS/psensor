@@ -18,8 +18,10 @@
 
 
 
-FILE * PWM_Enable_FD[MAX_HWMON_DIRS];
-FILE * PWM_Fan_FD[MAX_HWMON_DIRS];
+FILE * PWM_Enable_FD[MAX_FANS];
+FILE * PWM_Fan_FD[MAX_FANS];
+int last_pwm_value[MAX_FANS] = {0};
+
 
 
 int isFanInput(const char *filename)
@@ -68,6 +70,7 @@ void getPwmF(psensor_fan *list, const char *directory, int fan_number)
 
 void psensor_fan_open(psensor_fan *f)
 {
+    char content[10];
     for(int i = 0; i < f->fanInputCount; i++)
     {
         PWM_Enable_FD[i] = fopen(f->pwmEnableFiles[i], "r+");
@@ -84,6 +87,17 @@ void psensor_fan_open(psensor_fan *f)
             log_error("[PWM] - Failed to open %s", f->pwmFiles[i]);
         else
             log_debug("[PWM] - Opened %s", f->pwmFiles[i]);
+        
+        // Also get the lat PWM value from sysfs as initial value
+        
+        if(PWM_Fan_FD[i] == NULL)
+        {
+            log_error("Failed to open %s for reading last pwm value! errorno: %s", f->pwmFiles[i], strerror(errno));
+            return;
+        }
+        rewind(PWM_Fan_FD[i]);
+        fgets(content, 10, PWM_Fan_FD[i]);
+        last_pwm_value[i] = atoi(content);
     }
 }
 
@@ -203,23 +217,15 @@ int psensor_fan_set_pwm(psensor_fan *f, int index, uint8_t PWM)
     
     fprintf(PWM_Fan_FD[index], "%d", PWM);
     fflush(PWM_Fan_FD[index]);   // <--- important
+    last_pwm_value[index] = PWM;
     
     return 0;
 }
 
 int psensor_get_last_pwm(psensor_fan *f, int index)
 {
-    char content[10];
-    int Pwm;
-
-    if(PWM_Fan_FD[index] == NULL)
-    {
-        log_error("Failed to open %s for reading last pwm value! errorno: %s", f->pwmFiles[index], strerror(errno));
-        return 0;
-    }
-    rewind(PWM_Fan_FD[index]);
-    fgets(content, 10, PWM_Fan_FD[index]);
-    Pwm = atoi(content);
+    // Get the last PWM value from the number array instead of reading from sysfs (which caused the slight decrementation of the PWM value in the GUI)
+    int Pwm = last_pwm_value[index];
     return Pwm;
 }
 

@@ -22,7 +22,7 @@
  
  
  
- 
+#define MAX_FANS 256
 #define MAX_HWMON_DIRS 9
 #define SMALL_BUF_SIZE 128
  

@@ -96,7 +96,7 @@ then build:
     - 🔽 Fan controller table
         - ❌ User created presets for fan speeds
         - ✔️ User controlled fan speeds
-        - ⚠️ Fan speed history
+        - ✔️ Fan speed history
     - 🔽 Sensor plots
         - ⚠️ Custom time span
         - ⚠️ Custom time interval
