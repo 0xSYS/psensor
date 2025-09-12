@@ -263,7 +263,7 @@ void RenderPreferences()
                 SaveSettings();
             }
             
-            if(ImGui::Checkbox("Autosave settings", &autosave_settings))
+            if(ImGui::Checkbox("Autosave settings", &autosave_settings)) // When disabled it already prevents this setting from saving to json file :madman:
             {
                 liveSettings.autosave_settings = autosave_settings;
                 SaveSettings();
