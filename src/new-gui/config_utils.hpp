@@ -13,7 +13,7 @@ typedef struct
 {
     int window_w;
     int window_h;
-    std::string graphics_platform;
+    int graphics_platform;
     bool autosave_settings;
     
     /* - - - - Psensor Providers - - - - */
@@ -24,6 +24,7 @@ typedef struct
     bool provider_hddtemp;
     bool provider_amd;
     bool provider_nvidia;
+    bool provider_ipmi;
     
     /* - - - - UI Settings - - - - */
     bool save_ui_layout;

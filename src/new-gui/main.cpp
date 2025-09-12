@@ -41,6 +41,7 @@
 #ifndef DEV_TEST
     #include "ui_entry.hpp"
     #include "utils.hpp"
+    #include "UI/settings_utils.hpp"
 #else
     #include "tests.h"
 #endif
@@ -53,6 +54,7 @@ int main(int argc, char * argv[])
 {
 #ifndef DEV_TEST
     Utils::setup_dirs();
+    SyncSettings();
     ui_main();
 #else
     test_stuff();

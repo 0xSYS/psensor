@@ -18,6 +18,7 @@ extern "C"
 
 
 #include "ui.hpp"
+#include "settings_utils.hpp"
 #include "sensor_list.hpp"
 
 #include "../utils.hpp"
@@ -39,36 +40,6 @@ inline std::vector<bool> is_fan_test_running;
 inline std::vector<int> fan_pwm;
 inline std::vector<int> prev_fan_pwm;
 inline std::vector<bool> pwm_set_exe;
-
-static int selected_graphics_platform = 0;
-static const char * graphics_plaforms[] =
-{
-    "Auto",
-    "Vulkan",
-    "OpenGL",
-    "OpenGLES2"
-};
-
-static bool save_ui_layouts = true;
-static bool autosave_settings = true;
-
-static bool cb_provider_lmsensors = true;
-static bool cb_provider_udisks2   = true;
-static bool cb_provider_hddtemp   = true;
-static bool cb_provier_arasmart   = true;
-static bool cb_provider_gtop      = true;
-static bool cb_provider_amd       = true;
-static bool cb_provider_nvidia    = true;
-static bool cb_provider_ipmi      = true;
-
-static bool cb_use_celsiustemp = true;
-
-static int sl_plot_buf_size = 12000;
-static float sl_plot_buf_history = 30.0f;
-static int sl_update_interval = 1000;
-
-static bool cb_skip_mod_load = false;
-static bool cb_emergency_cooling = true;
 
 
 
@@ -254,15 +225,21 @@ void RenderPreferences()
     {
         if(ImGui::BeginTabItem("General"))
         {
+            ImGui::Text("Settings marked with * apply after restarting the application");
+            ImGui::Text("Settings marked with # are not implemented");
             ImGui::Text("* Graphics Platform: ");
             ImGui::SameLine();
-            if (ImGui::BeginCombo("##gplat", graphics_plaforms[selected_graphics_platform], ImGuiComboFlags_WidthFitPreview))
+            if(ImGui::BeginCombo("##gplat", graphics_plaforms[selected_graphics_platform], ImGuiComboFlags_WidthFitPreview))
             {
-                for (int n = 0; n < IM_ARRAYSIZE(graphics_plaforms); n++)
+                for(int n = 0; n < IM_ARRAYSIZE(graphics_plaforms); n++)
                 {
                     const bool is_selected = (selected_graphics_platform == n);
-                    if (ImGui::Selectable(graphics_plaforms[n], is_selected))
+                    if(ImGui::Selectable(graphics_plaforms[n], is_selected))
+                    {
                         selected_graphics_platform = n;
+                        liveSettings.graphics_platform = selected_graphics_platform;
+                        SaveSettings();
+                    }
     
                     // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
                     if (is_selected)
@@ -280,49 +257,109 @@ void RenderPreferences()
                 ImGui::PopTextWrapPos();
                 ImGui::EndTooltip();
             }
-            ImGui::Checkbox("Save UI layouts", &save_ui_layouts);
-            ImGui::Checkbox("Autosave settings", &autosave_settings);
+            if(ImGui::Checkbox("Save UI layouts", &save_ui_layouts))
+            {
+                liveSettings.save_ui_layout = save_ui_layouts;
+                SaveSettings();
+            }
+            
+            if(ImGui::Checkbox("Autosave settings", &autosave_settings))
+            {
+                liveSettings.autosave_settings = autosave_settings;
+                SaveSettings();
+            }
+            
             ImGui::EndTabItem();
         }
         if(ImGui::BeginTabItem("Providers"))
         {
-            ImGui::Checkbox("lm_sensors", &cb_provider_lmsensors);
-            ImGui::Checkbox("udisks2",    &cb_provider_udisks2  );
-            ImGui::Checkbox("hddtemp",    &cb_provider_hddtemp  );
-            ImGui::Checkbox("atasmart",   &cb_provier_arasmart  );
-            ImGui::Checkbox("gtop",       &cb_provider_gtop     );
-            ImGui::Checkbox("amd",        &cb_provider_amd      );
-            ImGui::Checkbox("nvidia",     &cb_provider_nvidia   );
+            if(ImGui::Checkbox("lm_sensors", &cb_provider_lmsensors))
+            {
+                liveSettings.provider_lmsensors = cb_provider_lmsensors;
+                SaveSettings();
+            }
+            
+            if(ImGui::Checkbox("udisks2", &cb_provider_udisks2))
+            {
+                liveSettings.provider_udisks2 = cb_provider_udisks2;
+                SaveSettings();
+            }
+            
+            if(ImGui::Checkbox("hddtemp", &cb_provider_hddtemp))
+            {
+                liveSettings.provider_hddtemp = cb_provider_hddtemp;
+                SaveSettings();
+            }
+            
+            if(ImGui::Checkbox("atasmart", &cb_provier_arasmart))
+            {
+                liveSettings.provider_atasmart = cb_provier_arasmart;
+                SaveSettings();
+            }
+            
+            if(ImGui::Checkbox("gtop", &cb_provider_gtop))
+            {
+                liveSettings.provider_gtop = cb_provider_gtop;
+                SaveSettings();
+            }
+            
+            if(ImGui::Checkbox("amd", &cb_provider_amd))
+            {
+                liveSettings.provider_amd = cb_provider_amd;
+                SaveSettings();
+            }
+            
+            if(ImGui::Checkbox("nvidia", &cb_provider_nvidia))
+            {
+                liveSettings.provider_nvidia = cb_provider_nvidia;
+                SaveSettings();
+            }
             ImGui::BeginDisabled();
-            ImGui::Checkbox("IPMI (Soon...)",      &cb_provider_ipmi   );
+            ImGui::Checkbox("IPMI (Soon...)", &cb_provider_ipmi);
             ImGui::EndDisabled();
             ImGui::EndTabItem();
         }
         if(ImGui::BeginTabItem("Sensor List"))
         {
-            ImGui::Checkbox("Use Celsius Temperature Unit", &cb_use_celsiustemp);
+            if(ImGui::Checkbox("Use Celsius Temperature Unit", &cb_use_celsiustemp))
+            {
+                liveSettings.use_celsius_temp_unit = cb_use_celsiustemp;
+                SaveSettings();
+            }
             ImGui::EndTabItem();
         }
         if(ImGui::BeginTabItem("Plot settings"))
         {
             if(ImGui::SliderInt("Plot Buffer Size", &sl_plot_buf_size, 1000, 50000))
             {
+                liveSettings.scroll_buffer_size = sl_plot_buf_size;
                 log_info("Temp...");
             }
             if(ImGui::SliderFloat("Plot History", &sl_plot_buf_history, 10.0f, 60.0f))
             {
+                liveSettings.scroll_buffer_history = sl_plot_buf_history;
                 log_info("Temp...");
             }
             if(ImGui::SliderInt("Update Interval", &sl_update_interval, 500, 5000))
             {
+                liveSettings.update_interval = sl_update_interval;
                 log_info("up interv...");
             }
             ImGui::EndTabItem();
         }
         if(ImGui::BeginTabItem("Fan Controller"))
         {
-            ImGui::Checkbox("Skip kernel module loading", &cb_skip_mod_load);
-            ImGui::Checkbox("Emergency Cooling", &cb_emergency_cooling);
+            if(ImGui::Checkbox("Skip kernel module loading", &cb_skip_mod_load))
+            {
+                liveSettings.skip_module_loading = cb_skip_mod_load;
+                SaveSettings();
+            }
+            
+            if(ImGui::Checkbox("Emergency Cooling", &cb_emergency_cooling))
+            {
+                liveSettings.emergency_cooling = cb_emergency_cooling;
+                SaveSettings();
+            }
             ImGui::EndTabItem();
         }
         ImGui::EndTabBar();

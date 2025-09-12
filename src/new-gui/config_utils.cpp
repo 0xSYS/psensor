@@ -20,6 +20,8 @@ pconfig readConfig()
     std::ostringstream out_path;
     out_path << Utils::get_home_dir() << PSENSOR_SETTINGS_PATH;
     
+    log_info("Reading config...");
+    
     std::ifstream in_conf(out_path.str());
     
     nlohmann::json json_in = nlohmann::json::parse(in_conf);
@@ -27,7 +29,7 @@ pconfig readConfig()
     
     nlohmann::json general_obj = json_in["general"];
     
-    out_conf.graphics_platform = general_obj["graphicsPlatform"].get<std::string>();
+    out_conf.graphics_platform = general_obj["graphicsPlatform"].get<int>();
     out_conf.autosave_settings = general_obj["autosaveSettings"].get<bool>();
     
     
@@ -45,6 +47,7 @@ pconfig readConfig()
     out_conf.provider_hddtemp   = providers_obj["hddtemp"].get<bool>();
     out_conf.provider_amd       = providers_obj["amd"].get<bool>();
     out_conf.provider_nvidia    = providers_obj["nvidia"].get<bool>();
+    out_conf.provider_ipmi      = providers_obj["ipmi"].get<bool>();
     
     
     nlohmann::json ui_settings_obj = json_in["uiSettings"];
@@ -99,7 +102,8 @@ void writeConfig(const pconfig config)
                 { "atasmart",  config.provider_atasmart  },
                 { "hddtemp",   config.provider_hddtemp   },
                 { "amd",       config.provider_amd       },
-                { "nvidia",    config.provider_nvidia    }
+                { "nvidia",    config.provider_nvidia    },
+                { "ipmi",      config.provider_ipmi      }
             }
         },
         {
@@ -150,30 +154,31 @@ void writeConfig(const pconfig config)
 void printConfig(const pconfig config)
 {
     std::cout << "settings from struct:\n";
-    std::cout << "[INT] - window_w: "                << config.window_w << "\n";
-    std::cout << "[INT] - window_h: "                << config.window_h << "\n";
-    std::cout << "[BOOL] - autosave_settings: "      << config.autosave_settings << "\n";
+    std::cout << "[INT]  - window_w:          -> " << config.window_w << "\n";
+    std::cout << "[INT]  - window_h:          -> " << config.window_h << "\n";
+    std::cout << "[BOOL] - autosave_settings: -> " << config.autosave_settings << "\n";
     std::cout << "--------------------------------------------\n";
     std::cout << "[STRING] - graphics_platform: "    << config.graphics_platform << "\n";
     std::cout << "--------------------------------------------\n";
-    std::cout << "[BOOL] - provider_gtop: "          << config.provider_gtop << "\n";
-    std::cout << "[BOOL] - provider_lmsensors: "     << config.provider_lmsensors << "\n";
-    std::cout << "[BOOL] - provider_udisks2: "       << config.provider_udisks2 << "\n";
-    std::cout << "[BOOL] - provider_atasmart: "      << config.provider_atasmart << "\n";
-    std::cout << "[BOOL] - provider_hddtemp: "       << config.provider_hddtemp << "\n";
-    std::cout << "[BOOL] - provider_amd: "           << config.provider_amd << "\n";
-    std::cout << "[BOOL] - provider_nvidia: "        << config.provider_nvidia << "\n";
+    std::cout << "[BOOL] - provider_gtop:      -> " << config.provider_gtop      << "\n";
+    std::cout << "[BOOL] - provider_lmsensors: -> " << config.provider_lmsensors << "\n";
+    std::cout << "[BOOL] - provider_udisks2:   -> " << config.provider_udisks2   << "\n";
+    std::cout << "[BOOL] - provider_atasmart:  -> " << config.provider_atasmart  << "\n";
+    std::cout << "[BOOL] - provider_hddtemp:   -> " << config.provider_hddtemp   << "\n";
+    std::cout << "[BOOL] - provider_amd:       -> " << config.provider_amd       << "\n";
+    std::cout << "[BOOL] - provider_nvidia:    -> " << config.provider_nvidia    << "\n";
+    std::cout << "[BOOL] - provider_ipmi:      -> " << config.provider_ipmi      << "\n";
     std::cout << "--------------------------------------------\n";
-    std::cout << "[BOOL]  - save_ui_layout: "         << config.save_ui_layout << "\n";
-    std::cout << "[FLOAT] - ui_font_size: "          << config.ui_font_size << "\n";
+    std::cout << "[BOOL]  - save_ui_layout: -> " << config.save_ui_layout << "\n";
+    std::cout << "[FLOAT] - ui_font_size:   -> " << config.ui_font_size   << "\n";
     std::cout << "--------------------------------------------\n";
-    std::cout << "[BOOL] - use_celsius_temp_unit: "  << config.use_celsius_temp_unit << "\n";
+    std::cout << "[BOOL] - use_celsius_temp_unit: -> " << config.use_celsius_temp_unit << "\n";
     std::cout << "--------------------------------------------\n";
-    std::cout << "[INT]   - scroll_buffer_size: "    << config.scroll_buffer_size << "\n";
-    std::cout << "[FLOAT] - scroll_buffer_history: " << config.scroll_buffer_history << "\n";
-    std::cout << "[INT]   - update_interval: "       << config.update_interval << "\n";
+    std::cout << "[INT]   - scroll_buffer_size:    -> " << config.scroll_buffer_size    << "\n";
+    std::cout << "[FLOAT] - scroll_buffer_history: -> " << config.scroll_buffer_history << "\n";
+    std::cout << "[INT]   - update_interval:       -> " << config.update_interval       << "\n";
     std::cout << "--------------------------------------------\n";
-    std::cout << "[BOOL]   - skip_module_loading: "  << config.skip_module_loading << "\n";
-    std::cout << "[BOOL]   - emergency_cooling: "    << config.emergency_cooling << "\n";
-    std::cout << "[STRING] - cooling_preset: "       << config.cooling_preset << "\n";
+    std::cout << "[BOOL]   - skip_module_loading: -> "  << config.skip_module_loading << "\n";
+    std::cout << "[BOOL]   - emergency_cooling:   -> "  << config.emergency_cooling   << "\n";
+    std::cout << "[STRING] - cooling_preset:      -> "  << config.cooling_preset      << "\n";
 }

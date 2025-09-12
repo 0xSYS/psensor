@@ -117,7 +117,7 @@ void test_stuff()
     config_test.window_w = 800;
     config_test.window_h = 600;
     
-    config_test.graphics_platform = "vulkan";
+    config_test.graphics_platform = 2;
     
     config_test.save_ui_layout = 1;
     
