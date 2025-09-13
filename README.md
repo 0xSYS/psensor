@@ -104,7 +104,7 @@ then build:
         - ❌ Sensor record viewer
     - ❌ Individual sensor preferences
     - ❌ Custom toast message boxes
-    - ❌ Configuration
+    - ✔️ Configuration
     
 - 🔽 Server
     - ❌ User Auth via SSH protocol
@@ -127,9 +127,9 @@ then build:
     
 
 > [!NOTE]
-> On wayland psensor-ui can fail with `ERROR new-gui/ui_entry.cpp:168: Error: SDL_Init(): No available video device`
+> On wayland when running with sudo psensor-ui can fail with `ERROR new-gui/ui_entry.cpp:168: Error: SDL_Init(): No available video device`
 > 
-> To fix this simply pass the -E flag to sudo like this: `sudo -E psensor-ui`
+> To fix this simply pass the -E flag to sudo : `sudo -E psensor-ui`
 > 
 > This preserves the environment variables
     
