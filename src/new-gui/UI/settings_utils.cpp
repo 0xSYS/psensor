@@ -30,6 +30,7 @@ void SyncSettings()
     
     cb_use_celsiustemp         = liveSettings.use_celsius_temp_unit ;
     autosave_settings          = liveSettings.autosave_settings     ;
+    temp_autosave_settings     = liveSettings.autosave_settings     ;
     save_ui_layouts            = liveSettings.save_ui_layout        ;
     cb_provider_lmsensors      = liveSettings.provider_gtop         ;
     cb_provider_udisks2        = liveSettings.provider_lmsensors    ;
@@ -56,7 +57,7 @@ void SyncSettings()
 
 void SaveSettings()
 {
-    if(liveSettings.autosave_settings)
+    if(temp_autosave_settings)
     {
         writeConfig(liveSettings);
     }

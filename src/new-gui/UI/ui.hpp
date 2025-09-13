@@ -31,6 +31,7 @@ inline const char * graphics_plaforms[] =
 
 inline bool save_ui_layouts;
 inline bool autosave_settings;
+inline bool temp_autosave_settings;
 
 inline bool cb_provider_lmsensors;
 inline bool cb_provider_udisks2  ;
