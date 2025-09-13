@@ -67,7 +67,7 @@ bool is_mod_existing(const char * mod_name)
     }
     else
     {
-        log_info("CHECK_MOD_EXIST: Module %s exists on disk", mod_name);
+        log_debug("CHECK_MOD_EXIST: Module %s exists on disk", mod_name);
         kmod_module_unref_list(list);
     }
     return true;
@@ -92,7 +92,7 @@ void pmod_load_modules()
                 struct kmod_module *dep = kmod_module_get_module(itr);
                 const char *dep_name = kmod_module_get_name(dep);
             
-                log_info("Dependency: %s", dep_name);
+                log_debug("Dependency: %s", dep_name);
                 int ret = kmod_module_insert_module(dep, 0, NULL); // And try to load it
                 if(ret < 0)
                     log_error("Failed to insert dependency %s (%s)", dep_name, strerror(-ret));
@@ -109,7 +109,7 @@ void pmod_load_modules()
                 ret = kmod_module_insert_module(modules[i], 0, module_table[i].opts);
                 
                 if(ret == 0)
-                    log_info("MOD_LOADER: Loaded module: %s", module_table[i].name);
+                    log_debug("MOD_LOADER: Loaded module: %s", module_table[i].name);
                 else
                     log_error("MOD_LOADER: Failed to load module %s via libkmod (%s)", module_table[i].name, strerror(-ret));
             }
@@ -133,10 +133,6 @@ void pmod_init()
         log_error("Failed to create kmod context");
         exit(1);
     }
-    else
-    {
-        printf("mod Init\n");
-    }
 }
 
 bool pmod_check_loaded(const char * mod_name)
@@ -148,19 +144,19 @@ bool pmod_check_loaded(const char * mod_name)
     state = kmod_module_get_initstate(m);
     if(state == KMOD_MODULE_LIVE)
     {
-        log_info("CHECK_MOD_LOADED: Module %s is loaded", mod_name);
+        log_debug("CHECK_MOD_LOADED: Module %s is loaded", mod_name);
         kmod_module_unref(m);
         return true;
     }
     else if(state == KMOD_MODULE_BUILTIN)
     {
-        log_info("CHECK_MOD_LOADED: Module %s is built into the kernel", mod_name);
+        log_debug("CHECK_MOD_LOADED: Module %s is built into the kernel", mod_name);
         kmod_module_unref(m);
         return true;
     }
     else
     {
-        log_info("CHECK_MOD_LOADED: Module %s is not loaded (state: %d)", mod_name, state);
+        log_debug("CHECK_MOD_LOADED: Module %s is not loaded (state: %d)", mod_name, state);
         kmod_module_unref(m);
         return false;
     }

@@ -8,6 +8,7 @@ extern "C"
 #include <SDL3/SDL.h>
 #include <log_c/log.h>
 
+#include <sstream>
 #include <thread>
 #include <mutex>
 
@@ -20,6 +21,8 @@ extern "C"
 #include "UI/ui.hpp"
 #include "UI/sensor_list.hpp"
 #include "UI/settings_utils.hpp"
+
+#include "utils.hpp"
 
 #include "config_utils.hpp"
 
@@ -153,8 +156,6 @@ void sdl_graphics_picker(SDL_Renderer*& r, SDL_Window* w)
                 exit(1);
             }
             log_info("Render created using %s graphics", sdl_graphics_platforms[i]);
-            const char* name = SDL_GetRendererName(r);
-            printf("Renderer in use: %s\n", name);
             break;
         }
     }
@@ -181,17 +182,23 @@ void ui_main()
     
     SDL_Renderer* renderer;
     
-    /*
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr);
+    if(liveSettings.graphics_platform == 0)
+        sdl_graphics_picker(renderer, window);
+    else
+        renderer = SDL_CreateRenderer(window, sdl_graphics_platforms[liveSettings.graphics_platform-1]);
+    
+    
+    
     SDL_SetRenderVSync(renderer, 1);
     if(renderer == nullptr)
     {
-        SDL_Log("Error: SDL_CreateRenderer(): %s\n", SDL_GetError());
+        log_error("SDL_CreateRenderer(): %s", SDL_GetError());
         exit(1);
     }
-    */
     
-    sdl_graphics_picker(renderer, window);
+    const char* name = SDL_GetRendererName(renderer);
+    log_debug("SDL_GetRendererName(): %s", name);
+        
     SDL_SetRenderVSync(renderer, 1);
     SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
     SDL_ShowWindow(window);
@@ -202,6 +209,19 @@ void ui_main()
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    
+    std::string imgui_ini_path;
+    
+    // Store imgui ini in the home directory in .config/psensor
+    if(liveSettings.save_ui_layout)
+    {
+        imgui_ini_path = Utils::get_home_dir() + "/" + PSENSOR_DIR + "/imgui.ini";
+        io.IniFilename = imgui_ini_path.c_str();
+    }
+    else
+        io.IniFilename = nullptr;
+    
+
     
     
     ImGui::CreateContext();
@@ -295,6 +315,7 @@ void ui_main()
         if(show_implot_demo)
             ImPlot::ShowDemoWindow(&show_implot_demo);
         
+        
         RenderUI();
            
    
@@ -310,7 +331,7 @@ void ui_main()
             break;
     }
     
-    SaveSettings();
+    writeConfig(liveSettings);
     
     ImGui_ImplSDLRenderer3_Shutdown();
     ImGui_ImplSDL3_Shutdown();

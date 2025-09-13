@@ -119,7 +119,8 @@ void lmsensor_psensor_list_update(struct psensor **sensors)
 	double v;
 
 	if(!init_done || !sensors)
-		return;
+	    return;
+	
 
 	while(*sensors)
 	{

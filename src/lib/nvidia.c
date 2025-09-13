@@ -320,6 +320,12 @@ void nvidia_psensor_list_update(struct psensor **sensors)
 {
 	struct psensor *s;
 
+	if(sensors == NULL)
+	{
+	    log_error("Failed to update sensor list for NVIDIA provider");
+	    return;
+	}
+	
 	while(*sensors)
 	{
 		s = *sensors;

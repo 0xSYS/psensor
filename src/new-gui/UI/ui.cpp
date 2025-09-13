@@ -6,6 +6,7 @@ extern "C"
 }
 
 #include <vector>
+#include <sstream>
 #include <mutex>
 #include <map>
 #include <future>
@@ -219,14 +220,30 @@ void RenderSensorSettings()
 
 void RenderPreferences()
 {
-    ImGui::SetNextWindowSizeConstraints(ImVec2(500, 500), ImVec2(FLT_MAX, FLT_MAX));
+    std::ostringstream save_settings_btn_text;
+    
+    if(autosave_settings)
+        save_settings_btn_text << "Autosave";
+    else
+        save_settings_btn_text << "Save Settings";
+    
+    ImGui::SetNextWindowSizeConstraints(ImVec2(705, 505), ImVec2(FLT_MAX, FLT_MAX));
     ImGui::Begin("Preferences", &preferences);
+    
+    ImGui::Text("Settings marked with * apply after restarting the application");
+    ImGui::Text("Settings marked with # are not implemented");
+    
+    ImGui::Separator();
+    
+    ImGui::BeginDisabled(autosave_settings);
+    if(ImGui::Button(save_settings_btn_text.str().c_str()))
+        writeConfig(liveSettings);
+    
+    ImGui::EndDisabled();
     if(ImGui::BeginTabBar("##Settings", 0))
     {
         if(ImGui::BeginTabItem("General"))
         {
-            ImGui::Text("Settings marked with * apply after restarting the application");
-            ImGui::Text("Settings marked with # are not implemented");
             ImGui::Text("* Graphics Platform: ");
             ImGui::SameLine();
             if(ImGui::BeginCombo("##gplat", graphics_plaforms[selected_graphics_platform], ImGuiComboFlags_WidthFitPreview))
@@ -249,7 +266,7 @@ void RenderPreferences()
             }
             ImGui::SameLine();
             ImGui::TextDisabled("(?)");
-            if (ImGui::BeginItemTooltip())
+            if(ImGui::BeginItemTooltip())
             {
                 ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
                 ImGui::Text("Set a graphics platform\nAutomatic - tries the available graphics platforms and choses the one that works");
@@ -257,13 +274,13 @@ void RenderPreferences()
                 ImGui::PopTextWrapPos();
                 ImGui::EndTooltip();
             }
-            if(ImGui::Checkbox("Save UI layouts", &save_ui_layouts))
+            if(ImGui::Checkbox("* Save UI layouts", &save_ui_layouts))
             {
                 liveSettings.save_ui_layout = save_ui_layouts;
                 SaveSettings();
             }
             
-            if(ImGui::Checkbox("* Autosave settings", &autosave_settings)) // When disabled it already prevents this setting from saving to json file :madman:
+            if(ImGui::Checkbox("Autosave settings", &autosave_settings)) // When disabled it already prevents this setting from saving to json file :madman:
             {
                 liveSettings.autosave_settings = autosave_settings;
                 SaveSettings();
@@ -273,6 +290,7 @@ void RenderPreferences()
         }
         if(ImGui::BeginTabItem("Providers"))
         {
+            ImGui::Text("All providers apply after restart");
             if(ImGui::Checkbox("lm_sensors", &cb_provider_lmsensors))
             {
                 liveSettings.provider_lmsensors = cb_provider_lmsensors;
@@ -291,9 +309,9 @@ void RenderPreferences()
                 SaveSettings();
             }
             
-            if(ImGui::Checkbox("atasmart", &cb_provier_arasmart))
+            if(ImGui::Checkbox("atasmart", &cb_provider_atasmart))
             {
-                liveSettings.provider_atasmart = cb_provier_arasmart;
+                liveSettings.provider_atasmart = cb_provider_atasmart;
                 SaveSettings();
             }
             
@@ -315,7 +333,7 @@ void RenderPreferences()
                 SaveSettings();
             }
             ImGui::BeginDisabled();
-            ImGui::Checkbox("IPMI (Soon...)", &cb_provider_ipmi);
+            ImGui::Checkbox("# IPMI", &cb_provider_ipmi);
             ImGui::EndDisabled();
             ImGui::EndTabItem();
         }
@@ -330,17 +348,17 @@ void RenderPreferences()
         }
         if(ImGui::BeginTabItem("Plot settings"))
         {
-            if(ImGui::SliderInt("Plot Buffer Size", &sl_plot_buf_size, 1000, 50000))
+            if(ImGui::SliderInt("# Plot Buffer Size", &sl_plot_buf_size, 1000, 50000))
             {
                 liveSettings.scroll_buffer_size = sl_plot_buf_size;
                 log_info("Temp...");
             }
-            if(ImGui::SliderFloat("Plot History", &sl_plot_buf_history, 10.0f, 60.0f))
+            if(ImGui::SliderFloat("# Plot History", &sl_plot_buf_history, 10.0f, 60.0f))
             {
                 liveSettings.scroll_buffer_history = sl_plot_buf_history;
                 log_info("Temp...");
             }
-            if(ImGui::SliderInt("Update Interval", &sl_update_interval, 500, 5000))
+            if(ImGui::SliderInt("# Update Interval", &sl_update_interval, 500, 5000))
             {
                 liveSettings.update_interval = sl_update_interval;
                 log_info("up interv...");
@@ -349,13 +367,13 @@ void RenderPreferences()
         }
         if(ImGui::BeginTabItem("Fan Controller"))
         {
-            if(ImGui::Checkbox("Skip kernel module loading", &cb_skip_mod_load))
+            if(ImGui::Checkbox("# Skip kernel module loading", &cb_skip_mod_load))
             {
                 liveSettings.skip_module_loading = cb_skip_mod_load;
                 SaveSettings();
             }
             
-            if(ImGui::Checkbox("Emergency Cooling", &cb_emergency_cooling))
+            if(ImGui::Checkbox("# Emergency Cooling", &cb_emergency_cooling))
             {
                 liveSettings.emergency_cooling = cb_emergency_cooling;
                 SaveSettings();
@@ -424,13 +442,13 @@ void RenderSensorList()
             ImGui::Text("%s", s.name.c_str());
             
             ImGui::TableSetColumnIndex(2);
-            ImGui::Text("%s", psensor_value_to_str(s.sensor_type, s.current_value, 1));
+            ImGui::Text("%s", psensor_value_to_str(s.sensor_type, s.current_value, liveSettings.use_celsius_temp_unit));
             
             ImGui::TableSetColumnIndex(3);
-            ImGui::Text("%s", psensor_value_to_str(s.sensor_type, s.min, 1));
+            ImGui::Text("%s", psensor_value_to_str(s.sensor_type, s.min, liveSettings.use_celsius_temp_unit));
             
             ImGui::TableSetColumnIndex(4);
-            ImGui::Text("%s", psensor_value_to_str(s.sensor_type, s.max, 1));
+            ImGui::Text("%s", psensor_value_to_str(s.sensor_type, s.max, liveSettings.use_celsius_temp_unit));
             
             ImGui::PushID(row);
             ImGui::TableSetColumnIndex(5);
@@ -463,6 +481,17 @@ void RenderSensorPlot()
     }
     
     ImGui::Begin("##Sensor_Plot", NULL); // ImGuiWindowFlags_NoCollapse
+    
+    // Just some testing
+    /*
+    if(ImGui::Button("Clear plots"))
+    {
+        for(int i = 0; i < sensor_count; i++)
+        {
+            sensor_plots[i].Erase();
+        }
+    }
+    */
     
     if(ImPlot::BeginPlot("##Scrolling", ImVec2(-1,-1), ImPlotFlags_NoLegend))
     {
@@ -500,8 +529,8 @@ void RenderUI()
             {
                 if(Utils::is_root())
                 {
-                    // idk why but this feels like it can fail
                     EnableFanPwmOnce();
+                    // idk why but this feels like it can fail
                     if(!PCFans || PCFans->fanInputCount <= 0)
                     {
                         log_error("No fans detected.");

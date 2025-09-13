@@ -7,7 +7,7 @@ static const char * sdl_graphics_platforms[] =
 {
     "vulkan",
     "opengl",
-    "opengles",
+    "opengles2",
     "software",
     nullptr
 };

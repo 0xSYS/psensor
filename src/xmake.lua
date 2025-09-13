@@ -155,9 +155,9 @@ target("psensor-ui")
         "../ext_deps/implot/*.cpp"
     )
 
-    after_build(function (target)
-        os.cp("../assets/Liter-Regular.ttf", target:targetdir())
-    end)
+    --after_build(function (target)
+    --    os.cp("../assets/Liter-Regular.ttf", target:targetdir())
+    --end)
 
 
 

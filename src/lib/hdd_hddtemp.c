@@ -212,6 +212,12 @@ void hddtemp_psensor_list_append(struct psensor ***sensors, int values_max_lengt
 
 static void update(struct psensor **sensors, struct hdd_info *info)
 {
+    if(sensors == NULL)
+	{
+	    log_error("Failed to update sensor list for hddtemp provider");
+	    return;
+	}
+    
 	while(*sensors)
 	{
 		if(!((*sensors)->type & SENSOR_TYPE_REMOTE) && (*sensors)->type & SENSOR_TYPE_HDDTEMP && !strcmp((*sensors)->id + 8, info->name))

@@ -26,7 +26,8 @@ inline const char * graphics_plaforms[] =
     "Auto",
     "Vulkan",
     "OpenGL",
-    "OpenGLES2"
+    "OpenGL ES2",
+    "SDL Software"
 };
 
 inline bool save_ui_layouts;
@@ -36,7 +37,7 @@ inline bool temp_autosave_settings;
 inline bool cb_provider_lmsensors;
 inline bool cb_provider_udisks2  ;
 inline bool cb_provider_hddtemp  ;
-inline bool cb_provier_arasmart  ;
+inline bool cb_provider_atasmart  ;
 inline bool cb_provider_gtop     ;
 inline bool cb_provider_amd      ;
 inline bool cb_provider_nvidia   ;

@@ -6,6 +6,7 @@
 
 
 inline pconfig liveSettings;
+inline pconfig initialSettings;
 
 static pconfig defaultSettings =
 {

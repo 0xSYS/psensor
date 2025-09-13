@@ -3,12 +3,15 @@
 #include <mutex>
 #include <unistd.h>
 
+#include <SDL3/SDL.h>
+
 
 
 #include <imgui/imgui.h>
 
 
 #include "sensor_list.hpp"
+#include "settings_utils.hpp"
 
 extern "C"
 {
@@ -40,13 +43,27 @@ ImVec4 ImVec4_RGBtoFloat(ImVec4 c)
 
 void create_sensor_list()
 {
-    lmsensor_psensor_list_append(&sensors, 600);
-    hddtemp_psensor_list_append(&sensors, 600);
-    atasmart_psensor_list_append(&sensors, 600);
-    nvidia_psensor_list_append(&sensors, 600);
-    amd_psensor_list_append(&sensors, 600);
-    gtop2_psensor_list_append(&sensors, 600);
-    udisks2_psensor_list_append(&sensors, 600);
+    if(initialSettings.provider_lmsensors)
+        lmsensor_psensor_list_append(&sensors, 600);
+    
+    if(initialSettings.provider_hddtemp)
+        hddtemp_psensor_list_append(&sensors, 600);
+    
+    if(initialSettings.provider_atasmart)
+        atasmart_psensor_list_append(&sensors, 600);
+    
+    if(initialSettings.provider_nvidia)
+        nvidia_psensor_list_append(&sensors, 600);
+    
+    if(initialSettings.provider_amd)
+        amd_psensor_list_append(&sensors, 600);
+    
+    if(initialSettings.provider_gtop)
+        gtop2_psensor_list_append(&sensors, 600);
+    
+    if(initialSettings.provider_udisks2)
+        udisks2_psensor_list_append(&sensors, 600);
+    
     sensor_list_created = true;
     log_info("Sensor list created");
 }
@@ -63,15 +80,34 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
     
     while(1)
     {
-        lmsensor_psensor_list_update(sensors);
-        nvidia_psensor_list_update(sensors);
-        amd_psensor_list_update(sensors);
-        udisks2_psensor_list_update(sensors);
-        gtop2_psensor_list_update(sensors);
-        atasmart_psensor_list_update(sensors);
-        hddtemp_psensor_list_update(sensors);
+        if(initialSettings.provider_lmsensors)
+            lmsensor_psensor_list_update(sensors);
+        
+        if(initialSettings.provider_nvidia)
+            nvidia_psensor_list_update(sensors);
+        
+        if(initialSettings.provider_amd)
+            amd_psensor_list_update(sensors);
+        
+        if(initialSettings.provider_udisks2)
+            udisks2_psensor_list_update(sensors);
+        
+        if(initialSettings.provider_gtop)
+            gtop2_psensor_list_update(sensors);
+        
+        if(initialSettings.provider_atasmart)
+            atasmart_psensor_list_update(sensors);
+        
+        if(initialSettings.provider_hddtemp)
+            hddtemp_psensor_list_update(sensors);
 
         std::vector<ui_sensor> temp_list;
+        if(sensors == nullptr)
+        {
+            log_error("No sensor list available. Check psensor providers");
+            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "No sensor list available.\nCheck psensor providers", NULL);
+            exit(1);
+        }
         for(int i = 0; sensors[i] != nullptr; i++)
         {
             temp_s = sensors[i];

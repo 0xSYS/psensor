@@ -22,6 +22,7 @@
 #define _(str) gettext(str)
 
 #include <string.h>
+#include <log_c/log.h>
 
 #include <glibtop/cpu.h>
 #include <glibtop/mem.h>
@@ -123,6 +124,12 @@ void gtop2_psensor_list_update(struct psensor **sensors)
 {
 	struct psensor *s;
 
+	if(sensors == NULL)
+	{
+	    log_error("Failed to update sensor list for gtop provider");
+	    return;
+	}
+	
 	while(*sensors)
 	{
 		s = *sensors;
