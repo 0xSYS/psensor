@@ -76,13 +76,13 @@ then build:
         - ❌ automatic speed control
         - ✔️ speed test
         - ⚠️ Kernel module management
+        - 🔽 OEM Compatibility
+            - ❌ Dell
+            - ❌ Lenovo Thinkpad
     - ❌ IPMI Support
     - ❌ Individual Core Usage
     - ❌ Cache Usage
     - ❌ Sensor recording
-        - Writing modes
-            - ❌ Buffered
-            - ❌ Instant append
         - Formats
             - ❌ JSON
             - ❌ CSV
@@ -98,9 +98,10 @@ then build:
         - ✔️ User controlled fan speeds
         - ✔️ Fan speed history
     - 🔽 Sensor plots
-        - ⚠️ Custom time span
-        - ⚠️ Custom time interval
+        - ✔️ Custom plot history
+        - ✔️ Custom time interval
         - ✔️ Sensor list
+        - ✔️ Sensor list refresh
         - ❌ Sensor record viewer
     - ❌ Individual sensor preferences
     - ❌ Custom toast message boxes

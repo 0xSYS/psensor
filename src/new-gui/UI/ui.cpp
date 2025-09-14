@@ -273,6 +273,24 @@ void RenderSensorSettings()
     ImGui::End();
 }
 
+void AddQuestionMarkTooltip(std::string tooltip_text)
+{
+    int text_id = 0;
+    ImGui::PushID(text_id++);
+    ImGui::TextDisabled("(?)");
+    ImGui::PopID();
+    
+    ImGui::PushID(text_id++);
+    if(ImGui::BeginItemTooltip())
+    {
+        ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+        ImGui::Text("%s", tooltip_text.c_str());
+        ImGui::PopTextWrapPos();
+        ImGui::EndTooltip();
+    }
+    ImGui::PopID();
+}
+
 void RenderPreferences()
 {
     std::ostringstream save_settings_btn_text;
@@ -320,20 +338,14 @@ void RenderPreferences()
                 ImGui::EndCombo();
             }
             ImGui::SameLine();
-            ImGui::TextDisabled("(?)");
-            if(ImGui::BeginItemTooltip())
-            {
-                ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-                ImGui::Text("Set a graphics platform\nAutomatic - tries the available graphics platforms and choses the one that works");
-                ImGui::Text("GUI Rendering can be slow when using the software renderer which can be applied if the rest of the graphics platforms are not available");
-                ImGui::PopTextWrapPos();
-                ImGui::EndTooltip();
-            }
+            AddQuestionMarkTooltip("Set a graphics platform\nAutomatic - tries the available graphics platforms and choses the one that works\nGUI Rendering can be slow when using the software renderer which can be applied if the rest of the graphics platforms are not available");
             if(ImGui::Checkbox("* Save UI layouts", &save_ui_layouts))
             {
                 liveSettings.save_ui_layout = save_ui_layouts;
                 SaveSettings();
             }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Allow imgui to save UI layouts to ini file");
             
             if(ImGui::Checkbox("Autosave settings", &autosave_settings)) // When disabled it already prevents this setting from saving to json file :madman:
             {
@@ -341,11 +353,17 @@ void RenderPreferences()
                 SaveSettings();
             }
             
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Automatically save the settings on click events");
+            
             if(ImGui::Checkbox("Allow Screen Saving", &cb_allow_screen_saver))
             {
                 liveSettings.allow_screen_saver = cb_allow_screen_saver;
                 SaveSettings();
             }
+            
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Allows the screen to turn off when idle");
             
             ImGui::EndTabItem();
         }
@@ -361,42 +379,57 @@ void RenderPreferences()
                 liveSettings.provider_lmsensors = cb_provider_lmsensors;
                 SaveSettings();
             }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Provides temperature and fan speed information");
             
             if(ImGui::Checkbox("udisks2", &cb_provider_udisks2))
             {
                 liveSettings.provider_udisks2 = cb_provider_udisks2;
                 SaveSettings();
             }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Provides disk information");
             
             if(ImGui::Checkbox("hddtemp", &cb_provider_hddtemp))
             {
                 liveSettings.provider_hddtemp = cb_provider_hddtemp;
                 SaveSettings();
             }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Provides disk / SSD temperature");
             
             if(ImGui::Checkbox("atasmart", &cb_provider_atasmart))
             {
                 liveSettings.provider_atasmart = cb_provider_atasmart;
                 SaveSettings();
             }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Provides S.M.A.R.T. details for storage devices");
             
             if(ImGui::Checkbox("gtop", &cb_provider_gtop))
             {
                 liveSettings.provider_gtop = cb_provider_gtop;
                 SaveSettings();
             }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Provides system information resources (CPU usage, Memory etc)");
             
             if(ImGui::Checkbox("amd", &cb_provider_amd))
             {
                 liveSettings.provider_amd = cb_provider_amd;
                 SaveSettings();
             }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Provides AMD GPU information (GPU usage)");
             
             if(ImGui::Checkbox("nvidia", &cb_provider_nvidia))
             {
                 liveSettings.provider_nvidia = cb_provider_nvidia;
                 SaveSettings();
             }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Provides NVIDIA GPU information");
+            
             ImGui::BeginDisabled();
             ImGui::Checkbox("# IPMI", &cb_provider_ipmi);
             ImGui::EndDisabled();
@@ -410,6 +443,9 @@ void RenderPreferences()
                 liveSettings.use_celsius_temp_unit = cb_use_celsiustemp;
                 SaveSettings();
             }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("When disabled the temperature unit is transformed to Fahrenheit");
+            
             ImGui::EndTabItem();
         }
         if(ImGui::BeginTabItem("Plot settings"))
@@ -424,14 +460,23 @@ void RenderPreferences()
             {
                 liveSettings.scroll_buffer_size = sl_plot_buf_size;
             }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Set how many plot points to keep in memory");
+            
             if(ImGui::SliderFloat("Plot History", &sl_plot_buf_history, 10.0f, 60.0f))
             {
                 liveSettings.scroll_buffer_history = sl_plot_buf_history;
             }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Set how much plot history to view");
+            
             if(ImGui::SliderInt("Update Interval", &sl_update_interval, 500, 5000))
             {
                 liveSettings.update_interval = sl_update_interval;
             }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Set the time interval for updating sensor list / plots");
+            
             ImGui::EndTabItem();
         }
         if(ImGui::BeginTabItem("Fan Controller"))
@@ -441,12 +486,17 @@ void RenderPreferences()
                 liveSettings.skip_module_loading = cb_skip_mod_load;
                 SaveSettings();
             }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Kernel module loading is generally required in order to detect fans in sysfs\nKeep it enabled if no fans could be detected");
             
             if(ImGui::Checkbox("# Emergency Cooling", &cb_emergency_cooling))
             {
                 liveSettings.emergency_cooling = cb_emergency_cooling;
                 SaveSettings();
             }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Enable the builtin emergency cooling.\nIt works by monitoring CPU and GPU temperatures and sets high PWM values to prevent overheating");
+            
             ImGui::EndTabItem();
         }
         ImGui::EndTabBar();
@@ -546,7 +596,7 @@ void RenderSensorPlot()
     for(int i = 0; i < sensor_count; i++)
     {
         auto& s = sensor[i];
-        sensor_plots[i].AddPoint(t, s.current_value * 0.005f);
+        sensor_plots[i].AddPoint(t, s.current_value * 0.180f);
     }
     
     ImGui::Begin("##Sensor_Plot", NULL); // ImGuiWindowFlags_NoCollapse

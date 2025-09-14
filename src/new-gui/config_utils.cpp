@@ -133,7 +133,7 @@ void writeConfig(const pconfig config)
             {
                 { "scrollBuffer",        config.scroll_buffer_size    },
                 { "scrollBufferHistory", config.scroll_buffer_history },
-                { "updateInterval",      config.update_interval       }
+                { "updateInterval",      config.update_interval       },
             }
         },
         {
@@ -156,9 +156,10 @@ void writeConfig(const pconfig config)
 void printConfig(const pconfig config)
 {
     std::cout << "settings from struct:\n";
-    std::cout << "[INT]  - window_w:          -> " << config.window_w << "\n";
-    std::cout << "[INT]  - window_h:          -> " << config.window_h << "\n";
-    std::cout << "[BOOL] - autosave_settings: -> " << config.autosave_settings << "\n";
+    std::cout << "[INT]  - window_w:           -> " << config.window_w << "\n";
+    std::cout << "[INT]  - window_h:           -> " << config.window_h << "\n";
+    std::cout << "[BOOL] - autosave_settings:  -> " << config.autosave_settings << "\n";
+    std::cout << "[BOOL] - allow_screen_saver: -> " << config.allow_screen_saver << "\n";
     std::cout << "--------------------------------------------\n";
     std::cout << "[STRING] - graphics_platform: "    << config.graphics_platform << "\n";
     std::cout << "--------------------------------------------\n";
