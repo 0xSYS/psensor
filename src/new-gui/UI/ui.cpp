@@ -23,6 +23,7 @@ extern "C"
 #include "sensor_list.hpp"
 
 #include "../utils.hpp"
+#include "../ui_entry.hpp"
 
 
 
@@ -47,6 +48,60 @@ inline std::vector<bool> pwm_set_exe;
 
 
 // MARK: Internal funcs
+
+void RefreshSensorList()
+{
+    // Stop the sensor updater loop
+    keep_sensor_update.store(false);
+
+    // Wait till the sensor updater finishes
+    if(sensor_update_thr.joinable())
+    {
+        sensor_update_thr.join();
+    }
+
+    // Free psensor list
+    {
+        std::lock_guard<std::mutex> lock_sensors(sensors_mutex);
+        if(sensors)
+        {
+            psensor_list_free(sensors);
+            sensors = nullptr;
+            sensor_count = 0;
+        }
+    }
+
+    // Clear plots and previous sensor data
+    {
+        std::lock_guard<std::mutex> lock_list(sensor_list_mutex);
+        for(auto &p : sensor_plots)
+        {
+            p.Erase();
+        }
+        sensor_plots.clear();
+        sensor.clear();
+    }
+
+    // Resync atomic bools
+    sensor_list_lmsensors = liveSettings.provider_lmsensors;
+    sensor_list_atasmart  = liveSettings.provider_atasmart;
+    sensor_list_udisks2   = liveSettings.provider_udisks2;
+    sensor_list_gtop      = liveSettings.provider_gtop;
+    sensor_list_amd       = liveSettings.provider_amd;
+    sensor_list_nvidia    = liveSettings.provider_nvidia;
+    sensor_list_hddtemp   = liveSettings.provider_hddtemp;
+    sensor_list_up_interv = liveSettings.update_interval;
+
+    // Create the new sensor list (which can differ depending on the enabled providers)
+    {
+        std::lock_guard<std::mutex> lock_sensors(sensors_mutex);
+        create_sensor_list();
+    }
+    
+    // Start the sensor updater thread
+    keep_sensor_update.store(true);
+    sensor_update_thr = std::thread(update_sensor_list, std::ref(sensor));
+}
 
 void EnableFanPwmOnce()
 {
@@ -227,7 +282,7 @@ void RenderPreferences()
     else
         save_settings_btn_text << "Save Settings";
     
-    ImGui::SetNextWindowSizeConstraints(ImVec2(705, 505), ImVec2(FLT_MAX, FLT_MAX));
+    ImGui::SetNextWindowSizeConstraints(ImVec2(705, 513), ImVec2(FLT_MAX, FLT_MAX));
     ImGui::Begin("Preferences", &preferences);
     
     ImGui::Text("Settings marked with * apply after restarting the application");
@@ -286,11 +341,21 @@ void RenderPreferences()
                 SaveSettings();
             }
             
+            if(ImGui::Checkbox("Allow Screen Saving", &cb_allow_screen_saver))
+            {
+                liveSettings.allow_screen_saver = cb_allow_screen_saver;
+                SaveSettings();
+            }
+            
             ImGui::EndTabItem();
         }
         if(ImGui::BeginTabItem("Providers"))
         {
-            ImGui::Text("All providers apply after restart");
+            if(ImGui::Button("Refresh Sensor List"))
+            {
+                RefreshSensorList();
+            }
+            
             if(ImGui::Checkbox("lm_sensors", &cb_provider_lmsensors))
             {
                 liveSettings.provider_lmsensors = cb_provider_lmsensors;
@@ -335,6 +400,7 @@ void RenderPreferences()
             ImGui::BeginDisabled();
             ImGui::Checkbox("# IPMI", &cb_provider_ipmi);
             ImGui::EndDisabled();
+            
             ImGui::EndTabItem();
         }
         if(ImGui::BeginTabItem("Sensor List"))
@@ -348,20 +414,23 @@ void RenderPreferences()
         }
         if(ImGui::BeginTabItem("Plot settings"))
         {
-            if(ImGui::SliderInt("# Plot Buffer Size", &sl_plot_buf_size, 1000, 50000))
+            ImGui::PushID("##Refresh Sensor List");
+            if(ImGui::Button("Refresh Sensor List"))
+            {
+                RefreshSensorList();
+            }
+            ImGui::PopID();
+            if(ImGui::SliderInt("* Plot Buffer Size", &sl_plot_buf_size, 1000, 50000))
             {
                 liveSettings.scroll_buffer_size = sl_plot_buf_size;
-                log_info("Temp...");
             }
-            if(ImGui::SliderFloat("# Plot History", &sl_plot_buf_history, 10.0f, 60.0f))
+            if(ImGui::SliderFloat("Plot History", &sl_plot_buf_history, 10.0f, 60.0f))
             {
                 liveSettings.scroll_buffer_history = sl_plot_buf_history;
-                log_info("Temp...");
             }
-            if(ImGui::SliderInt("# Update Interval", &sl_update_interval, 500, 5000))
+            if(ImGui::SliderInt("Update Interval", &sl_update_interval, 500, 5000))
             {
                 liveSettings.update_interval = sl_update_interval;
-                log_info("up interv...");
             }
             ImGui::EndTabItem();
         }
@@ -482,21 +551,10 @@ void RenderSensorPlot()
     
     ImGui::Begin("##Sensor_Plot", NULL); // ImGuiWindowFlags_NoCollapse
     
-    // Just some testing
-    /*
-    if(ImGui::Button("Clear plots"))
-    {
-        for(int i = 0; i < sensor_count; i++)
-        {
-            sensor_plots[i].Erase();
-        }
-    }
-    */
-    
     if(ImPlot::BeginPlot("##Scrolling", ImVec2(-1,-1), ImPlotFlags_NoLegend))
     {
         ImPlot::SetupAxes("Time", "Values", flags, flags);
-        ImPlot::SetupAxisLimits(ImAxis_X1,t - 30.0f, t, ImGuiCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_X1,t - sl_plot_buf_history, t, ImGuiCond_Always);
         ImPlot::SetupAxisLimits(ImAxis_Y1,0,10);
         for(int i = 0; i < sensor_count; i++)
         {
@@ -520,9 +578,9 @@ void RenderUI()
     {
         if(ImGui::BeginMenu("Psensor"))
         {
-            if(ImGui::MenuItem("Preferences"))
+            if(ImGui::MenuItem("Refresh Sensor List"))
             {
-                preferences = true;
+                RefreshSensorList();
             }
             
             if(ImGui::MenuItem("Fan Controller"))
@@ -545,14 +603,23 @@ void RenderUI()
                     no_root_open = true;
                 }
             }
-            if(ImGui::MenuItem("Sensor Settings"))
-            {
-                sensor_settings = true;
-            }
             ImGui::Separator();
             if(ImGui::MenuItem("Exit"))
             {
                 loop_exit = true;
+            }
+            ImGui::EndMenu();
+        }
+        if(ImGui::BeginMenu("Edit"))
+        {
+            if(ImGui::MenuItem("Preferences"))
+            {
+                preferences = true;
+            }
+            
+            if(ImGui::MenuItem("Sensor Settings"))
+            {
+                sensor_settings = true;
             }
             ImGui::EndMenu();
         }

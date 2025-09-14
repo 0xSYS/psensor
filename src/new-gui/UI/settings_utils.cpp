@@ -33,6 +33,7 @@ void SyncSettings()
 
     cb_use_celsiustemp         = liveSettings.use_celsius_temp_unit ;
     autosave_settings          = liveSettings.autosave_settings     ;
+    cb_allow_screen_saver      = liveSettings.allow_screen_saver    ;
     temp_autosave_settings     = liveSettings.autosave_settings     ;
     save_ui_layouts            = liveSettings.save_ui_layout        ;
     cb_provider_lmsensors      = liveSettings.provider_lmsensors    ;
@@ -48,6 +49,17 @@ void SyncSettings()
     sl_update_interval         = liveSettings.update_interval       ;
     cb_skip_mod_load           = liveSettings.skip_module_loading   ;
     cb_emergency_cooling       = liveSettings.emergency_cooling     ;
+    
+    // Update atomic bool for sensor list
+    sensor_list_lmsensors = liveSettings.provider_lmsensors;
+    sensor_list_atasmart  = liveSettings.provider_atasmart;
+    sensor_list_udisks2   = liveSettings.provider_udisks2;
+    sensor_list_gtop      = liveSettings.provider_gtop;
+    sensor_list_amd       = liveSettings.provider_amd;
+    sensor_list_nvidia    = liveSettings.provider_nvidia;
+    sensor_list_hddtemp   = liveSettings.provider_hddtemp;
+    sensor_list_up_interv = liveSettings.update_interval;
+    
     if(liveSettings.graphics_platform > 3)
     {
         log_error("Invalid graphics platform index !!! Falling back to auto");

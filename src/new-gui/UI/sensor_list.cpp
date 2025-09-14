@@ -43,25 +43,25 @@ ImVec4 ImVec4_RGBtoFloat(ImVec4 c)
 
 void create_sensor_list()
 {
-    if(initialSettings.provider_lmsensors)
+    if(sensor_list_lmsensors)
         lmsensor_psensor_list_append(&sensors, 600);
     
-    if(initialSettings.provider_hddtemp)
+    if(sensor_list_hddtemp)
         hddtemp_psensor_list_append(&sensors, 600);
     
-    if(initialSettings.provider_atasmart)
+    if(sensor_list_atasmart)
         atasmart_psensor_list_append(&sensors, 600);
     
-    if(initialSettings.provider_nvidia)
+    if(sensor_list_nvidia)
         nvidia_psensor_list_append(&sensors, 600);
     
-    if(initialSettings.provider_amd)
+    if(sensor_list_amd)
         amd_psensor_list_append(&sensors, 600);
     
-    if(initialSettings.provider_gtop)
+    if(sensor_list_gtop)
         gtop2_psensor_list_append(&sensors, 600);
     
-    if(initialSettings.provider_udisks2)
+    if(sensor_list_udisks2)
         udisks2_psensor_list_append(&sensors, 600);
     
     sensor_list_created = true;
@@ -78,30 +78,31 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
 
     log_info("Sensor update started");
     
-    while(1)
+    while(keep_sensor_update)
     {
-        if(initialSettings.provider_lmsensors)
+        if(sensor_list_lmsensors)
             lmsensor_psensor_list_update(sensors);
         
-        if(initialSettings.provider_nvidia)
+        if(sensor_list_nvidia)
             nvidia_psensor_list_update(sensors);
         
-        if(initialSettings.provider_amd)
+        if(sensor_list_amd)
             amd_psensor_list_update(sensors);
         
-        if(initialSettings.provider_udisks2)
+        if(sensor_list_udisks2)
             udisks2_psensor_list_update(sensors);
         
-        if(initialSettings.provider_gtop)
+        if(sensor_list_gtop)
             gtop2_psensor_list_update(sensors);
         
-        if(initialSettings.provider_atasmart)
+        if(sensor_list_atasmart)
             atasmart_psensor_list_update(sensors);
         
-        if(initialSettings.provider_hddtemp)
+        if(sensor_list_hddtemp)
             hddtemp_psensor_list_update(sensors);
 
         std::vector<ui_sensor> temp_list;
+        std::lock_guard<std::mutex> lock(sensors_mutex);
         if(sensors == nullptr)
         {
             log_error("No sensor list available. Check psensor providers");
@@ -129,6 +130,6 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
             plot_update_interval += 0.1f;
         }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(sensor_list_up_interv));
     }
 }

@@ -2,6 +2,13 @@
 #define UI_ENTRY_HPP
 
 
+#include <thread>
+
+
+#include "UI/sensor_list.hpp"
+#include "UI/ui.hpp"
+
+
 
 static const char * sdl_graphics_platforms[] =
 {
@@ -11,6 +18,9 @@ static const char * sdl_graphics_platforms[] =
     "software",
     nullptr
 };
+
+
+inline std::thread sensor_update_thr;
 
 
 void ui_main();

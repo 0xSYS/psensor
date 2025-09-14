@@ -171,6 +171,9 @@ void ui_main()
         exit(1);
     }
     
+    if(liveSettings.allow_screen_saver)
+        SDL_EnableScreenSaver();
+    
     float main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
     SDL_WindowFlags window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
     SDL_Window* window = SDL_CreateWindow("Psensor", (int)(liveSettings.window_w * main_scale), (int)(liveSettings.window_h * main_scale), window_flags);
@@ -248,7 +251,8 @@ void ui_main()
     
     create_sensor_list();
     
-    std::thread sensor_update_thr(update_sensor_list, ref(sensor));
+    //std::thread sensor_update_thr(update_sensor_list, ref(sensor));
+    sensor_update_thr = std::thread(update_sensor_list, std::ref(sensor));
     sensor_update_thr.detach();
     
     // Wait until the sensor count gets an actual value
@@ -331,11 +335,18 @@ void ui_main()
             break;
     }
     
-    writeConfig(liveSettings);
+    if(liveSettings.autosave_settings)
+        writeConfig(liveSettings);
     
     ImGui_ImplSDLRenderer3_Shutdown();
     ImGui_ImplSDL3_Shutdown();
     ImGui::DestroyContext();
+    
+    keep_sensor_update.store(false);
+    if(sensor_update_thr.joinable())
+    {
+        sensor_update_thr.join();
+    }
     
     psensor_list_free(sensors);
     

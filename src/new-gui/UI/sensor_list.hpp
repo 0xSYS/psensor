@@ -5,11 +5,22 @@
 #include <iostream>
 #include <vector>
 #include <mutex>
+#include <atomic>
 
 
 
 inline std::mutex sensor_list_mutex;
+inline std::mutex sensors_mutex;
 inline bool sensor_list_created = false;
+inline std::atomic<bool> keep_sensor_update{true};
+inline std::atomic<bool> sensor_list_lmsensors;
+inline std::atomic<bool> sensor_list_atasmart;
+inline std::atomic<bool> sensor_list_udisks2;
+inline std::atomic<bool> sensor_list_gtop;
+inline std::atomic<bool> sensor_list_nvidia;
+inline std::atomic<bool> sensor_list_amd;
+inline std::atomic<bool> sensor_list_hddtemp;
+inline std::atomic<int> sensor_list_up_interv;
 inline int sensor_count = -1;
 inline struct psensor **sensors = nullptr;
 inline struct psensor* temp_s;

@@ -4,6 +4,8 @@
 #include <imgui/imgui.h>
 #include <implot/implot.h>
 
+#include "settings_utils.hpp"
+
 
 
 struct ScrollingBuffer
@@ -11,7 +13,7 @@ struct ScrollingBuffer
     int MaxSize;
     int Offset;
     ImVector<ImVec2> Data;
-    ScrollingBuffer(int max_size = 12000)
+    ScrollingBuffer(int max_size = liveSettings.scroll_buffer_size)
     {
         MaxSize = max_size;
         Offset  = 0;

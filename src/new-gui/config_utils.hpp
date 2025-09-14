@@ -15,6 +15,7 @@ typedef struct
     int window_h;
     int graphics_platform;
     bool autosave_settings;
+    bool allow_screen_saver;
     
     /* - - - - Psensor Providers - - - - */
     bool provider_gtop;

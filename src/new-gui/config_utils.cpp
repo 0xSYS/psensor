@@ -29,8 +29,9 @@ pconfig readConfig()
     
     nlohmann::json general_obj = json_in["general"];
     
-    out_conf.graphics_platform = general_obj["graphicsPlatform"].get<int>();
-    out_conf.autosave_settings = general_obj["autosaveSettings"].get<bool>();
+    out_conf.graphics_platform  = general_obj["graphicsPlatform"].get<int>();
+    out_conf.autosave_settings  = general_obj["autosaveSettings"].get<bool>();
+    out_conf.allow_screen_saver = general_obj["allowScreenSaver"].get<bool>();
     
     
     nlohmann::json sensor_list_obj = json_in["sensorList"];
@@ -90,7 +91,8 @@ void writeConfig(const pconfig config)
             "general",
             {
                 { "graphicsPlatform", config.graphics_platform },
-                { "autosaveSettings", config.autosave_settings }
+                { "autosaveSettings", config.autosave_settings },
+                { "allowScreenSaver", config.allow_screen_saver }
             }
         },
         {

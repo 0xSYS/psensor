@@ -14,6 +14,7 @@ static pconfig defaultSettings =
     .window_h = 820,
     .graphics_platform     = 0, /* Auto */
     .autosave_settings     = true,
+    .allow_screen_saver    = true,
     .provider_gtop         = true,
     .provider_lmsensors    = true,
     .provider_udisks2      = true,
