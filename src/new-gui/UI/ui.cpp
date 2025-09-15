@@ -81,6 +81,9 @@ void RefreshSensorList()
         sensor_plots.clear();
         sensor.clear();
     }
+    
+    // Reset plot update interval to 0
+    plot_update_interval = 0.0f;
 
     // Resync atomic bools
     sensor_list_lmsensors = liveSettings.provider_lmsensors;

@@ -227,7 +227,7 @@ void ui_main()
 
     
     
-    ImGui::CreateContext();
+    //ImGui::CreateContext();
     ImPlot::CreateContext();
     
     ImFontConfig config;

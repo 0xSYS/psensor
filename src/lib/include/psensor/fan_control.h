@@ -28,16 +28,19 @@
  
  
 #include <stdint.h>
+
+#include "psensor.h"
  
  
  
  
- typedef struct
- {
-   char **pwmFiles;
-   char **pwmEnableFiles;
-   int fanInputCount;  // Number of fanX_input files
- }psensor_fan;
+typedef struct
+{
+    // Kind of poorly designed (A re-write will be made sometime...)
+    char **pwmFiles;
+    char **pwmEnableFiles;
+    int fanInputCount;  // Number of fanX_input files
+}psensor_fan;
  
  
  
@@ -89,6 +92,12 @@ Returns 0 if the function is executed successfully if not it returns 1
 Example: int fn_stat = psensor_test_fan("/sys/class/hwmon/hwmon3/pwm1");
 */
 int psensor_test_fan(psensor_fan *f, int index);
+
+
+/*
+Associate each fan with a thermal sensor
+*/
+int psensor_associate_fan(psensor_fan *f, struct psensor *s);
  
  
 /*

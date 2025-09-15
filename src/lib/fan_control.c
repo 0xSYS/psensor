@@ -20,8 +20,9 @@
  
  
 /*
-Todo: More accurate fan detection based on small and fast speed tests
-This should only detect the physical fans
+Todo:
+- More accurate fan detection based on small and fast speed tests (This should only detect the physical fans)
+- Functions for associating fans with thermal sensors / zones (Requires writing to file containing data serialized in messagepack)
 */
 
 
