@@ -433,6 +433,14 @@ void RenderPreferences()
             ImGui::SameLine();
             AddQuestionMarkTooltip("Provides NVIDIA GPU information");
             
+            if(ImGui::Checkbox("bcm2835", &cb_provider_bcm2835))
+            {
+                liveSettings.provider_bcm2835 = cb_provider_bcm2835;
+                SaveSettings();
+            }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Provides NVIDIA GPU information");
+            
             ImGui::BeginDisabled();
             ImGui::Checkbox("# IPMI", &cb_provider_ipmi);
             ImGui::EndDisabled();

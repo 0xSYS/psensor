@@ -48,6 +48,7 @@ pconfig readConfig()
     out_conf.provider_hddtemp   = providers_obj["hddtemp"].get<bool>();
     out_conf.provider_amd       = providers_obj["amd"].get<bool>();
     out_conf.provider_nvidia    = providers_obj["nvidia"].get<bool>();
+    out_conf.provider_bcm2835   = providers_obj["bcm2835"].get<bool>();
     out_conf.provider_ipmi      = providers_obj["ipmi"].get<bool>();
     
     
@@ -105,6 +106,7 @@ void writeConfig(const pconfig config)
                 { "hddtemp",   config.provider_hddtemp   },
                 { "amd",       config.provider_amd       },
                 { "nvidia",    config.provider_nvidia    },
+                { "bcm2835",   config.provider_bcm2835   },
                 { "ipmi",      config.provider_ipmi      }
             }
         },

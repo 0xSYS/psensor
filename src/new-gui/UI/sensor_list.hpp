@@ -18,6 +18,7 @@ inline std::atomic<bool> sensor_list_atasmart;
 inline std::atomic<bool> sensor_list_udisks2;
 inline std::atomic<bool> sensor_list_gtop;
 inline std::atomic<bool> sensor_list_nvidia;
+inline std::atomic<bool> sensor_list_bcm2835;
 inline std::atomic<bool> sensor_list_amd;
 inline std::atomic<bool> sensor_list_hddtemp;
 inline std::atomic<int> sensor_list_up_interv;

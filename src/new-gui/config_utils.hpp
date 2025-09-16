@@ -25,6 +25,7 @@ typedef struct
     bool provider_hddtemp;
     bool provider_amd;
     bool provider_nvidia;
+    bool provider_bcm2835;
     bool provider_ipmi;
     
     /* - - - - UI Settings - - - - */

@@ -38,11 +38,12 @@ inline bool cb_allow_screen_saver;
 inline bool cb_provider_lmsensors;
 inline bool cb_provider_udisks2  ;
 inline bool cb_provider_hddtemp  ;
-inline bool cb_provider_atasmart  ;
+inline bool cb_provider_atasmart ;
 inline bool cb_provider_gtop     ;
 inline bool cb_provider_amd      ;
 inline bool cb_provider_nvidia   ;
 inline bool cb_provider_ipmi     ;
+inline bool cb_provider_bcm2835  ;
 
 inline bool cb_use_celsiustemp;
 

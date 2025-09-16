@@ -43,6 +43,7 @@ void SyncSettings()
     cb_provider_gtop           = liveSettings.provider_gtop         ;
     cb_provider_amd            = liveSettings.provider_amd          ;
     cb_provider_nvidia         = liveSettings.provider_nvidia       ;
+    cb_provider_bcm2835        = liveSettings.provider_bcm2835      ;
     cb_provider_ipmi           = liveSettings.provider_ipmi         ;
     sl_plot_buf_size           = liveSettings.scroll_buffer_size    ;
     sl_plot_buf_history        = liveSettings.scroll_buffer_history ;

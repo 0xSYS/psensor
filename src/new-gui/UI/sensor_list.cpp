@@ -22,6 +22,7 @@ extern "C"
     #include <psensor/amd.h>
     #include <psensor/pgtop2.h>
     #include <psensor/pudisks2.h>
+    #include <psensor/bcm2835.h>
     #include <psensor/psensor_json.h>
     #include <log_c/log.h>
 }
@@ -55,6 +56,9 @@ void create_sensor_list()
     if(sensor_list_nvidia)
         nvidia_psensor_list_append(&sensors, 600);
     
+    if(sensor_list_bcm2835)
+        bcm2835_psensor_list_append(&sensors, 600);
+    
     if(sensor_list_amd)
         amd_psensor_list_append(&sensors, 600);
     
@@ -85,6 +89,9 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
         
         if(sensor_list_nvidia)
             nvidia_psensor_list_update(sensors);
+        
+        if(sensor_list_bcm2835)
+            bcm2835_psensor_list_update(sensors);
         
         if(sensor_list_amd)
             amd_psensor_list_update(sensors);
