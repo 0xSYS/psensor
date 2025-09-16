@@ -101,6 +101,12 @@ void getPwmF(psensor_fan *list, const char *directory, int fan_number)
 void psensor_fan_open(psensor_fan *f)
 {
     char content[10];
+    if(f == NULL)
+    {
+        log_error("Invalid fan control object");
+        return;
+    }
+    
     for(int i = 0; i < f->fanInputCount; i++)
     {
         PWM_Enable_FD[i] = fopen(f->pwmEnableFiles[i], "r+");
