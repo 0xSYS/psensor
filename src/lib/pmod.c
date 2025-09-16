@@ -20,7 +20,7 @@
  
 #include <libkmod.h>
 #include <stdlib.h>
-#include <sys/io.h>
+//#include <sys/io.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
