@@ -79,9 +79,24 @@ then build:
         - 🔽 OEM Compatibility
             - ❌ Dell
             - ❌ Lenovo Thinkpad
-    - ❌ IPMI Support
-    - ❌ Individual Core Usage
-    - ❌ Cache Usage
+    - 🔽 Hardware Providers
+        - lm-sensors
+        - ✔️ NVIDIA
+        - ✔️ Broadcom BCM2835
+        - ❌ Broadcom BCM2712
+        - ✔️ AMD
+        - 🔽 gtop2
+             - ✔️ CPU Usage
+             - ✔️ Free Memory
+             - ❌ Memory Usage
+             - ❌ Network Usage / traffic
+             - ❌ Individual Core Usage
+             - ❌ Cache Usage
+        - ✔️ udisks2
+        - ✔️ hddtemp
+        - ✔️ atasmart
+        - ❌ IPMI
+   
     - ❌ Sensor recording
         - Formats
             - ❌ JSON
