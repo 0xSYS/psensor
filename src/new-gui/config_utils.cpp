@@ -1,5 +1,8 @@
-#include <nlohmann/json.hpp>
 #include <iostream>
+
+
+
+#include <nlohmann/json.hpp>
 #include <fstream>
 
 #include <log_c/log.h>
@@ -8,6 +11,7 @@
 
 #include "config_utils.hpp"
 #include "utils.hpp"
+#include "UI/settings_utils.hpp"
 
 
 
@@ -27,53 +31,61 @@ pconfig readConfig()
     nlohmann::json json_in = nlohmann::json::parse(in_conf);
     
     
-    nlohmann::json general_obj = json_in["general"];
+    nlohmann::json general_obj = json_in.value("general", nlohmann::json::object());
     
-    out_conf.graphics_platform  = general_obj["graphicsPlatform"].get<int>();
-    out_conf.autosave_settings  = general_obj["autosaveSettings"].get<bool>();
-    out_conf.allow_screen_saver = general_obj["allowScreenSaver"].get<bool>();
+    out_conf.graphics_platform  = general_obj.value("graphicsPlatform", defaultSettings.graphics_platform);
+    out_conf.autosave_settings  = general_obj.value("autosaveSettings", defaultSettings.autosave_settings);
+    out_conf.allow_screen_saver = general_obj.value("allowScreenSaver", defaultSettings.allow_screen_saver);
     
-    
-    nlohmann::json sensor_list_obj = json_in["sensorList"];
+    nlohmann::json sensor_list_obj = json_in.value("sensorList", nlohmann::json::array());
     
     out_conf.use_celsius_temp_unit = sensor_list_obj["useCelsiusTempUnit"].get<bool>();
     
     
-    nlohmann::json providers_obj = json_in["providers"];
+    nlohmann::json providers_obj = json_in.value("providers", nlohmann::json::object());
     
-    out_conf.provider_gtop      = providers_obj["gtop"].get<bool>();
-    out_conf.provider_lmsensors = providers_obj["lmsensors"].get<bool>();
-    out_conf.provider_udisks2   = providers_obj["udisks2"].get<bool>();
-    out_conf.provider_atasmart  = providers_obj["atasmart"].get<bool>();
-    out_conf.provider_hddtemp   = providers_obj["hddtemp"].get<bool>();
-    out_conf.provider_amd       = providers_obj["amd"].get<bool>();
-    out_conf.provider_nvidia    = providers_obj["nvidia"].get<bool>();
-    out_conf.provider_bcm2835   = providers_obj["bcm2835"].get<bool>();
-    out_conf.provider_ipmi      = providers_obj["ipmi"].get<bool>();
-    
-    
-    nlohmann::json ui_settings_obj = json_in["uiSettings"];
-    
-    out_conf.save_ui_layout = ui_settings_obj["saveUIlayouts"].get<bool>();
-    out_conf.ui_font_size = ui_settings_obj["uiFontSize"].get<float>();
+    out_conf.provider_gtop      = providers_obj.value("gtop",      defaultSettings.provider_gtop     );
+    out_conf.provider_lmsensors = providers_obj.value("lmsensors", defaultSettings.provider_lmsensors);
+    out_conf.provider_udisks2   = providers_obj.value("udisks2",   defaultSettings.provider_udisks2  );
+    out_conf.provider_atasmart  = providers_obj.value("atasmart",  defaultSettings.provider_atasmart );
+    out_conf.provider_hddtemp   = providers_obj.value("hddtemp",   defaultSettings.provider_hddtemp  );
+    out_conf.provider_amd       = providers_obj.value("amd",       defaultSettings.provider_amd      );
+    out_conf.provider_nvidia    = providers_obj.value("nvidia",    defaultSettings.provider_nvidia   );
+    out_conf.provider_bcm2835   = providers_obj.value("bcm2835",   defaultSettings.provider_bcm2835  );
+    out_conf.provider_ipmi      = providers_obj.value("ipmi",      defaultSettings.provider_ipmi     );
     
     
-    nlohmann::json main_window_obj = ui_settings_obj["mainWindow"];
+    nlohmann::json ui_settings_obj = json_in.value("uiSettings", nlohmann::json::object());
     
-    out_conf.window_w = main_window_obj["width"].get<int>();
-    out_conf.window_h = main_window_obj["height"].get<int>();
-    
-    nlohmann::json plot_settings_obj = json_in["plotSettings"];
-    
-    out_conf.scroll_buffer_size    = plot_settings_obj["scrollBuffer"].get<int>();
-    out_conf.scroll_buffer_history = plot_settings_obj["scrollBufferHistory"].get<float>();
-    out_conf.update_interval       = plot_settings_obj["updateInterval"].get<float>();
+    out_conf.save_ui_layout = ui_settings_obj.value("saveUIlayouts", defaultSettings.save_ui_layout);
+    out_conf.ui_font_size   = ui_settings_obj.value("uiFontSize", defaultSettings.ui_font_size);
     
     
-    nlohmann::json fan_controller_obj = json_in["fanController"];
-    out_conf.skip_module_loading      = fan_controller_obj["skipModuleLoading"].get<bool>();
-    out_conf.emergency_cooling        = fan_controller_obj["emergencyCooling"].get<bool>();
-    out_conf.cooling_preset           = fan_controller_obj["coolingPreset"].get<std::string>();
+    nlohmann::json main_window_obj = ui_settings_obj.value("mainWindow", nlohmann::json::object());
+    
+    out_conf.window_w = main_window_obj.value("width", defaultSettings.window_w);
+    out_conf.window_h = main_window_obj.value("height", defaultSettings.window_h);
+    
+    nlohmann::json bg_color_obj = main_window_obj.value("backgroundColor", nlohmann::json::object());
+    
+    out_conf.bg_color.r = bg_color_obj.value("r", defaultSettings.bg_color.r);
+    out_conf.bg_color.g = bg_color_obj.value("g", defaultSettings.bg_color.g);
+    out_conf.bg_color.b = bg_color_obj.value("b", defaultSettings.bg_color.b);
+    out_conf.bg_color.a = bg_color_obj.value("a", defaultSettings.bg_color.a);
+    
+    
+    nlohmann::json plot_settings_obj = json_in.value("plotSettings", nlohmann::json::object());
+    
+    out_conf.scroll_buffer_size    = plot_settings_obj.value("scrollBuffer", defaultSettings.scroll_buffer_size);
+    out_conf.scroll_buffer_history = plot_settings_obj.value("scrollBufferHistory", defaultSettings.scroll_buffer_history);
+    out_conf.update_interval       = plot_settings_obj.value("updateInterval", defaultSettings.update_interval);
+    
+
+    nlohmann::json fan_controller_obj = json_in.value("fanController", nlohmann::json::object());
+    
+    out_conf.skip_module_loading      = fan_controller_obj.value("skipModuleLoading", defaultSettings.skip_module_loading);
+    out_conf.emergency_cooling        = fan_controller_obj.value("emergencyCooling", defaultSettings.emergency_cooling);
+    out_conf.cooling_preset           = fan_controller_obj.value("coolingPreset", defaultSettings.cooling_preset);
     
     in_conf.close();
     
@@ -121,11 +133,19 @@ void writeConfig(const pconfig config)
             {
                 { "saveUIlayouts", config.save_ui_layout },
                 { "uiFontSize",    config.ui_font_size },
-                {
-                    "mainWindow",
+                { "mainWindow",
                     {
-                        { "width",  config.window_w },
-                        { "height", config.window_h }
+                        { "width", config.window_w },
+                        { "height", config.window_h },
+                        {
+                            "backgroundColor",
+                            {
+                                { "r", config.bg_color.r },
+                                { "g", config.bg_color.g },
+                                { "b", config.bg_color.b },
+                                { "a", config.bg_color.a }
+                            }
+                        }
                     }
                 }
             }

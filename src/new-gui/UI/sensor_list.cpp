@@ -31,16 +31,6 @@ extern "C"
 
 
 
-ImVec4 ImVec4_RGBtoFloat(ImVec4 c)
-{
-    return ImVec4(
-        c.x / 255.0f,
-        c.y / 255.0f,
-        c.z / 255.0f,
-        c.w / 255.0f 
-    );
-}
-
 
 void create_sensor_list()
 {

@@ -67,7 +67,7 @@ struct ui_sensor
         : name(n), current_value(cv), min(mn), max(mx), sensor_type(st), graph_color(gc), graph_visible(gv) {}
 };
 
-ImVec4 ImVec4_RGBtoFloat(ImVec4 c);
+
 
 void create_sensor_list();
 void update_sensor_list(std::vector<ui_sensor>& sl);

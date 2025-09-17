@@ -54,6 +54,11 @@ inline int sl_update_interval;
 inline bool cb_skip_mod_load;
 inline bool cb_emergency_cooling;
 
+inline ImVec4 clear_color = ImVec4(0.34f, 0.34f, 0.34f, 1.00f);
+
+ImVec4 ImVec4_RGBtoFloat(ImVec4 c);
+RGBA_int FloatRGB2Int(ImVec4 c);
+
 
 
 

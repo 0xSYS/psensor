@@ -3,6 +3,8 @@
 #include <sstream>
 #include <filesystem>
 
+#include <imgui/imgui.h>
+
 #include <log_c/log.h>
 
 
@@ -60,6 +62,14 @@ void SyncSettings()
     sensor_list_nvidia    = liveSettings.provider_nvidia;
     sensor_list_hddtemp   = liveSettings.provider_hddtemp;
     sensor_list_up_interv = liveSettings.update_interval;
+    
+    ImVec4 temp_color;
+    temp_color.x = liveSettings.bg_color.r;
+    temp_color.y = liveSettings.bg_color.g;
+    temp_color.z = liveSettings.bg_color.b;
+    temp_color.w = liveSettings.bg_color.a;
+    
+    clear_color = ImVec4_RGBtoFloat(temp_color);
     
     if(liveSettings.graphics_platform > 3)
     {

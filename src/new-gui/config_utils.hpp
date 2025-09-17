@@ -9,10 +9,20 @@
 #define PSENSOR_SETTINGS_PATH "/.config/psensor/settings.json"
 
 
+
+typedef struct
+{
+    int r;
+    int g;
+    int b;
+    int a;
+}RGBA_int;
+
 typedef struct
 {
     int window_w;
     int window_h;
+    RGBA_int bg_color;
     int graphics_platform;
     bool autosave_settings;
     bool allow_screen_saver;

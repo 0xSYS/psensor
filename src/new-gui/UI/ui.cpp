@@ -49,6 +49,29 @@ inline std::vector<bool> pwm_set_exe;
 
 // MARK: Internal funcs
 
+ImVec4 ImVec4_RGBtoFloat(ImVec4 c)
+{
+    return ImVec4(
+        c.x / 255.0f,
+        c.y / 255.0f,
+        c.z / 255.0f,
+        c.w / 255.0f 
+    );
+}
+
+RGBA_int FloatRGB2Int(ImVec4 c)
+{
+    return
+    {
+        (int)(c.x * 255.0f + 0.5f),
+        (int)(c.y * 255.0f + 0.5f),
+        (int)(c.z * 255.0f + 0.5f),
+        (int)(c.w * 255.0f + 0.5f)
+    };
+}
+
+
+
 void RefreshSensorList()
 {
     // Stop the sensor updater loop
@@ -367,6 +390,12 @@ void RenderPreferences()
             
             ImGui::SameLine();
             AddQuestionMarkTooltip("Allows the screen to turn off when idle");
+            
+            //RGBA_int temp = clear_color;
+            ImGui::ColorEdit3("Background Color", (float*)&clear_color);
+            liveSettings.bg_color = FloatRGB2Int(clear_color);
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Changes the background color of the main window");
             
             ImGui::EndTabItem();
         }

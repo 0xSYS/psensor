@@ -12,6 +12,7 @@ static pconfig defaultSettings =
 {
     .window_w = 1020,
     .window_h = 820,
+    .bg_color = { .r = 87,  .g = 87, .b = 87, .a = 255},
     .graphics_platform     = 0, /* Auto */
     .autosave_settings     = true,
     .allow_screen_saver    = true,
@@ -22,6 +23,7 @@ static pconfig defaultSettings =
     .provider_hddtemp      = true,
     .provider_amd          = true,
     .provider_nvidia       = true,
+    .provider_bcm2835      = true,
     .provider_ipmi         = false,
     .save_ui_layout        = true,
     .ui_font_size          = 25.0f,
