@@ -468,7 +468,7 @@ void RenderPreferences()
                 SaveSettings();
             }
             ImGui::SameLine();
-            AddQuestionMarkTooltip("Provides NVIDIA GPU information");
+            AddQuestionMarkTooltip("Provides thermal zone temperature information (Raspberry pi 3)");
             
             ImGui::BeginDisabled();
             ImGui::Checkbox("# IPMI", &cb_provider_ipmi);
