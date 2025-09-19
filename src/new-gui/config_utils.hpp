@@ -23,6 +23,7 @@ typedef struct
     int window_w;
     int window_h;
     RGBA_int bg_color;
+    int color_theme_index;
     int graphics_platform;
     bool autosave_settings;
     bool allow_screen_saver;

@@ -4,6 +4,8 @@
 
 #include <nlohmann/json.hpp>
 #include <fstream>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include <log_c/log.h>
 
@@ -57,8 +59,9 @@ pconfig readConfig()
     
     nlohmann::json ui_settings_obj = json_in.value("uiSettings", nlohmann::json::object());
     
-    out_conf.save_ui_layout = ui_settings_obj.value("saveUIlayouts", defaultSettings.save_ui_layout);
-    out_conf.ui_font_size   = ui_settings_obj.value("uiFontSize", defaultSettings.ui_font_size);
+    out_conf.save_ui_layout    = ui_settings_obj.value("saveUIlayouts", defaultSettings.save_ui_layout);
+    out_conf.ui_font_size      = ui_settings_obj.value("uiFontSize", defaultSettings.ui_font_size);
+    out_conf.color_theme_index = ui_settings_obj.value("colorThemeIndex", defaultSettings.color_theme_index);
     
     
     nlohmann::json main_window_obj = ui_settings_obj.value("mainWindow", nlohmann::json::object());
@@ -95,6 +98,9 @@ pconfig readConfig()
 
 void writeConfig(const pconfig config)
 {
+    /*
+    Todo: Fix file permissions
+    */
     nlohmann::ordered_json json_out;
     std::ostringstream out_path;
     
@@ -133,6 +139,7 @@ void writeConfig(const pconfig config)
             {
                 { "saveUIlayouts", config.save_ui_layout },
                 { "uiFontSize",    config.ui_font_size },
+                { "colorThemeIndex", config.color_theme_index },
                 { "mainWindow",
                     {
                         { "width", config.window_w },
@@ -169,6 +176,25 @@ void writeConfig(const pconfig config)
     };
     
     out_path << Utils::get_home_dir() << PSENSOR_SETTINGS_PATH;
+    
+    // Some attempt to make the configuration file to be writable by the user regardless of being root or not
+    int fd = open(out_path.str().c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
+    
+    if(fd == -1)
+    {
+        log_error("open() failed: %s", strerror(errno));
+        return;
+    }
+    
+    // Convert fd → stream
+    FILE* f = fdopen(fd, "w");
+    if(!f)
+    {
+        log_error("fdopen() failed: %s", strerror(errno));
+        close(fd);
+        return;
+    }
+        
     std::ofstream out_file(out_path.str());
     out_file << json_out.dump(4);
     out_file.close();
@@ -196,6 +222,7 @@ void printConfig(const pconfig config)
     std::cout << "--------------------------------------------\n";
     std::cout << "[BOOL]  - save_ui_layout: -> " << config.save_ui_layout << "\n";
     std::cout << "[FLOAT] - ui_font_size:   -> " << config.ui_font_size   << "\n";
+    std::cout << "[INT]   - color_theme_index: -> " << config.color_theme_index << "\n";
     std::cout << "--------------------------------------------\n";
     std::cout << "[BOOL] - use_celsius_temp_unit: -> " << config.use_celsius_temp_unit << "\n";
     std::cout << "--------------------------------------------\n";

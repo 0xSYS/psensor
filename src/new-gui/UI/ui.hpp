@@ -20,7 +20,7 @@ inline std::vector<ImVec4> sensor_graph_color;
 inline std::vector<ScrollingBuffer> sensor_plots;
 
 
-inline int selected_graphics_platform = 0;
+inline int selected_graphics_platform = liveSettings.graphics_platform;
 inline const char * graphics_plaforms[] =
 {
     "Auto",
@@ -29,6 +29,9 @@ inline const char * graphics_plaforms[] =
     "OpenGL ES2",
     "SDL Software"
 };
+
+inline int selected_ui_theme = liveSettings.color_theme_index;
+inline const char ** ui_themes = nullptr;
 
 inline bool save_ui_layouts;
 inline bool autosave_settings;

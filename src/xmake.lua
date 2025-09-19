@@ -128,7 +128,8 @@ target("psensor-ui")
     add_includedirs(
         "lib/include",
         "../ext_deps/imgui",
-        "../ext_deps/"
+        "../ext_deps/",
+        "../ext_deps/sfd"
     )
 
     add_linkdirs(
@@ -146,7 +147,10 @@ target("psensor-ui")
     add_defines("LOGC__USER_SETTINGS")
 
 
-    add_files("../ext_deps/log_c/*.c")
+    add_files(
+        "../ext_deps/log_c/*.c",
+        "../ext_deps/sfd/sfd.c"
+    )
     add_files(
         "new-gui/*.cpp",
         "new-gui/UI/*.cpp",

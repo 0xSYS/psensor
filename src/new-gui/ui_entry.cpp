@@ -2,6 +2,7 @@ extern "C"
 {
     #include <psensor/psensor.h>
     #include <psensor/pmod.h>
+    #include <sfd.h>
 }
 
 
@@ -27,6 +28,7 @@ extern "C"
 #include "config_utils.hpp"
 
 #include <imgui/imgui.h>
+#include <imgui/imgui_styles.h>
 #include <imgui/backend/imgui_impl_sdl3.h>
 #include <imgui/backend/imgui_impl_sdlrenderer3.h>
 
@@ -234,7 +236,38 @@ void ui_main()
     config.FontDataOwnedByAtlas = false; // it caused memory freeing issues this whole time (without this config)
     io.Fonts->AddFontFromMemoryTTF((void*)Liter_Regular_ttf, sizeof(Liter_Regular_ttf), 25.0f, &config);
     
-    SetDefaultTheme();
+    std::vector<std::string> color_themes;
+    color_themes = Utils::get_color_themes_files();
+    
+    // Handling UI Themes
+    
+    if(ui_themes)
+    {
+        for(int i = 0; i < ui_themes_count; i++)
+        {
+            free((void*)ui_themes[i]);
+        }
+        delete[] ui_themes;
+    }
+   
+    // +1 for the default entry
+    ui_themes_count = static_cast<int>(color_themes.size()) + 1;
+    ui_themes = new const char*[ui_themes_count];
+   
+    // add default
+    ui_themes[0] = strdup("Moonlight (Default)");
+   
+    // add file-based themes
+    for(int i = 0; i < (int)color_themes.size(); i++)
+    {
+        ui_themes[i + 1] = strdup(color_themes[i].c_str());
+    }
+       
+       
+    if(liveSettings.color_theme_index == 0)
+        SetDefaultTheme();
+    else
+        ImGui::LoadStyleFrom(ui_themes[liveSettings.color_theme_index]);
     
     
     // Setup scaling
@@ -303,6 +336,35 @@ void ui_main()
                     show_implot_demo = true;
                     printf("Ctrl+d -> Devel\n");
                 }
+                
+                // Temporary stuff
+                if((mods & SDL_KMOD_CTRL) && sym == SDLK_A)
+                {
+                    printf("Ctrl+a -> save ui theme\n");
+                    
+                    std::ostringstream temp;
+                    temp << Utils::get_home_dir() << "/.config/psensor/themes";
+                    
+                    std::string temp_str_path = temp.str();
+                    
+                    temp_fd =
+                    {
+                        .title        = "Save Imgui theme",
+                        .path = temp_str_path.c_str(),
+                        .filter_name  = "Ini File",
+                        .filter       = "*.ini",
+                    };
+                    
+                    const char *filename = sfd_save_dialog(&temp_fd);
+                    
+                    if(filename)
+                    {
+                        log_debug("Got file: '%s'", filename);
+                        ImGui::SaveStylesTo(filename);
+                    }
+                    else
+                        log_debug("Open canceled");
+                }
             }
         }
         
@@ -353,5 +415,4 @@ void ui_main()
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
-
 }

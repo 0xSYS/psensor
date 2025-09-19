@@ -16,6 +16,7 @@ extern "C"
 #include <log_c/log.h>
 
 #include <imgui/imgui.h>
+#include <imgui/imgui_styles.h>
 
 
 #include "ui.hpp"
@@ -68,6 +69,13 @@ RGBA_int FloatRGB2Int(ImVec4 c)
         (int)(c.z * 255.0f + 0.5f),
         (int)(c.w * 255.0f + 0.5f)
     };
+}
+
+// Stolen from NVi-PFA :madman:
+std::string FilenameOnly(const std::string& path) 
+{
+    size_t slash = path.find_last_of("/\\");
+    return (slash == std::string::npos) ? path : path.substr(slash + 1);
 }
 
 
@@ -397,6 +405,31 @@ void RenderPreferences()
             ImGui::SameLine();
             AddQuestionMarkTooltip("Changes the background color of the main window");
             
+            if(ImGui::BeginCombo("# UI Theme", FilenameOnly(ui_themes[selected_ui_theme]).c_str(), ImGuiComboFlags_WidthFitPreview))
+            {
+                for(int n = 0; n < ui_themes_count; n++)
+                {
+                    const bool is_selected = (selected_ui_theme == n);
+                    if(ImGui::Selectable(FilenameOnly(ui_themes[n]).c_str(), is_selected))
+                    {
+                        selected_ui_theme = n;
+                        liveSettings.color_theme_index = selected_ui_theme;
+                        
+                        if(selected_ui_theme == 0)
+                            SetDefaultTheme();
+                        else
+                            ImGui::LoadStyleFrom(ui_themes[selected_ui_theme]);
+                        
+                        SaveSettings();
+                    }
+    
+                    // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+            
             ImGui::EndTabItem();
         }
         if(ImGui::BeginTabItem("Providers"))
@@ -693,6 +726,12 @@ void RenderUI()
                     no_root_open = true;
                 }
             }
+            
+            if(ImGui::MenuItem("Save Theme (temp)"))
+            {
+                ImGui::SaveStylesTo("/home/andre/.config/psensor/themes/new_theme.ini");
+            }
+            
             ImGui::Separator();
             if(ImGui::MenuItem("Exit"))
             {

@@ -21,7 +21,8 @@ static const char * sdl_graphics_platforms[] =
 
 
 inline std::thread sensor_update_thr;
+inline size_t ui_themes_count = 0;
 
-
+void SetDefaultTheme();
 void ui_main();
 #endif
