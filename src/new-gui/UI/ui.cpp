@@ -727,11 +727,6 @@ void RenderUI()
                 }
             }
             
-            if(ImGui::MenuItem("Save Theme (temp)"))
-            {
-                ImGui::SaveStylesTo("/home/andre/.config/psensor/themes/new_theme.ini");
-            }
-            
             ImGui::Separator();
             if(ImGui::MenuItem("Exit"))
             {
