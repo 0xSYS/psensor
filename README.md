@@ -120,7 +120,7 @@ then build:
         - ❌ Sensor record viewer
     - ❌ Individual sensor preferences
     - ❌ Custom toast message boxes
-    - ✔️ Custom UI theme support
+    - ❌ Custom UI theme support
     - ✔️ Configuration
     
 - 🔽 Server
