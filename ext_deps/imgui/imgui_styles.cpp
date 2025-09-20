@@ -75,6 +75,7 @@ IMGUI_API void ImGui::SaveStylesTo(const char* fileName) {
 	WRITE_FLOAT(ColumnsMinSpacing);
 	WRITE_FLOAT(ScrollbarSize);
 	WRITE_FLOAT(ScrollbarRounding);
+	WRITE_FLOAT(ScrollbarPadding);
 	WRITE_FLOAT(GrabMinSize);
 	WRITE_FLOAT(GrabRounding);
 	WRITE_FLOAT(LogSliderDeadzone);
@@ -156,6 +157,7 @@ IMGUI_API void ImGui::LoadStyleFrom(const char* fileName) {
 	LOAD_FLOAT(ColumnsMinSpacing);
 	LOAD_FLOAT(ScrollbarSize);
 	LOAD_FLOAT(ScrollbarRounding);
+	LOAD_FLOAT(ScrollbarPadding);
 	LOAD_FLOAT(GrabMinSize);
 	LOAD_FLOAT(GrabRounding);
 	LOAD_FLOAT(LogSliderDeadzone);
