@@ -263,6 +263,8 @@ void ui_main()
     color_themes = Utils::get_color_themes_files();
     
     // Handling UI Themes
+    
+    RefreshColorThemesFiles();
        
        
     if(liveSettings.color_theme_index == 0)
