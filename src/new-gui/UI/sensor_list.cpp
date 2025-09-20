@@ -11,7 +11,7 @@
 
 
 #include "sensor_list.hpp"
-#include "settings_utils.hpp"
+//#include "settings_utils.hpp"
 
 extern "C"
 {
@@ -118,6 +118,7 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
                 graph_colors[i],
                 true
             );
+            //std::cout << "Stuff | id: " << temp_s->id << " | chip: " << temp_s->chip << std::endl;
         }
 
         {

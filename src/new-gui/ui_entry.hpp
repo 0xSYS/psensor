@@ -3,10 +3,11 @@
 
 
 #include <thread>
+#include <vector>
 
 
-#include "UI/sensor_list.hpp"
-#include "UI/ui.hpp"
+//#include "UI/sensor_list.hpp"
+//#include "UI/ui.hpp"
 
 
 
@@ -22,6 +23,8 @@ static const char * sdl_graphics_platforms[] =
 
 inline std::thread sensor_update_thr;
 inline size_t ui_themes_count = 0;
+inline std::vector<std::string> color_themes;
+void RefreshColorThemesFiles();
 
 void SetDefaultTheme();
 void ui_main();

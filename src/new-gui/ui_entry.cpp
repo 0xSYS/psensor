@@ -11,7 +11,7 @@ extern "C"
 
 #include <sstream>
 #include <thread>
-#include <mutex>
+//#include <mutex>
 
 #include <stdlib.h>
 
@@ -137,6 +137,7 @@ void SetDefaultTheme()
 	style.Colors[ImGuiCol_NavWindowingHighlight] = ImVec4(0.4980392158031464f, 0.5137255191802979f, 1.0f, 1.0f);
 	style.Colors[ImGuiCol_NavWindowingDimBg]     = ImVec4(0.196078434586525f, 0.1764705926179886f, 0.5450980663299561f, 0.501960813999176f);
 	style.Colors[ImGuiCol_ModalWindowDimBg]      = ImVec4(0.196078434586525f, 0.1764705926179886f, 0.5450980663299561f, 0.501960813999176f);
+	
 }
 
 
@@ -163,7 +164,30 @@ void sdl_graphics_picker(SDL_Renderer*& r, SDL_Window* w)
     }
 }
 
-
+void RefreshColorThemesFiles()
+{
+    if(ui_themes)
+    {
+        for(int i = 0; i < ui_themes_count; i++)
+        {
+            free((void*)ui_themes[i]);
+        }
+        delete[] ui_themes;
+    }
+   
+    // +1 for the default entry
+    ui_themes_count = static_cast<int>(color_themes.size()) + 1;
+    ui_themes = new const char*[ui_themes_count];
+   
+    // add default
+    ui_themes[0] = strdup("Moonlight (Default)");
+   
+    // add file-based themes
+    for(int i = 0; i < (int)color_themes.size(); i++)
+    {
+        ui_themes[i + 1] = strdup(color_themes[i].c_str());
+    }
+}
 
 void ui_main()
 {
@@ -236,32 +260,9 @@ void ui_main()
     config.FontDataOwnedByAtlas = false; // it caused memory freeing issues this whole time (without this config)
     io.Fonts->AddFontFromMemoryTTF((void*)Liter_Regular_ttf, sizeof(Liter_Regular_ttf), 25.0f, &config);
     
-    std::vector<std::string> color_themes;
     color_themes = Utils::get_color_themes_files();
     
     // Handling UI Themes
-    
-    if(ui_themes)
-    {
-        for(int i = 0; i < ui_themes_count; i++)
-        {
-            free((void*)ui_themes[i]);
-        }
-        delete[] ui_themes;
-    }
-   
-    // +1 for the default entry
-    ui_themes_count = static_cast<int>(color_themes.size()) + 1;
-    ui_themes = new const char*[ui_themes_count];
-   
-    // add default
-    ui_themes[0] = strdup("Moonlight (Default)");
-   
-    // add file-based themes
-    for(int i = 0; i < (int)color_themes.size(); i++)
-    {
-        ui_themes[i + 1] = strdup(color_themes[i].c_str());
-    }
        
        
     if(liveSettings.color_theme_index == 0)
@@ -354,6 +355,8 @@ void ui_main()
                         .filter_name  = "Ini File",
                         .filter       = "*.ini",
                     };
+                    
+                    log_debug("initial Path: '%s'", temp_fd.path);
                     
                     const char *filename = sfd_save_dialog(&temp_fd);
                     

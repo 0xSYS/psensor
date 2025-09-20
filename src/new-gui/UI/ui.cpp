@@ -20,6 +20,7 @@ extern "C"
 
 
 #include "ui.hpp"
+#include "../ui_entry.hpp"
 #include "settings_utils.hpp"
 #include "sensor_list.hpp"
 
@@ -329,6 +330,10 @@ void RenderPreferences()
 {
     std::ostringstream save_settings_btn_text;
     
+    color_themes = Utils::get_color_themes_files();
+    
+    RefreshColorThemesFiles();
+    
     if(autosave_settings)
         save_settings_btn_text << "Autosave";
     else
@@ -405,7 +410,7 @@ void RenderPreferences()
             ImGui::SameLine();
             AddQuestionMarkTooltip("Changes the background color of the main window");
             
-            if(ImGui::BeginCombo("# UI Theme", FilenameOnly(ui_themes[selected_ui_theme]).c_str(), ImGuiComboFlags_WidthFitPreview))
+            if(ImGui::BeginCombo("UI Theme", FilenameOnly(ui_themes[selected_ui_theme]).c_str(), ImGuiComboFlags_WidthFitPreview))
             {
                 for(int n = 0; n < ui_themes_count; n++)
                 {
@@ -428,6 +433,14 @@ void RenderPreferences()
                         ImGui::SetItemDefaultFocus();
                 }
                 ImGui::EndCombo();
+            }
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Use your own ui theme");
+            ImGui::SameLine();
+            if(ImGui::Button("Refresh Themes"))
+            {
+                color_themes = Utils::get_color_themes_files();
+                RefreshColorThemesFiles();
             }
             
             ImGui::EndTabItem();
