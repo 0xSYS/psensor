@@ -18,6 +18,8 @@ inline std::vector<ui_sensor> sensor;
 inline std::vector<bool> sensor_graph_enabled;
 inline std::vector<ImVec4> sensor_graph_color;
 inline std::vector<ScrollingBuffer> sensor_plots;
+inline int selected_sensor = 0;
+inline char sensor_name_buf[250];
 
 
 inline int selected_graphics_platform = liveSettings.graphics_platform;

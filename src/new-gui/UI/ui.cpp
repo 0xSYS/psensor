@@ -7,6 +7,7 @@ extern "C"
 
 #include <vector>
 #include <sstream>
+#include <cstring>
 #include <mutex>
 #include <map>
 #include <future>
@@ -77,6 +78,24 @@ std::string FilenameOnly(const std::string& path)
 {
     size_t slash = path.find_last_of("/\\");
     return (slash == std::string::npos) ? path : path.substr(slash + 1);
+}
+
+void AddQuestionMarkTooltip(std::string tooltip_text)
+{
+    int text_id = 0;
+    ImGui::PushID(text_id++);
+    ImGui::TextDisabled("(?)");
+    ImGui::PopID();
+    
+    ImGui::PushID(text_id++);
+    if(ImGui::BeginItemTooltip())
+    {
+        ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+        ImGui::Text("%s", tooltip_text.c_str());
+        ImGui::PopTextWrapPos();
+        ImGui::EndTooltip();
+    }
+    ImGui::PopID();
 }
 
 
@@ -305,25 +324,73 @@ void RenderSensorSettings()
 {
     ImGui::SetNextWindowSizeConstraints(ImVec2(500, 500), ImVec2(FLT_MAX, FLT_MAX));
     ImGui::Begin("Sensor Settings", &sensor_settings);
-    ImGui::End();
-}
-
-void AddQuestionMarkTooltip(std::string tooltip_text)
-{
-    int text_id = 0;
-    ImGui::PushID(text_id++);
-    ImGui::TextDisabled("(?)");
-    ImGui::PopID();
     
-    ImGui::PushID(text_id++);
-    if(ImGui::BeginItemTooltip())
+    if(ImGui::BeginListBox("##sensor_names", ImVec2(-FLT_MIN, 6 * ImGui::GetTextLineHeightWithSpacing())))
     {
-        ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-        ImGui::Text("%s", tooltip_text.c_str());
-        ImGui::PopTextWrapPos();
-        ImGui::EndTooltip();
+        for(int n = 0; n < sensor_count; n++)
+        {
+            bool is_selected = (selected_sensor == n);
+            
+            ImGui::PushID(n);
+            
+            if(ImGui::Selectable(sensor_names[n].c_str(), is_selected))
+                selected_sensor = n;
+
+            // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+            if(is_selected)
+                ImGui::SetItemDefaultFocus();
+            
+            ImGui::PopID();
+        }
+        ImGui::EndListBox();
     }
-    ImGui::PopID();
+    
+    //auto& s = sensor[selected_sensor];
+    
+    if(ImGui::BeginTabBar("##Settings", 0))
+    {
+        if(ImGui::BeginTabItem("Properties"))
+        {
+            std::strncpy(sensor_name_buf, sensor[selected_sensor].name.c_str(), sizeof(sensor_name_buf));
+            sensor_name_buf[sizeof(sensor_name_buf) - 1] = '\0';
+            ImGui::Text("Sensor Name ");
+            ImGui::SameLine();
+            ImGui::InputTextWithHint("##sname", "Enter sensor name", sensor_name_buf, IM_ARRAYSIZE(sensor_name_buf));
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("Renaming can be helpful to identify sensors more easily.");
+            
+            ImGui::Text("Type: %s", psensor_type_to_str(sensor[selected_sensor].sensor_type));
+            ImGui::Text("Chip: %s", sensor[selected_sensor].chip.c_str());
+            ImGui::Text("ID: %s", sensor[selected_sensor].sensor_id.c_str());
+            ImGui::Text("Min: %s", psensor_value_to_str(sensor[selected_sensor].sensor_type, sensor[selected_sensor].min, liveSettings.use_celsius_temp_unit));
+            ImGui::Text("Max: %s", psensor_value_to_str(sensor[selected_sensor].sensor_type, sensor[selected_sensor].max, liveSettings.use_celsius_temp_unit));
+            
+            if(ImGui::IsKeyPressed(ImGuiKey_Enter))
+            {
+                sensor_names[selected_sensor] = sensor_name_buf;
+            }
+            ImGui::EndTabItem();
+        }
+        
+        if(ImGui::BeginTabItem("Display"))
+        {
+            bool b = sensor_graph_enabled[selected_sensor] != false;
+            if(ImGui::Checkbox("Show Sensor Plot", &b))
+                sensor_graph_enabled[selected_sensor] = b ? true : false;
+            
+            ImGui::ColorEdit3("Plot Color", &sensor_graph_color[selected_sensor].x, ImGuiColorEditFlags_NoInputs);
+            
+            ImGui::EndTabItem();
+        }
+        
+        if(ImGui::BeginTabItem("Alarm"))
+        {
+            ImGui::Text("Soon...");
+            ImGui::EndTabItem();
+        }
+    }
+    ImGui::EndTabBar();
+    ImGui::End();
 }
 
 void RenderPreferences()

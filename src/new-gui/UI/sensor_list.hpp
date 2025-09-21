@@ -26,6 +26,7 @@ inline int sensor_count = -1;
 inline struct psensor **sensors = nullptr;
 inline struct psensor* temp_s;
 inline float plot_update_interval = 0.0f;
+inline std::vector<std::string> sensor_names;
 
 const std::vector <ImVec4> graph_colors=
 {
@@ -60,11 +61,13 @@ struct ui_sensor
     double min;
     double max;
     int sensor_type;
+    std::string chip;
+    std::string sensor_id;
     
     ImVec4 graph_color;
     bool graph_visible;
-    ui_sensor(const std::string& n, double cv, double mn, double mx, int st, const ImVec4& gc, bool gv)
-        : name(n), current_value(cv), min(mn), max(mx), sensor_type(st), graph_color(gc), graph_visible(gv) {}
+    ui_sensor(const std::string& n, double cv, double mn, double mx, int st, const std::string& c, const std::string& i, const ImVec4& gc, bool gv)
+        : name(n), current_value(cv), min(mn), max(mx), sensor_type(st), chip(c), sensor_id(i), graph_color(gc), graph_visible(gv) {}
 };
 
 

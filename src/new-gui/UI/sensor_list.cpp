@@ -58,6 +58,12 @@ void create_sensor_list()
     if(sensor_list_udisks2)
         udisks2_psensor_list_append(&sensors, 600);
     
+    
+    for(int i = 0; sensors[i] != nullptr; i++)
+    {
+        sensor_names.emplace_back(sensors[i]->name);
+    }
+    
     sensor_list_created = true;
     log_info("Sensor list created");
 }
@@ -110,11 +116,13 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
         {
             temp_s = sensors[i];
             temp_list.emplace_back(
-                temp_s->name,
+                sensor_names[i],
                 psensor_get_current_value(temp_s),
                 temp_s->sess_lowest,
                 temp_s->sess_highest,
                 temp_s->type,
+                temp_s->chip,
+                temp_s->id,
                 graph_colors[i],
                 true
             );
