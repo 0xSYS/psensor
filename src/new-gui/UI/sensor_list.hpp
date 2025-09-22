@@ -66,6 +66,8 @@ struct ui_sensor
     
     ImVec4 graph_color;
     bool graph_visible;
+    
+    ui_sensor() = default;
     ui_sensor(const std::string& n, double cv, double mn, double mx, int st, const std::string& c, const std::string& i, const ImVec4& gc, bool gv)
         : name(n), current_value(cv), min(mn), max(mx), sensor_type(st), chip(c), sensor_id(i), graph_color(gc), graph_visible(gv) {}
 };

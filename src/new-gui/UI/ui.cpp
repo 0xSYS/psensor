@@ -27,6 +27,7 @@ extern "C"
 
 #include "../utils.hpp"
 #include "../ui_entry.hpp"
+#include "sensor_properties.hpp"
 
 
 
@@ -62,15 +63,31 @@ ImVec4 ImVec4_RGBtoFloat(ImVec4 c)
     );
 }
 
+static inline int clamp255(int v)
+{
+    return v < 0 ? 0 : (v > 255 ? 255 : v);
+}
+
 RGBA_int FloatRGB2Int(ImVec4 c)
 {
-    return
+    // Uuhhh Ugly af
+    bool likely_0_255 = (c.x > 1.5f || c.y > 1.5f || c.z > 1.5f || c.w > 1.5f);
+   
+    auto to8 = [&](float v) -> int
     {
-        (int)(c.x * 255.0f + 0.5f),
-        (int)(c.y * 255.0f + 0.5f),
-        (int)(c.z * 255.0f + 0.5f),
-        (int)(c.w * 255.0f + 0.5f)
+        if(likely_0_255)
+        {
+            // already 0..255: round and clamp
+            return clamp255(static_cast<int>(std::lroundf(v)));
+        }
+        else
+        {
+            // normalized 0..1: scale, round, clamp
+            return clamp255(static_cast<int>(std::lroundf(v * 255.0f)));
+        }
     };
+   
+    return{ to8(c.x), to8(c.y), to8(c.z), to8(c.w) };
 }
 
 // Stolen from NVi-PFA :madman:
@@ -353,6 +370,8 @@ void RenderSensorSettings()
         {
             std::strncpy(sensor_name_buf, sensor[selected_sensor].name.c_str(), sizeof(sensor_name_buf));
             sensor_name_buf[sizeof(sensor_name_buf) - 1] = '\0';
+            
+            
             ImGui::Text("Sensor Name ");
             ImGui::SameLine();
             ImGui::InputTextWithHint("##sname", "Enter sensor name", sensor_name_buf, IM_ARRAYSIZE(sensor_name_buf));
@@ -368,7 +387,10 @@ void RenderSensorSettings()
             if(ImGui::IsKeyPressed(ImGuiKey_Enter))
             {
                 sensor_names[selected_sensor] = sensor_name_buf;
+                sensor[selected_sensor].name = sensor_names[selected_sensor];
+                saveSensorProperties(sensor);
             }
+            
             ImGui::EndTabItem();
         }
         
@@ -376,9 +398,19 @@ void RenderSensorSettings()
         {
             bool b = sensor_graph_enabled[selected_sensor] != false;
             if(ImGui::Checkbox("Show Sensor Plot", &b))
+            {
                 sensor_graph_enabled[selected_sensor] = b ? true : false;
+                sensor[selected_sensor].graph_visible = sensor_graph_enabled[selected_sensor];
+                saveSensorProperties(sensor);
+            }
             
             ImGui::ColorEdit3("Plot Color", &sensor_graph_color[selected_sensor].x, ImGuiColorEditFlags_NoInputs);
+            
+            if(ImGui::IsItemDeactivated() == 1)
+            {
+                sensor[selected_sensor].graph_color = sensor_graph_color[selected_sensor];
+                saveSensorProperties(sensor);
+            }
             
             ImGui::EndTabItem();
         }
@@ -705,7 +737,11 @@ void RenderSensorList()
             ImGui::TableSetColumnIndex(0);
             bool b = sensor_graph_enabled[row] != false;
             if(ImGui::Checkbox("##Graph_Show", &b))
+            {
                 sensor_graph_enabled[row] = b ? true : false;
+                sensor[row].graph_visible = sensor_graph_enabled[row];
+                saveSensorProperties(sensor);
+            }
             
             ImGui::PopID();
             
@@ -725,6 +761,12 @@ void RenderSensorList()
             ImGui::PushID(row);
             ImGui::TableSetColumnIndex(5);
             ImGui::ColorEdit3("##Graph_Color", &sensor_graph_color[row].x, ImGuiColorEditFlags_NoInputs);
+            
+            if(ImGui::IsItemDeactivated() == 1)
+            {
+                sensor[row].graph_color = sensor_graph_color[row];
+                saveSensorProperties(sensor);
+            }
             
             ImGui::PopID();
         }
