@@ -22,6 +22,7 @@ extern "C"
 #include "UI/ui.hpp"
 #include "UI/sensor_list.hpp"
 #include "UI/settings_utils.hpp"
+#include "UI/sensor_properties.hpp"
 
 #include "utils.hpp"
 

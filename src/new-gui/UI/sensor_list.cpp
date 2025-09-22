@@ -2,6 +2,7 @@
 #include <thread>
 #include <mutex>
 #include <unistd.h>
+#include <string.h>
 
 #include <SDL3/SDL.h>
 
@@ -11,6 +12,9 @@
 
 
 #include "sensor_list.hpp"
+#include "../ui_entry.hpp"
+#include "ui.hpp"
+#include "sensor_properties.hpp"
 //#include "settings_utils.hpp"
 
 extern "C"
@@ -75,6 +79,8 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
         log_error("Sensor list not created");
         return;
     }
+    
+    initial_sensor_properties = loadSensorProperties();
 
     log_info("Sensor update started");
     
@@ -105,6 +111,9 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
             hddtemp_psensor_list_update(sensors);
 
         std::vector<ui_sensor> temp_list;
+        std::vector<ImVec4> temp_colors;
+        std::vector<std::string> temp_names;
+        std::vector<bool> temp_en;
         std::lock_guard<std::mutex> lock(sensors_mutex);
         if(sensors == nullptr)
         {
@@ -115,18 +124,35 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
         for(int i = 0; sensors[i] != nullptr; i++)
         {
             temp_s = sensors[i];
+            std::string name;
+            ImVec4 color;
+            bool enabled;
+            
+            // Condition also "works" if sensor_properties.json is missing
+            if(!initial_sensor_properties.empty() && i < initial_sensor_properties.size() && strcmp(sensors[i]->id, initial_sensor_properties[i].sensor_id.c_str()) == 0)
+            {
+                name    = initial_sensor_properties[i].name;
+                color   = initial_sensor_properties[i].graph_color;
+                enabled = initial_sensor_properties[i].graph_visible;
+            }
+            else
+            {
+                name    = sensor_names[i];
+                color   = graph_colors[i];
+                enabled = true;
+            }
+            
             temp_list.emplace_back(
-                sensor_names[i],
+                name,
                 psensor_get_current_value(temp_s),
                 temp_s->sess_lowest,
                 temp_s->sess_highest,
                 temp_s->type,
                 temp_s->chip,
                 temp_s->id,
-                graph_colors[i],
-                true
+                color,
+                enabled
             );
-            //std::cout << "Stuff | id: " << temp_s->id << " | chip: " << temp_s->chip << std::endl;
         }
 
         {

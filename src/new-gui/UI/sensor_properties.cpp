@@ -1,4 +1,5 @@
 #include <fstream>
+#include <filesystem>
 #include <unistd.h>
 #include <fcntl.h>
 #include <nlohmann/json.hpp>
@@ -29,8 +30,7 @@ void saveSensorProperties(std::vector<ui_sensor>& sens_props)
     }
     
     out_path << Utils::get_home_dir() << SENSOR_PROPERTIES_PATH;
-    
-    // Some attempt to make the configuration file to be writable by the user regardless of being root or not
+
     int fd = open(out_path.str().c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
     
     if(fd == -1)
@@ -39,7 +39,6 @@ void saveSensorProperties(std::vector<ui_sensor>& sens_props)
         return;
     }
     
-    // Convert fd → stream
     FILE* f = fdopen(fd, "w");
     if(!f)
     {
@@ -58,9 +57,16 @@ std::vector<ui_sensor> loadSensorProperties()
     std::vector<ui_sensor> sensor_props_out;
     std::ostringstream out_path;
     out_path << Utils::get_home_dir() << SENSOR_PROPERTIES_PATH;
+    std::ifstream in_conf;
     
+   
+    in_conf = std::ifstream(out_path.str());
     
-    std::ifstream in_conf(out_path.str());
+    if(!in_conf.is_open())
+    {
+        log_warn("Sensor properties file not found, returning empty list");
+        return sensor_props_out;
+    }
     
     nlohmann::json json_in = nlohmann::json::parse(in_conf);
     
@@ -68,15 +74,14 @@ std::vector<ui_sensor> loadSensorProperties()
     for(auto& js : json_in)
     {
         ui_sensor sensor;
-        sensor.sensor_id     = js.at("id").get<int>();
-        sensor.name          = js.at("name").get<std::string>();
-        sensor.graph_visible = js.at("showPlot").get<bool>();
+        sensor.sensor_id     = js.value("id", "");
+        sensor.name          = js.value("name", "");
+        sensor.graph_visible = js.value("showPlot", true);
     
-        // plotColor is an array -> index directly
         auto col = js.value("plotColor", std::vector<int>{0,0,0,255});
-        if (col.size() < 4) col.resize(4, 255); // ensure alpha present
+        if(col.size() < 4)
+            col.resize(4, 255);
         
-        // construct ImVec4 with integer components
         ImVec4 c_int(
             static_cast<float>(col[0]),
             static_cast<float>(col[1]),
@@ -84,8 +89,7 @@ std::vector<ui_sensor> loadSensorProperties()
             static_cast<float>(col[3])
         );
         
-        // now convert to normalized float ImVec4
-        sensor.graph_color = ImVec4_RGBtoFloat(c_int);
+        sensor.graph_color = c_int;
     
         sensor_props_out.push_back(sensor);
     }
