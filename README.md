@@ -118,7 +118,7 @@ then build:
         - ✔️ Sensor list
         - ✔️ Sensor list refresh
         - ❌ Sensor record viewer
-    - ❌ Individual sensor preferences
+    - ✔️ Individual sensor preferences
     - ❌ Custom toast message boxes
     - ❌ Custom UI theme support
     - ✔️ Configuration
