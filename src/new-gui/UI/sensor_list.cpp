@@ -132,6 +132,7 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
             if(!initial_sensor_properties.empty() && i < initial_sensor_properties.size() && strcmp(sensors[i]->id, initial_sensor_properties[i].sensor_id.c_str()) == 0)
             {
                 name    = initial_sensor_properties[i].name;
+                sensor_names[i] = name;
                 color   = initial_sensor_properties[i].graph_color;
                 enabled = initial_sensor_properties[i].graph_visible;
             }

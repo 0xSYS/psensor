@@ -386,6 +386,7 @@ void RenderSensorSettings()
             
             if(ImGui::IsKeyPressed(ImGuiKey_Enter))
             {
+                initial_sensor_properties[selected_sensor].name = sensor_name_buf;
                 sensor_names[selected_sensor] = sensor_name_buf;
                 sensor[selected_sensor].name = sensor_names[selected_sensor];
                 saveSensorProperties(sensor);
