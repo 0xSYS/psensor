@@ -62,10 +62,11 @@ void create_sensor_list()
     if(sensor_list_udisks2)
         udisks2_psensor_list_append(&sensors, 600);
     
-    
+    initial_sensor_names.clear();
     for(int i = 0; sensors[i] != nullptr; i++)
     {
-        sensor_names.emplace_back(sensors[i]->name);
+        initial_sensor_names.emplace_back(sensors[i]->name);
+        //std::cout << "Sensor name: " << sensors[i]->name << std::endl;
     }
     
     sensor_list_created = true;
@@ -132,13 +133,13 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
             if(!initial_sensor_properties.empty() && i < initial_sensor_properties.size() && strcmp(sensors[i]->id, initial_sensor_properties[i].sensor_id.c_str()) == 0)
             {
                 name    = initial_sensor_properties[i].name;
-                sensor_names[i] = name;
+                sensor_names.emplace_back(name);
                 color   = initial_sensor_properties[i].graph_color;
                 enabled = initial_sensor_properties[i].graph_visible;
             }
             else
             {
-                name    = sensor_names[i];
+                name = initial_sensor_names[i];
                 color   = graph_colors[i];
                 enabled = true;
             }

@@ -148,6 +148,7 @@ void RefreshSensorList()
         }
         sensor_plots.clear();
         sensor.clear();
+        sensor_graph_color.clear();
     }
     
     // Reset plot update interval to 0
@@ -169,9 +170,14 @@ void RefreshSensorList()
         create_sensor_list();
     }
     
+    log_trace("Do you get here ????");
+    
     // Start the sensor updater thread
     keep_sensor_update.store(true);
     sensor_update_thr = std::thread(update_sensor_list, std::ref(sensor));
+    
+    //std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    //std::lock_guard<std::mutex> lock_sensors(sensors_mutex);
 }
 
 void EnableFanPwmOnce()
@@ -504,7 +510,6 @@ void RenderPreferences()
             ImGui::SameLine();
             AddQuestionMarkTooltip("Allows the screen to turn off when idle");
             
-            //RGBA_int temp = clear_color;
             ImGui::ColorEdit3("Background Color", (float*)&clear_color);
             liveSettings.bg_color = FloatRGB2Int(clear_color);
             ImGui::SameLine();
@@ -550,6 +555,16 @@ void RenderPreferences()
             if(ImGui::Button("Refresh Sensor List"))
             {
                 RefreshSensorList();
+                
+                // What a piece of shit
+                // It never works correctly when new sensors appear FUCK ME
+                //std::lock_guard<std::mutex> lock(sensor_list_mutex);
+                //for(int i = 0; i < 50; i++)
+                //{
+                //    //sensor_graph_color[i] = sensor[i].graph_color;
+                //    sensor_graph_color.emplace_back(sensor[i].graph_color);
+                //    std::cout << "Sensor " << i << " color: " << sensor_graph_color[i].x << " " << sensor_graph_color[i].y << " " << sensor_graph_color[i].z << std::endl;
+                //}
             }
             
             if(ImGui::Checkbox("lm_sensors", &cb_provider_lmsensors))
