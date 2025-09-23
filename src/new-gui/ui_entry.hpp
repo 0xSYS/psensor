@@ -25,6 +25,7 @@ inline std::thread sensor_update_thr;
 inline size_t ui_themes_count = 0;
 inline std::vector<std::string> color_themes;
 inline std::vector<ui_sensor> initial_sensor_properties;
+inline int initial_theme_index = 0;
 void RefreshColorThemesFiles();
 
 void SetDefaultTheme();

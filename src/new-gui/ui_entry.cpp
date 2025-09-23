@@ -11,6 +11,7 @@ extern "C"
 
 #include <sstream>
 #include <thread>
+#include <filesystem>
 //#include <mutex>
 
 #include <stdlib.h>
@@ -41,7 +42,7 @@ extern "C"
 
 
 
-
+bool is_default_theme = false;
 
 void SetDefaultTheme()
 {
@@ -139,6 +140,7 @@ void SetDefaultTheme()
 	style.Colors[ImGuiCol_NavWindowingDimBg]     = ImVec4(0.196078434586525f, 0.1764705926179886f, 0.5450980663299561f, 0.501960813999176f);
 	style.Colors[ImGuiCol_ModalWindowDimBg]      = ImVec4(0.196078434586525f, 0.1764705926179886f, 0.5450980663299561f, 0.501960813999176f);
 	
+	is_default_theme = true;
 }
 
 
@@ -252,26 +254,42 @@ void ui_main()
         io.IniFilename = nullptr;
     
 
-    
-    
-    //ImGui::CreateContext();
     ImPlot::CreateContext();
     
     ImFontConfig config;
     config.FontDataOwnedByAtlas = false; // it caused memory freeing issues this whole time (without this config)
     io.Fonts->AddFontFromMemoryTTF((void*)Liter_Regular_ttf, sizeof(Liter_Regular_ttf), 25.0f, &config);
     
-    color_themes = Utils::get_color_themes_files();
     
     // Handling UI Themes
     
+    color_themes = Utils::get_color_themes_files();
+    
     RefreshColorThemesFiles();
        
-       
-    if(liveSettings.color_theme_index == 0)
+    // Now Better
+    if(!std::filesystem::exists(liveSettings.ui_theme_path))
+    {
+        log_error("Missing UI Theme: '%s' Falling back to default theme...", liveSettings.ui_theme_path.c_str());
         SetDefaultTheme();
+    }
     else
-        ImGui::LoadStyleFrom(ui_themes[liveSettings.color_theme_index]);
+        ImGui::LoadStyleFrom(liveSettings.ui_theme_path.c_str());
+    
+    for(int i = 0; i < (int)color_themes.size(); i++)
+    {
+        if(color_themes[i] == liveSettings.ui_theme_path)
+        {
+            initial_theme_index = i+1;
+            break;
+        }
+        initial_theme_index = i;
+    }
+    
+    if(!is_default_theme)
+        selected_ui_theme = initial_theme_index;
+    else
+        selected_ui_theme = 0;
     
     
     // Setup scaling

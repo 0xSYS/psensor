@@ -52,7 +52,7 @@ void SyncSettings()
     sl_update_interval         = liveSettings.update_interval       ;
     cb_skip_mod_load           = liveSettings.skip_module_loading   ;
     cb_emergency_cooling       = liveSettings.emergency_cooling     ;
-    selected_ui_theme          = liveSettings.color_theme_index     ;
+    //selected_ui_theme          = liveSettings.color_theme_index     ; // Not available anymore, theme handling is now better and more stable
     
     // Update atomic bool for sensor list
     sensor_list_lmsensors = liveSettings.provider_lmsensors;

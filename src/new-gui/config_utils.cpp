@@ -61,7 +61,7 @@ pconfig readConfig()
     
     out_conf.save_ui_layout    = ui_settings_obj.value("saveUIlayouts", defaultSettings.save_ui_layout);
     out_conf.ui_font_size      = ui_settings_obj.value("uiFontSize", defaultSettings.ui_font_size);
-    out_conf.color_theme_index = ui_settings_obj.value("colorThemeIndex", defaultSettings.color_theme_index);
+    out_conf.ui_theme_path     = ui_settings_obj.value("uiTheme", defaultSettings.ui_theme_path);
     
     
     nlohmann::json main_window_obj = ui_settings_obj.value("mainWindow", nlohmann::json::object());
@@ -139,7 +139,7 @@ void writeConfig(const pconfig config)
             {
                 { "saveUIlayouts", config.save_ui_layout },
                 { "uiFontSize",    config.ui_font_size },
-                { "colorThemeIndex", config.color_theme_index },
+                { "uiTheme", config.ui_theme_path },
                 { "mainWindow",
                     {
                         { "width", config.window_w },
@@ -220,9 +220,9 @@ void printConfig(const pconfig config)
     std::cout << "[BOOL] - provider_nvidia:    -> " << config.provider_nvidia    << "\n";
     std::cout << "[BOOL] - provider_ipmi:      -> " << config.provider_ipmi      << "\n";
     std::cout << "--------------------------------------------\n";
-    std::cout << "[BOOL]  - save_ui_layout: -> " << config.save_ui_layout << "\n";
-    std::cout << "[FLOAT] - ui_font_size:   -> " << config.ui_font_size   << "\n";
-    std::cout << "[INT]   - color_theme_index: -> " << config.color_theme_index << "\n";
+    std::cout << "[BOOL]   - save_ui_layout:   -> " << config.save_ui_layout << "\n";
+    std::cout << "[FLOAT]  - ui_font_size:     -> " << config.ui_font_size   << "\n";
+    std::cout << "[STRING] - color_theme_path: -> " << config.ui_theme_path  << "\n";
     std::cout << "--------------------------------------------\n";
     std::cout << "[BOOL] - use_celsius_temp_unit: -> " << config.use_celsius_temp_unit << "\n";
     std::cout << "--------------------------------------------\n";

@@ -32,7 +32,7 @@ inline const char * graphics_plaforms[] =
     "SDL Software"
 };
 
-inline int selected_ui_theme = liveSettings.color_theme_index;
+inline int selected_ui_theme;
 inline const char ** ui_themes = nullptr;
 
 inline bool save_ui_layouts;

@@ -13,7 +13,7 @@ static pconfig defaultSettings =
     .window_w = 1020,
     .window_h = 820,
     .bg_color = { .r = 87,  .g = 87, .b = 87, .a = 255},
-    .color_theme_index     = 0, /* Moonlight */
+    .ui_theme_path         = "",
     .graphics_platform     = 0, /* Auto */
     .autosave_settings     = true,
     .allow_screen_saver    = true,

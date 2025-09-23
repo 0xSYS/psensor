@@ -517,7 +517,7 @@ void RenderPreferences()
                     if(ImGui::Selectable(FilenameOnly(ui_themes[n]).c_str(), is_selected))
                     {
                         selected_ui_theme = n;
-                        liveSettings.color_theme_index = selected_ui_theme;
+                        liveSettings.ui_theme_path = ui_themes[selected_ui_theme];
                         
                         if(selected_ui_theme == 0)
                             SetDefaultTheme();
