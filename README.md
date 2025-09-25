@@ -72,6 +72,7 @@ then build:
     - ✔️ Sensor reading
     - ✔️ JSON Output of sensor values
     - 🔽 Fan controller (!!! WARNING !!! It may not work correctly for any hardware. Be cautious when using it as it can cause GPU / CPU overheating)
+        * On Older machines the fan controller may not work if Smart fan control is enabled in BIOS
         - ✔️ manual speed control
         - ❌ automatic speed control
         - ✔️ speed test

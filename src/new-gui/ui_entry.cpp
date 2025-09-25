@@ -407,6 +407,15 @@ void ui_main()
         
         
         RenderUI();
+        
+        //Dosen't work bruh
+        /*
+        if(ImGui::IsAnyItemActive())
+        {
+            if(ImGui::IsItemClicked(ImGuiMouseButton_Left))
+                log_trace("Any click event !!!");
+        }
+        */
            
    
         // Rendering
