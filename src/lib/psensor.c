@@ -121,7 +121,7 @@ void psensor_free(struct psensor *s)
     if(!s)
         return;
 
-    log_debug("Cleanup %s", s->id);
+    //log_debug("Cleanup %s", s->id);
 
     free(s->name);
     free(s->id);

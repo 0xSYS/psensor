@@ -121,7 +121,7 @@ target("psensor")
 
 
 -- GUI
-target("psensor-ui")
+target("omnisensor")
     set_kind("binary")
     set_languages("c++17")
 
@@ -152,8 +152,8 @@ target("psensor-ui")
         "../ext_deps/sfd/sfd.c"
     )
     add_files(
-        "new-gui/*.cpp",
-        "new-gui/UI/*.cpp",
+        "OmniSensor/*.cpp",
+        "OmniSensor/UI/*.cpp",
         "../ext_deps/imgui/*.cpp",
         "../ext_deps/imgui/backend/*.cpp",
         "../ext_deps/implot/*.cpp"

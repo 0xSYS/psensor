@@ -323,14 +323,15 @@ void RenderAboutWindow()
         ImGui::Begin("About", &about_window, 0);
         ImVec2 avail_size = ImGui::GetContentRegionAvail();
         ImGui::BeginChild("ScrollRegion", avail_size, true, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_AlwaysVerticalScrollbar);
-        ImGui::Text("Psensor");
+        ImGui::Text("OmniSensor");
         ImGui::Text("A fork of the original Psensor project created by jeanfi@gmail.com");
         ImGui::Text("This fork aims to provide a new look and feel for the desktop application as well as new features.");
         ImGui::Text("");
         ImGui::Text("Source code available on ");
         ImGui::SameLine();
         ImGui::TextLinkOpenURL("GitHub", "https://github.com/0xSYS/psensor");
-        ImGui::Text("Psensor %s", VERSION);
+        ImGui::Text("OmniSensor Version: %s", OMNISENSOR_VERSION);
+        ImGui::Text("Psensor Version: %s", VERSION);
         ImGui::Text("Copyright (C) 2010-2025");
         ImGui::Text("jeanfi@gmail.com");
         ImGui::Text("xsys061@gmail.com");

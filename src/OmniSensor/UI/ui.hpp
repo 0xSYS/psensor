@@ -6,6 +6,18 @@
 #include "plot.hpp"
 #include "sensor_list.hpp"
 
+
+
+
+#define OMNISENSOR_VERSION "1.0.0 - B1"
+
+
+
+
+
+
+
+
 inline bool loop_exit = false;
 inline bool sensor_list = true;
 inline bool fan_controller_open = false;
