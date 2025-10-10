@@ -126,8 +126,8 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
         {
             temp_s = sensors[i];
             std::string name;
-            ImVec4 color;
-            bool enabled;
+            static ImVec4 color;
+            static bool enabled;
             
             // Condition also "works" if sensor_properties.json is missing
             if(!initial_sensor_properties.empty() && i < initial_sensor_properties.size() && strcmp(sensors[i]->id, initial_sensor_properties[i].sensor_id.c_str()) == 0)
@@ -142,6 +142,7 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
                 name = initial_sensor_names[i];
                 color   = graph_colors[i];
                 enabled = true;
+                //log_trace("Sensor defaults -> color: %d | %d | %d | %d, enabled: %d", color.x, color.y, color.z, color.w, enabled);
             }
             
             temp_list.emplace_back(

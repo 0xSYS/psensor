@@ -170,7 +170,7 @@ void RefreshSensorList()
         create_sensor_list();
     }
     
-    log_trace("Do you get here ????");
+    //log_trace("Do you get here ????");
     
     // Start the sensor updater thread
     keep_sensor_update.store(true);
@@ -838,7 +838,7 @@ void RenderUI()
     // MARK: Main Menu Bar
     if(ImGui::BeginMainMenuBar())
     {
-        if(ImGui::BeginMenu("Psensor"))
+        if(ImGui::BeginMenu("OmniSensor"))
         {
             if(ImGui::MenuItem("Refresh Sensor List"))
             {
