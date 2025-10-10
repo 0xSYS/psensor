@@ -205,7 +205,7 @@ void ui_main()
     
     float main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
     SDL_WindowFlags window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
-    SDL_Window* window = SDL_CreateWindow("Psensor", (int)(liveSettings.window_w * main_scale), (int)(liveSettings.window_h * main_scale), window_flags);
+    SDL_Window* window = SDL_CreateWindow("OmniSensor", (int)(liveSettings.window_w * main_scale), (int)(liveSettings.window_h * main_scale), window_flags);
     if(window == nullptr)
     {
         log_error("Error: SDL_CreateWindow(): %s", SDL_GetError());
