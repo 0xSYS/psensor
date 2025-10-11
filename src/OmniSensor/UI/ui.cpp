@@ -565,16 +565,6 @@ void RenderPreferences()
             if(ImGui::Button("Refresh Sensor List"))
             {
                 RefreshSensorList();
-                
-                // What a piece of shit
-                // It never works correctly when new sensors appear FUCK ME
-                //std::lock_guard<std::mutex> lock(sensor_list_mutex);
-                //for(int i = 0; i < 50; i++)
-                //{
-                //    //sensor_graph_color[i] = sensor[i].graph_color;
-                //    sensor_graph_color.emplace_back(sensor[i].graph_color);
-                //    std::cout << "Sensor " << i << " color: " << sensor_graph_color[i].x << " " << sensor_graph_color[i].y << " " << sensor_graph_color[i].z << std::endl;
-                //}
             }
             
             if(ImGui::Checkbox("lm_sensors", &cb_provider_lmsensors))
@@ -739,20 +729,20 @@ void RenderSensorList()
         
         std::lock_guard<std::mutex> lock(sensor_list_mutex);
         
-        if (sensor_graph_color.size() < sensor_count)
-                {
-                    log_trace("Resizing sensor_graph_color from %zu to %d", sensor_graph_color.size(), sensor_count);
-                    for (size_t i = sensor_graph_color.size(); i < (size_t)sensor_count; ++i)
-                    {
-                        const ImVec4& c = graph_colors[i % graph_colors.size()];
-                        sensor_graph_color.push_back(ImVec4(
-                            c.x / 255.0f,
-                            c.y / 255.0f,
-                            c.z / 255.0f,
-                            1.0f // alpha
-                        ));
-                    }
-                }
+        if(sensor_graph_color.size() < sensor_count)
+        {
+            log_trace("Resizing sensor_graph_color from %zu to %d", sensor_graph_color.size(), sensor_count);
+            for(size_t i = sensor_graph_color.size(); i < (size_t)sensor_count; ++i)
+            {
+                const ImVec4& c = graph_colors[i % graph_colors.size()];
+                sensor_graph_color.push_back(ImVec4(
+                    c.x / 255.0f,
+                    c.y / 255.0f,
+                    c.z / 255.0f,
+                    1.0f // alpha
+                ));
+            }
+        }
         
         // --- ADD THIS BLOCK: ensure sensor_graph_color is large enough ---
         if(sensor_graph_color.size() < sensor_count)
