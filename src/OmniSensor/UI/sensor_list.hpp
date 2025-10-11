@@ -29,7 +29,7 @@ inline float plot_update_interval = 0.0f;
 inline std::vector<std::string> initial_sensor_names;
 inline std::vector<std::string> sensor_names;
 
-const std::vector <ImVec4> graph_colors=
+inline const std::vector <ImVec4> graph_colors=
 {
     {0,   255, 243, 255},
     {0,   130, 255, 255},

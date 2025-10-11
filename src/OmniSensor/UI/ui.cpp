@@ -68,6 +68,15 @@ static inline int clamp255(int v)
     return v < 0 ? 0 : (v > 255 ? 255 : v);
 }
 
+inline bool get_sensor_enabled(int row)
+{
+    if (row >= (int)sensor_graph_enabled.size()) {
+        log_warn("get_sensor_enabled: row %d out of range, returning true", row);
+        return true; // fallback
+    }
+    return sensor_graph_enabled[row];
+}
+
 RGBA_int FloatRGB2Int(ImVec4 c)
 {
     // Uuhhh Ugly af
@@ -729,6 +738,21 @@ void RenderSensorList()
         ImGui::TableHeadersRow();
         
         std::lock_guard<std::mutex> lock(sensor_list_mutex);
+        
+        // --- ADD THIS BLOCK: ensure sensor_graph_color is large enough ---
+        if(sensor_graph_color.size() < sensor_count)
+        {
+            log_trace("Resizing sensor_graph_color from %zu to %d", sensor_graph_color.size(), sensor_count);
+            for(size_t i = sensor_graph_color.size(); i < (size_t)sensor_count; ++i)
+                sensor_graph_color.push_back(graph_colors[i % graph_colors.size()]);
+        }
+        
+        if(sensor_graph_enabled.size() < sensor_count)
+        {
+            log_trace("Resizing sensor_graph_enabled from %zu to %d", sensor_graph_enabled.size(), sensor_count);
+            sensor_graph_enabled.resize(sensor_count, true); // default to enabled
+        }
+        
         for(int row = 0; row < sensor_count; row++)
         {
             auto& s = sensor[row];
@@ -777,7 +801,10 @@ void RenderSensorList()
             
             ImGui::PushID(row);
             ImGui::TableSetColumnIndex(5);
-            ImGui::ColorEdit3("##Graph_Color", &sensor_graph_color[row].x, ImGuiColorEditFlags_NoInputs);
+            //ImGui::ColorEdit3("##Graph_Color", &sensor_graph_color[row].x, ImGuiColorEditFlags_NoInputs);
+            
+            ImVec4& color = sensor_graph_color[row];
+            ImGui::ColorEdit3("##Graph_Color", &color.x, ImGuiColorEditFlags_NoInputs);
             
             if(ImGui::IsItemDeactivated() == 1)
             {

@@ -1,6 +1,7 @@
 #include <vector>
 #include <thread>
 #include <mutex>
+#include <algorithm>
 #include <unistd.h>
 #include <string.h>
 
@@ -122,6 +123,7 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
             SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "No sensor list available.\nCheck psensor providers", NULL);
             exit(1);
         }
+        
         for(int i = 0; sensors[i] != nullptr; i++)
         {
             temp_s = sensors[i];
@@ -140,9 +142,9 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
             else
             {
                 name = initial_sensor_names[i];
-                color   = graph_colors[i];
+                //color   = graph_colors[i];
+                color = graph_colors[i % graph_colors.size()]; // Loop trough the color array for now
                 enabled = true;
-                //log_trace("Sensor defaults -> color: %d | %d | %d | %d, enabled: %d", color.x, color.y, color.z, color.w, enabled);
             }
             
             temp_list.emplace_back(
@@ -157,7 +159,7 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
                 enabled
             );
         }
-
+          
         {
             std::lock_guard<std::mutex> lock(sensor_list_mutex);
             sl = std::move(temp_list);
