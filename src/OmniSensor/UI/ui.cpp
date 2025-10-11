@@ -739,6 +739,21 @@ void RenderSensorList()
         
         std::lock_guard<std::mutex> lock(sensor_list_mutex);
         
+        if (sensor_graph_color.size() < sensor_count)
+                {
+                    log_trace("Resizing sensor_graph_color from %zu to %d", sensor_graph_color.size(), sensor_count);
+                    for (size_t i = sensor_graph_color.size(); i < (size_t)sensor_count; ++i)
+                    {
+                        const ImVec4& c = graph_colors[i % graph_colors.size()];
+                        sensor_graph_color.push_back(ImVec4(
+                            c.x / 255.0f,
+                            c.y / 255.0f,
+                            c.z / 255.0f,
+                            1.0f // alpha
+                        ));
+                    }
+                }
+        
         // --- ADD THIS BLOCK: ensure sensor_graph_color is large enough ---
         if(sensor_graph_color.size() < sensor_count)
         {
