@@ -107,7 +107,7 @@ then build:
 - 🔽 Desktop GUI
     - 🔽 Easy to use UI
         - ✔️ Autosave window / table layouts
-        - ❌ Custom theme support
+        - ✔️ Custom theme support
         - ❌ Custom font support
     - 🔽 Fan controller table
         - ❌ User created presets for fan speeds
@@ -125,7 +125,7 @@ then build:
     - ✔️ Configuration
     
 - 🔽 Server
-    - ❌ User Auth via SSH protocol
+    - ❌ User Auth via PAM protocol
     
 - 🔽 Web Interface
     - ❌ Automatic page opening
