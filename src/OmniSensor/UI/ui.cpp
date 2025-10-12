@@ -187,6 +187,7 @@ void RefreshSensorList()
     
     //std::this_thread::sleep_for(std::chrono::milliseconds(200));
     //std::lock_guard<std::mutex> lock_sensors(sensors_mutex);
+    log_info("- - - - Sensor List Refreshed - - - -");
 }
 
 void EnableFanPwmOnce()
@@ -358,88 +359,162 @@ void RenderSensorSettings()
     ImGui::SetNextWindowSizeConstraints(ImVec2(500, 500), ImVec2(FLT_MAX, FLT_MAX));
     ImGui::Begin("Sensor Settings", &sensor_settings);
     
+    std::vector<ui_sensor> local_sensors;
+    int local_sensor_count = 0;
+    {
+        std::lock_guard<std::mutex> lock(sensor_list_mutex);
+        local_sensor_count = sensor_count;
+        if(local_sensor_count > 0)
+        {
+            local_sensors.reserve(local_sensor_count);
+            for(int i = 0; i < local_sensor_count; ++i)
+                local_sensors.emplace_back(sensor[i]);
+        }
+    }
+    
+    if(local_sensor_count == 0)
+    {
+        ImGui::Text("No sensors available.");
+        ImGui::End();
+        return;
+    }
+    
+    if(selected_sensor < 0 || selected_sensor >= local_sensor_count)
+        selected_sensor = 0;
+    
+    static int prev_selected = -1;
+    static char sensor_name_buf[256] = {0};
+    if(selected_sensor != prev_selected)
+    {
+        const std::string &src_name = local_sensors[selected_sensor].name;
+        std::strncpy(sensor_name_buf, src_name.c_str(), sizeof(sensor_name_buf));
+        sensor_name_buf[sizeof(sensor_name_buf) - 1] = '\0';
+        prev_selected = selected_sensor;
+    }
+
     if(ImGui::BeginListBox("##sensor_names", ImVec2(-FLT_MIN, 6 * ImGui::GetTextLineHeightWithSpacing())))
     {
-        for(int n = 0; n < sensor_count; n++)
+        for(int n = 0; n < local_sensor_count; ++n)
         {
             bool is_selected = (selected_sensor == n);
-            
             ImGui::PushID(n);
-            
-            if(ImGui::Selectable(sensor_names[n].c_str(), is_selected))
+            if(ImGui::Selectable(local_sensors[n].name.c_str(), is_selected))
+            {
                 selected_sensor = n;
-
-            // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+                const std::string &src_name = local_sensors[selected_sensor].name;
+                std::strncpy(sensor_name_buf, src_name.c_str(), sizeof(sensor_name_buf));
+                sensor_name_buf[sizeof(sensor_name_buf) - 1] = '\0';
+                prev_selected = selected_sensor;
+            }
+    
             if(is_selected)
                 ImGui::SetItemDefaultFocus();
-            
+    
             ImGui::PopID();
         }
         ImGui::EndListBox();
     }
     
-    //auto& s = sensor[selected_sensor];
-    
+    // Tabs
     if(ImGui::BeginTabBar("##Settings", 0))
     {
         if(ImGui::BeginTabItem("Properties"))
         {
-            std::strncpy(sensor_name_buf, sensor[selected_sensor].name.c_str(), sizeof(sensor_name_buf));
-            sensor_name_buf[sizeof(sensor_name_buf) - 1] = '\0';
-            
-            
+            const ui_sensor &s = local_sensors[selected_sensor];
+    
             ImGui::Text("Sensor Name ");
             ImGui::SameLine();
             ImGui::InputTextWithHint("##sname", "Enter sensor name", sensor_name_buf, IM_ARRAYSIZE(sensor_name_buf));
             ImGui::SameLine();
-            AddQuestionMarkTooltip("Renaming can be helpful to identify sensors more easily.");
-            
-            ImGui::Text("Type: %s", psensor_type_to_str(sensor[selected_sensor].sensor_type));
-            ImGui::Text("Chip: %s", sensor[selected_sensor].chip.c_str());
-            ImGui::Text("ID: %s", sensor[selected_sensor].sensor_id.c_str());
-            ImGui::Text("Min: %s", psensor_value_to_str(sensor[selected_sensor].sensor_type, sensor[selected_sensor].min, liveSettings.use_celsius_temp_unit));
-            ImGui::Text("Max: %s", psensor_value_to_str(sensor[selected_sensor].sensor_type, sensor[selected_sensor].max, liveSettings.use_celsius_temp_unit));
-            
-            if(ImGui::IsKeyPressed(ImGuiKey_Enter))
+            AddQuestionMarkTooltip("Renaming can be helpful to identify sensors more easily.\nHit Enter to change & save the new sensor name");
+    
+            ImGui::Text("Type: %s", psensor_type_to_str(s.sensor_type));
+            ImGui::Text("Chip: %s", s.chip.c_str());
+            ImGui::Text("ID: %s", s.sensor_id.c_str());
+            ImGui::Text("Min: %s", psensor_value_to_str(s.sensor_type, s.min, liveSettings.use_celsius_temp_unit));
+            ImGui::Text("Max: %s", psensor_value_to_str(s.sensor_type, s.max, liveSettings.use_celsius_temp_unit));
+    
+            if(ImGui::IsKeyPressed(ImGuiKey_Enter) || ImGui::IsItemDeactivatedAfterEdit())
             {
-                initial_sensor_properties[selected_sensor].name = sensor_name_buf;
-                sensor_names[selected_sensor] = sensor_name_buf;
-                sensor[selected_sensor].name = sensor_names[selected_sensor];
-                saveSensorProperties(sensor);
+                {
+                    std::lock_guard<std::mutex> lock(sensor_list_mutex);
+                    if((int)initial_sensor_properties.size() <= selected_sensor)
+                        initial_sensor_properties.resize(selected_sensor + 1);
+                    if((int)sensor_names.size() <= selected_sensor)
+                        sensor_names.resize(selected_sensor + 1);
+    
+                    initial_sensor_properties[selected_sensor].name = sensor_name_buf;
+                    sensor_names[selected_sensor] = sensor_name_buf;
+    
+                    if((int)sensor.size() > selected_sensor)
+                        sensor[selected_sensor].name = sensor_names[selected_sensor];
+    
+                    saveSensorProperties(sensor);
+                }
             }
-            
+    
             ImGui::EndTabItem();
         }
-        
+    
         if(ImGui::BeginTabItem("Display"))
         {
-            bool b = sensor_graph_enabled[selected_sensor] != false;
-            if(ImGui::Checkbox("Show Sensor Plot", &b))
             {
-                sensor_graph_enabled[selected_sensor] = b ? true : false;
-                sensor[selected_sensor].graph_visible = sensor_graph_enabled[selected_sensor];
+                std::lock_guard<std::mutex> lock(sensor_list_mutex);
+                if((int)sensor_graph_color.size() <= selected_sensor)
+                {
+                    for(size_t i = sensor_graph_color.size(); i <= (size_t)selected_sensor; ++i)
+                    {
+                        const ImVec4& c = graph_colors[i % graph_colors.size()];
+                        sensor_graph_color.push_back(ImVec4(c.x / 255.0f, c.y / 255.0f, c.z / 255.0f, 1.0f));
+                    }
+                }
+                if((int)sensor_graph_enabled.size() <= selected_sensor)
+                {
+                    sensor_graph_enabled.resize(selected_sensor + 1, true);
+                }
+            }
+
+            ImVec4 local_color;
+            bool local_enabled;
+            {
+                std::lock_guard<std::mutex> lock(sensor_list_mutex);
+                local_color = sensor_graph_color[selected_sensor];
+                local_enabled = sensor_graph_enabled[selected_sensor];
+            }
+
+            if(ImGui::Checkbox("Show Sensor Plot", &local_enabled))
+            {
+                std::lock_guard<std::mutex> lock(sensor_list_mutex);
+                sensor_graph_enabled[selected_sensor] = local_enabled;
+                if((int)sensor.size() > selected_sensor)
+                    sensor[selected_sensor].graph_visible = local_enabled;
                 saveSensorProperties(sensor);
             }
-            
-            ImGui::ColorEdit3("Plot Color", &sensor_graph_color[selected_sensor].x, ImGuiColorEditFlags_NoInputs);
-            
-            if(ImGui::IsItemDeactivated() == 1)
+
+            ImGui::ColorEdit3("Plot Color", &local_color.x, ImGuiColorEditFlags_NoInputs);
+
+            if(ImGui::IsItemDeactivated())
             {
-                sensor[selected_sensor].graph_color = sensor_graph_color[selected_sensor];
+                std::lock_guard<std::mutex> lock(sensor_list_mutex);
+                sensor_graph_color[selected_sensor] = local_color;
+                if((int)sensor.size() > selected_sensor)
+                    sensor[selected_sensor].graph_color = local_color;
                 saveSensorProperties(sensor);
             }
-            
+
             ImGui::EndTabItem();
         }
-        
+    
         if(ImGui::BeginTabItem("Alarm"))
         {
             ImGui::Text("Soon...");
             ImGui::EndTabItem();
         }
+    
+        ImGui::EndTabBar();
     }
-    ImGui::EndTabBar();
-    ImGui::End();
+    
+        ImGui::End();
 }
 
 void RenderPreferences()
@@ -731,7 +806,7 @@ void RenderSensorList()
         
         if(sensor_graph_color.size() < sensor_count)
         {
-            log_trace("Resizing sensor_graph_color from %zu to %d", sensor_graph_color.size(), sensor_count);
+            //log_trace("Resizing sensor_graph_color from %zu to %d", sensor_graph_color.size(), sensor_count);
             for(size_t i = sensor_graph_color.size(); i < (size_t)sensor_count; ++i)
             {
                 const ImVec4& c = graph_colors[i % graph_colors.size()];
@@ -747,14 +822,14 @@ void RenderSensorList()
         // --- ADD THIS BLOCK: ensure sensor_graph_color is large enough ---
         if(sensor_graph_color.size() < sensor_count)
         {
-            log_trace("Resizing sensor_graph_color from %zu to %d", sensor_graph_color.size(), sensor_count);
+            //log_trace("Resizing sensor_graph_color from %zu to %d", sensor_graph_color.size(), sensor_count);
             for(size_t i = sensor_graph_color.size(); i < (size_t)sensor_count; ++i)
                 sensor_graph_color.push_back(graph_colors[i % graph_colors.size()]);
         }
         
         if(sensor_graph_enabled.size() < sensor_count)
         {
-            log_trace("Resizing sensor_graph_enabled from %zu to %d", sensor_graph_enabled.size(), sensor_count);
+            //log_trace("Resizing sensor_graph_enabled from %zu to %d", sensor_graph_enabled.size(), sensor_count);
             sensor_graph_enabled.resize(sensor_count, true); // default to enabled
         }
         

@@ -67,7 +67,6 @@ void create_sensor_list()
     for(int i = 0; sensors[i] != nullptr; i++)
     {
         initial_sensor_names.emplace_back(sensors[i]->name);
-        //std::cout << "Sensor name: " << sensors[i]->name << std::endl;
     }
     
     sensor_list_created = true;
@@ -141,6 +140,7 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
             }
             else
             {
+                // This is kind of pointless
                 name = initial_sensor_names[i];
                 //color   = graph_colors[i];
                 color = graph_colors[i % graph_colors.size()]; // Loop trough the color array for now
