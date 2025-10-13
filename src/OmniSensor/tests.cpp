@@ -1,9 +1,10 @@
 #include "tests.h"
-#include "utils.hpp"
+//#include "utils.hpp"
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdio.h>
-#include <thread>
+//#include <stdio.h>
+//#include <thread>
+#include <iostream>
 
 #include <psensor/psensor.h>
 #include <psensor/lmsensor.h>

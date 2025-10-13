@@ -1,7 +1,6 @@
 #include <vector>
 #include <thread>
 #include <mutex>
-#include <algorithm>
 #include <unistd.h>
 #include <string.h>
 
@@ -14,7 +13,7 @@
 
 #include "sensor_list.hpp"
 #include "../ui_entry.hpp"
-#include "ui.hpp"
+//#include "ui.hpp"
 #include "sensor_properties.hpp"
 //#include "settings_utils.hpp"
 

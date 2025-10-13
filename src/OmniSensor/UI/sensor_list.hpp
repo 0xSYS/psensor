@@ -2,7 +2,7 @@
 #define SENSOR_LIST_HPP
 
 #include <imgui/imgui.h>
-#include <iostream>
+#include <string>
 #include <vector>
 #include <mutex>
 #include <atomic>
