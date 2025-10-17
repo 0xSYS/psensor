@@ -4,6 +4,7 @@
 
 #include <nlohmann/json.hpp>
 #include <fstream>
+#include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -185,6 +186,8 @@ void writeConfig(const pconfig config)
         log_error("open() failed: %s", strerror(errno));
         return;
     }
+    
+    fchmod(fd, 0666);
     
     // Convert fd → stream
     FILE* f = fdopen(fd, "w");

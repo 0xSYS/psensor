@@ -1,5 +1,5 @@
 #include <fstream>
-#include <filesystem>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <nlohmann/json.hpp>
@@ -39,6 +39,8 @@ void saveSensorProperties(std::vector<ui_sensor>& sens_props)
         return;
     }
     
+    fchmod(fd, 0666);
+    
     FILE* f = fdopen(fd, "w");
     if(!f)
     {
@@ -48,6 +50,10 @@ void saveSensorProperties(std::vector<ui_sensor>& sens_props)
     }
         
     std::ofstream out_file(out_path.str());
+    
+    if(!out_file)
+        log_error("Output file stream failed: %s", strerror(errno));
+    
     out_file << json_out.dump(4);
     out_file.close();
 }
