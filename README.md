@@ -15,7 +15,7 @@ Psensor is a graphical hardware monitoring application for Linux.
 ### Alerts are using Desktop Notification and a specific GTK+ status icon.
 
 > [!NOTE]
-> For Ubuntu users, Psensor is providing an Application Indicator which turns red under alert and a menu for quickly check all sensors.
+> OmniSensor can also be executed from TTY session without the need of a window manager / desktop manager simply by running `omnisensor` command
 >
 > A new feature of PSensor is to allow manual fan speed controlling by writing PWM values to the pwm controllers
 > each asociated to the certain fan managed by the kernel.
