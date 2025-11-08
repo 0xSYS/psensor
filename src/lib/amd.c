@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2010-2011 thgreasi@gmail.com, jeanfi@gmail.com
  * Copyright (C) 2012-2014 jeanfi@gmail.com
- * Copyright (C) 2025 xsys061@gmail.com
+ * Copyright (C) 2025 kiptunor
  *
  * GPU usage is a contribution of MestreLion
  *
