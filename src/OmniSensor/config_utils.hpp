@@ -32,7 +32,7 @@
 
 
 
-#define PSENSOR_SETTINGS_PATH "/.config/psensor/settings.json"
+#define PSENSOR_SETTINGS_PATH "/.config/omnisensor/settings.json"
 
 
 

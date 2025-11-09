@@ -82,10 +82,11 @@ then build:
             - ❌ Lenovo Thinkpad
     - 🔽 Hardware Providers
         - lm-sensors
-        - ✔️ NVIDIA
+        - ✔️ NVIDIA (X11 NVCtrl)
+        - ❌ NVML
         - ✔️ Broadcom BCM2835
         - ❌ Broadcom BCM2712
-        - ✔️ AMD
+        - ❌ ROC SMI (New replacement for the old AMD GPU provider)
         - 🔽 gtop2
              - ✔️ CPU Usage
              - ✔️ Free Memory
@@ -93,6 +94,10 @@ then build:
              - ❌ Network Usage / traffic
              - ❌ Individual Core Usage
              - ❌ Cache Usage
+        - 🔽 procps
+             - ❌ CPU Usage
+             - ❌ Memory Usage
+             - ❌ Process management
         - ✔️ udisks2
         - ✔️ hddtemp
         - ✔️ atasmart
