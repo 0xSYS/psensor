@@ -230,21 +230,7 @@ void ui_main()
     
     float main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
     SDL_WindowFlags window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_TRANSPARENT;
-    
-    SDL_PropertiesID props = SDL_CreateProperties();
-    SDL_SetStringProperty(props, SDL_PROP_WINDOW_CREATE_TITLE_STRING, "custom window");
-    SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_X_NUMBER, 100);
-    SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_Y_NUMBER, 100);
-    SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER, (int)liveSettings.window_w * main_scale);
-    SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER, (int)liveSettings.window_h * main_scale);
-    SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_TRANSPARENT_BOOLEAN, true);
-    SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HIGH_PIXEL_DENSITY_BOOLEAN, true);
-    // For window flags you should use separate window creation properties,
-    // but for easier migration from SDL2 you can use the following:
-    SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_FLAGS_NUMBER, window_flags);
-        
-    //SDL_Window* window = SDL_CreateWindow("OmniSensor", (int)(liveSettings.window_w * main_scale), (int)(liveSettings.window_h * main_scale), window_flags);
-    SDL_Window* window = SDL_CreateWindowWithProperties(props);
+    SDL_Window* window = SDL_CreateWindow("OmniSensor", (int)(liveSettings.window_w * main_scale), (int)(liveSettings.window_h * main_scale), window_flags);
     if(window == nullptr)
     {
         log_error("Error: SDL_CreateWindow(): %s", SDL_GetError());
@@ -460,8 +446,7 @@ void ui_main()
         // Rendering
         ImGui::Render();
         SDL_SetRenderScale(renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
-        //SDL_SetRenderDrawColorFloat(renderer, clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        SDL_SetRenderDrawColorFloat(renderer, 0, 0, 0, 0);
+        SDL_SetRenderDrawColorFloat(renderer, clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         SDL_RenderClear(renderer);
         ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer);
         SDL_RenderPresent(renderer);

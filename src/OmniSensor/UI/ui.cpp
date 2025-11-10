@@ -621,7 +621,7 @@ void RenderPreferences()
             ImGui::SameLine();
             AddQuestionMarkTooltip("Allows the screen to turn off when idle");
             
-            ImGui::ColorEdit3("Background Color", (float*)&clear_color);
+            ImGui::ColorEdit4("Background Color", (float*)&clear_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaNoBg);
             liveSettings.bg_color = FloatRGB2Int(clear_color);
             ImGui::SameLine();
             AddQuestionMarkTooltip("Changes the background color of the main window");
