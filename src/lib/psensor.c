@@ -17,7 +17,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-//#include "include/psensor/plog.h"
+
+
+
+
+
+
+
+
+
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -25,11 +34,6 @@
 #include <dirent.h>
 #include <regex.h>
 #include <errno.h>
-
-#include <libintl.h>
-#include <locale.h>
-#define _(str) gettext(str)
-
 
 #include <glibtop.h>
 #include <stdio.h>
@@ -456,13 +460,13 @@ const char *psensor_type_to_unit_str(unsigned int type, int use_celsius)
     }
     else if(type & SENSOR_TYPE_RPM)
     {
-        return _(" RPM");
+        return " RPM";
     }
     else if(type & SENSOR_TYPE_PERCENT)
     {
-        return _(" %");
+        return " %";
     }
-    return _("N/A");
+    return "N/A";
 }
 
 void psensor_log_measures(struct psensor **sensors)

@@ -28,11 +28,6 @@
 
 
 #define _LARGEFILE_SOURCE 1
-#include "../config.h"
-
-#include <locale.h>
-#include <libintl.h>
-#define _(str) gettext(str)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,7 +37,6 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "include/psensor/bool.h"
 #include <log_c/log.h>
 #include "pmutex.h"
 #include "ptime.h"
@@ -95,7 +89,7 @@ static char *get_default_path(void)
 		return path;
 	}
 
-	log_warn(_("HOME variable not set."));
+	log_warn("HOME variable not set.");
 	return strdup(DEFAULT_FILENAME);
 }
 
@@ -125,7 +119,7 @@ static bool slog_open(const char *path, struct psensor **sensors)
 	st = time(NULL);
 	t = time_to_str(&st);
 
-	fprintf(file, "I,%s,%s\n", t, VERSION);
+	fprintf(file, "I,%s,%s\n", t, LIBPSENSOR_VERSION);
 
 	while(*sensors)
 	{
@@ -147,7 +141,7 @@ static void slog_write_sensors(struct psensor **sensors)
 
 	if(!file)
 	{
-		log_debug(_("Sensor log file not open."));
+		log_debug("Sensor log file not open.");
 		return;
 	}
 
@@ -211,7 +205,7 @@ void slog_close(void)
 	}
 	else
 	{
-		log_debug(_("Sensor log not open, cannot close."));
+		log_debug("Sensor log not open, cannot close.");
 	}
 }
 
