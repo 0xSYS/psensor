@@ -117,6 +117,7 @@ void udisks2_psensor_list_update(struct psensor **sensors)
 
 void udisks2_psensor_list_append(struct psensor ***sensors, int values_length)
 {
+    log_trace("Append");
 	UDisksClient *client;
 	GList *objects, *cur;
 	UDisksDrive *drive;

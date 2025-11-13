@@ -708,13 +708,15 @@ void RenderPreferences()
             ImGui::SameLine();
             AddQuestionMarkTooltip("Provides system information resources (CPU usage, Memory etc)");
             
-            if(ImGui::Checkbox("amd", &cb_provider_amd))
+            ImGui::BeginDisabled();
+            if(ImGui::Checkbox("amd (Deprecated)", &cb_provider_amd))
             {
                 liveSettings.provider_amd = cb_provider_amd;
                 SaveSettings();
             }
+            ImGui::EndDisabled();
             ImGui::SameLine();
-            AddQuestionMarkTooltip("Provides AMD GPU information (GPU usage)");
+            AddQuestionMarkTooltip("The old AMD GPU information provider (It gives info about: GPU Fan Speed, GPU Clock Speed, GPU Memory Usage)");
             
             if(ImGui::Checkbox("nvidia", &cb_provider_nvidia))
             {

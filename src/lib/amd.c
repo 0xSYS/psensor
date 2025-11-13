@@ -168,7 +168,7 @@ static int init(void)
 	hdll = dlopen("libatiadlxx.so", RTLD_LAZY|RTLD_GLOBAL);
 	if(!hdll)
 	{
-		log_warn("AMD: cannot found ADL library.");
+		log_warn("AMD: libatiadlxx.so not found");
 		return 0;
 	}
 

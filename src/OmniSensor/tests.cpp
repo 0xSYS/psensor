@@ -32,6 +32,8 @@
 //#include <thread>
 #include <iostream>
 
+extern "C"
+{
 #include <psensor/psensor.h>
 #include <psensor/lmsensor.h>
 #include <psensor/hdd.h>
@@ -39,7 +41,9 @@
 #include <psensor/amd.h>
 #include <psensor/pgtop2.h>
 #include <psensor/pudisks2.h>
+#include <psensor/bcm2835.h>
 #include <psensor/psensor_json.h>
+}
 
 #include "UI/sensor_list.hpp"
 #include "config_utils.hpp"
@@ -131,7 +135,7 @@ void test_stuff()
     t2.join();  // this line is never reached (optional)
 */
 
-
+/*
     pconfig config_test;
     config_test.provider_gtop = 1;
     config_test.provider_lmsensors = 1;
@@ -157,6 +161,19 @@ void test_stuff()
     config_test.cooling_preset = "silent_efficiency.json";
     
     writeConfig(config_test);
+*/
+
+struct psensor **sensors = nullptr;
+amd_psensor_list_append(&sensors, 600);
+lmsensor_psensor_list_append(&sensors, 600);
+hddtemp_psensor_list_append(&sensors, 600);
+atasmart_psensor_list_append(&sensors, 600);
+nvidia_psensor_list_append(&sensors, 600);
+bcm2835_psensor_list_append(&sensors, 600);
+gtop2_psensor_list_append(&sensors, 600);
+udisks2_psensor_list_append(&sensors, 600);
+
+psensor_list_free(sensors);
 
 
 /*

@@ -23,6 +23,7 @@
 
 #include "bool.h"
 #include "psensor.h"
+#include <log_c/log.h>
 
 #if defined(HAVE_LIBATIADL) && HAVE_LIBATIADL
 
@@ -37,14 +38,24 @@ void amd_cleanup(void);
 
 #else
 
-static inline bool amd_is_supported(void)
-{
-    return false;
-}
+//static inline bool amd_is_supported(void)
+//{
+//    return false;
+//}
 
-static inline void amd_psensor_list_update(struct psensor **s) {}
-static inline void amd_psensor_list_append(struct psensor ***s, int n) {}
-static inline void amd_cleanup(void) {}
+// Too old to be used and it's not supported anymore
+static inline void amd_psensor_list_update(struct psensor **s)
+{
+    log_warn("amd_psensor_list_update(): AMD ADL PROVIDER IS DEPRECATED !!!");
+}
+static inline void amd_psensor_list_append(struct psensor ***s, int n)
+{
+    log_warn("amd_psensor_list_append(): AMD ADL PROVIDER IS DEPRECATED !!!");
+}
+static inline void amd_cleanup(void)
+{
+    log_warn("amd_cleanup(): AMD ADL PROVIDER IS DEPRECATED !!!");
+}
 
 #endif
 
