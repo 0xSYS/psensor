@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "include/psensor/ptime.h"
+#include "ptime.h"
 
 const int P_TIME_VER = 3;
 

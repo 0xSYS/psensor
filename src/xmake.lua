@@ -1,6 +1,8 @@
 add_rules("mode.debug", "mode.release", "plugin.compile_commands.autoupdate")
 
 
+add_defines("LIBPSENSOR_VERSION=\"1.2.1\"")
+
 
 -- Library Dependencies
 add_requires("json-c"       , {system = true})
@@ -115,6 +117,7 @@ target("psensor")
         "../ext_deps/NVCtrl/*.c",
         "../ext_deps/CMessagePack/*.c",
         "../ext_deps/csv/*.c",
+        "lib/providers/*.c",
         "lib/*.c"
     )
 
@@ -126,7 +129,7 @@ target("omnisensor")
     set_languages("c++17")
 
     add_includedirs(
-        "lib/include",
+        "lib/",
         "../ext_deps/imgui",
         "../ext_deps/",
         "../ext_deps/sfd"

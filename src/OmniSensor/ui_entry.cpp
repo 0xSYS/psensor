@@ -26,8 +26,8 @@
 
 extern "C"
 {
-    #include <psensor/psensor.h>
-    #include <psensor/pmod.h>
+    #include <psensor.h>
+    #include <pmod.h>
     #include <sfd.h>
 }
 

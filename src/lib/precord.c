@@ -19,7 +19,7 @@
 
 
 
-#include "include/psensor/precord.h"
+#include "precord.h"
 #include <log_c/log.h>
 #include <CMessagePack/cmp.h>
 

@@ -27,8 +27,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-//#include "include/psensor/plog.h"
-#include "include/psensor/pio.h"
+#include "pio.h"
 
 #include <log_c/log.h>
 

@@ -17,7 +17,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#include "include/psensor/temperature.h"
+
+
+
+
+
+
+
+
+
+
+#include "temperature.h"
 
 double celsius_to_fahrenheit(double c)
 {

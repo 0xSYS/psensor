@@ -27,7 +27,7 @@
 #include <string.h>
 #include <log_c/log.h>
 
-#include "include/psensor/pmod.h"
+#include "pmod.h"
 
 
 #define SIO_ADDR 0x2E

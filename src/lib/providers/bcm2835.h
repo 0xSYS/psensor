@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2017 jeanfi@gmail.com
  * Copyright (C) 2025 kiptunor
  *
  * This program is free software; you can redistribute it and/or
@@ -17,25 +17,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef _PSENSOR_PSENSOR_JSON_H_
-#define _PSENSOR_PSENSOR_JSON_H_
 
-#include "../../../config.h"
 
-#ifdef HAVE_JSON_0
-#include <json/json.h>
-#else
-#include <json-c/json.h>
-#endif
 
-#include "psensor.h"
 
-char *sensor_to_json_string(struct psensor *s);
-char *sensors_to_json_string(struct psensor **sensors);
+
+
+
+
+
 
 /*
- * Creates a new allocated psensor corresponding to a given json
- * representation.
+This file is was not part of the original source from github
+OG Source here: https://gitlab.com/jeanfi/psensor/-/blob/master/src/lib/bcm2835.h?ref_type=heads
+*/
+
+/*
+ * Retrieve temperature from the chip BCM2835 which is mostly
+ * used by the Raspberry PI3 and not support by lmsensor.
  */
-struct psensor *psensor_new_from_json(json_object *o, const char *sensors_url, int values_max_length);
+#ifndef _PSENSOR_BCM2835_H_
+#define _PSENSOR_BCM2835_H_
+
+
+#include "../psensor.h"
+
+
+void bcm2835_psensor_list_update(struct psensor **);
+void bcm2835_psensor_list_append(struct psensor ***, int);
+void bcm2835_cleanup(void);
+
 #endif

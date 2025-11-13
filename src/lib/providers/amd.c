@@ -20,13 +20,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
+
+
+
+
+
+
+
 #ifndef LINUX
 #define LINUX 1
 #endif
 
-#include <locale.h>
-#include <libintl.h>
-#define _(str) gettext(str)
+
 
 #include <dlfcn.h>
 #include <stdio.h>
@@ -35,7 +40,7 @@
 
 #include <adl_sdk.h>
 
-#include "include/psensor/psensor.h"
+#include "../psensor.h"
 #include <log_c/log.h>
 
 typedef int(*ADL_MAIN_CONTROL_CREATE)          (ADL_MAIN_MALLOC_CALLBACK, int);

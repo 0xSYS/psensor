@@ -21,7 +21,7 @@
 #include <stdio.h>
 
 #include <log_c/log.h>
-#include "include/psensor/pmutex.h"
+#include "pmutex.h"
 #include <string.h>
 
 int pmutex_lock(pthread_mutex_t *m)

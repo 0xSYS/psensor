@@ -17,12 +17,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#define _LARGEFILE_SOURCE 1
-#include "../config.h"
 
-#include <locale.h>
-#include <libintl.h>
-#define _(str) gettext(str)
+
+
+
+
+
+
+
+
+
+
 
 #include <errno.h>
 #include <fcntl.h>
@@ -37,8 +42,8 @@
 #include <atasmart.h>
 #include <linux/fs.h>
 
-#include "include/psensor/pio.h"
-#include "include/psensor/hdd.h"
+#include "../pio.h"
+#include "hdd.h"
 #include <log_c/log.h>
 
 static const char *PROVIDER_NAME = "atasmart";
@@ -65,7 +70,7 @@ static struct psensor *create_sensor(char *id, char *name, SkDisk *disk, int val
 
 	t = SENSOR_TYPE_ATASMART | SENSOR_TYPE_HDD | SENSOR_TYPE_TEMP;
 
-	s = psensor_create(id, strdup(name), strdup(_("Disk")), t, values_max_length);
+	s = psensor_create(id, strdup(name), strdup("Disk"), t, values_max_length);
 
 	s->provider_data = disk;
 	s->provider_data_free_fct = &provider_data_free;

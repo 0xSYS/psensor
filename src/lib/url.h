@@ -17,25 +17,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef _PSENSOR_MEASURE_H_
-#define _PSENSOR_MEASURE_H_
 
-#include <sys/time.h>
-#include <float.h>
-#include <stdint.h>
 
-#define UNKNOWN_DBL_VALUE DBL_MIN
 
-struct measure
-{
-	double value;
-	struct timeval time;
-};
 
-void measure_copy(struct measure *src, struct measure *dst);
 
-struct measure *measures_dbl_create(int size);
 
-void measures_free(struct measure *measures);
+
+
+
+
+#ifndef _PLIB_URL_H_
+#define _PLIB_URL_H_
+
+char *url_encode(const char *str);
+char *url_normalize(const char *url);
 
 #endif

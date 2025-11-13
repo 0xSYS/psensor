@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2010-2014 jeanfi@gmail.com
+ * Copyright (C) 2010-2011 thgreasi@gmail.com, jeanfi@gmail.com
+ * Copyright (C) 2012-2016 jeanfi@gmail.com
  * Copyright (C) 2025 kiptunor
  *
  * This program is free software; you can redistribute it and/or
@@ -17,34 +18,36 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef _PSENSOR_LMSENSOR_H_
-#define _PSENSOR_LMSENSOR_H_
 
-#include "bool.h"
-#include "psensor.h"
 
-#if defined(HAVE_LIBSENSORS) && HAVE_LIBSENSORS
 
-static inline bool lmsensor_is_supported(void)
+
+
+
+
+
+
+#ifndef _PSENSOR_AMD_H_
+#define _PSENSOR_AMD_H_
+
+#include "../psensor.h"
+#include <log_c/log.h>
+
+
+
+
+// Too old to be used and it's not supported anymore
+static inline void amd_psensor_list_update(struct psensor **s)
 {
-    return true;
+    log_warn("amd_psensor_list_update(): AMD ADL PROVIDER IS DEPRECATED !!!");
 }
-
-void lmsensor_psensor_list_update(struct psensor **);
-void lmsensor_psensor_list_append(struct psensor ***, int);
-void lmsensor_cleanup(void);
-
-#else
-
-static inline bool lmsensor_is_supported(void)
+static inline void amd_psensor_list_append(struct psensor ***s, int n)
 {
-    return false;
+    log_warn("amd_psensor_list_append(): AMD ADL PROVIDER IS DEPRECATED !!!");
 }
-
-static inline void lmsensor_psensor_list_update(struct psensor **s) {}
-static inline void lmsensor_psensor_list_append(struct psensor ***s, int n) {}
-static inline void lmsensor_cleanup(void) {}
-
-#endif
+static inline void amd_cleanup(void)
+{
+    log_warn("amd_cleanup(): AMD ADL PROVIDER IS DEPRECATED !!!");
+}
 
 #endif

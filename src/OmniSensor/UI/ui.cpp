@@ -27,8 +27,8 @@
 // C++ don't mangle my C functions !!! >:(
 extern "C"
 {
-    #include <psensor/psensor.h>
-    #include <psensor/fan_control.h>
+    #include <psensor.h>
+    #include <fan_control.h>
 }
 
 #include <vector>
@@ -367,7 +367,7 @@ void RenderAboutWindow()
         ImGui::SameLine();
         ImGui::TextLinkOpenURL("GitHub", "https://github.com/0xSYS/psensor");
         ImGui::Text("OmniSensor Version: %s", OMNISENSOR_VERSION);
-        ImGui::Text("Psensor Version: %s", VERSION);
+        ImGui::Text("Psensor Version: %s", LIBPSENSOR_VERSION);
         ImGui::Text("Copyright (C) 2010-2025");
         ImGui::Text("jeanfi@gmail.com");
         ImGui::Text("xsys061@gmail.com");

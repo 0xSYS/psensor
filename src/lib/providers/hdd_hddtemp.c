@@ -18,13 +18,20 @@
  * 02110-1301 USA
  */
 
+
+
+
+
+
+
+
+
+
 /* Part of the code in this file is based on GNOME sensors applet code
  * hddtemp-plugin.c see http://sensors-applet.sourceforge.net/
  */
 
-#include <locale.h>
-#include <libintl.h>
-#define _(str) gettext(str)
+
 
 #include <stdlib.h>
 #include <string.h>
@@ -35,8 +42,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-#include "include/psensor/hdd.h"
-#include "include/psensor/psensor.h"
+#include "hdd.h"
+#include "../psensor.h"
 
 #include <log_c/log.h>
 
@@ -124,7 +131,7 @@ static struct psensor *create_sensor(char *id, char *name, int values_max_length
 
 	t = SENSOR_TYPE_HDD | SENSOR_TYPE_HDDTEMP | SENSOR_TYPE_TEMP;
 
-	return psensor_create(id, name, strdup(_("Disk")), t, values_max_length);
+	return psensor_create(id, name, strdup("Disk"), t, values_max_length);
 }
 
 static char *next_hdd_info(char *string, struct hdd_info *info)

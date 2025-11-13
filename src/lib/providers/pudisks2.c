@@ -17,9 +17,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#include <locale.h>
-#include <libintl.h>
-#define _(str) gettext(str)
+
+
+
+
+
+
+
+
+
+
+
 
 #include <stdlib.h>
 #include <string.h>
@@ -27,8 +35,8 @@
 
 #include <udisks/udisks.h>
 
-#include "include/psensor/pudisks2.h"
-#include "include/psensor/temperature.h"
+#include "pudisks2.h"
+#include "../temperature.h"
 
 #include <log_c/log.h>
 
@@ -64,7 +72,7 @@ static void smart_update(struct psensor *s, UDisksDriveAta *ata)
 
 	if(gettimeofday(&t, NULL) != 0)
 	{
-		log_error("%s: %s", PROVIDER_NAME, _("gettimeofday failed."));
+		log_error("%s: %s", PROVIDER_NAME, "gettimeofday failed.");
 		return;
 	}
 
@@ -134,7 +142,7 @@ void udisks2_psensor_list_append(struct psensor ***sensors, int values_length)
 
 	if(!client)
 	{
-		log_error(_("%s: cannot get the udisks2 client"), PROVIDER_NAME);
+		log_error("%s: cannot get the udisks2 client", PROVIDER_NAME);
 		//log_fct_exit();
 		return;
 	}
@@ -193,8 +201,8 @@ void udisks2_psensor_list_append(struct psensor ***sensors, int values_length)
 		}
 		else
 		{
-			name = strdup(_("Disk"));
-			chip = strdup(_("Disk"));
+			name = strdup("Disk");
+			chip = strdup("Disk");
 		}
 
 		type = SENSOR_TYPE_TEMP | SENSOR_TYPE_UDISKS2 | SENSOR_TYPE_HDD;

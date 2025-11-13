@@ -17,9 +17,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#include <locale.h>
-#include <libintl.h>
-#define _(str) gettext(str)
+
+
+
+
+
+
+
+
+
+
+
 
 #include <string.h>
 #include <log_c/log.h>
@@ -27,7 +35,7 @@
 #include <glibtop/cpu.h>
 #include <glibtop/mem.h>
 
-#include "include/psensor/pgtop2.h"
+#include "pgtop2.h"
 
 static float last_used;
 static float last_total;
@@ -41,10 +49,10 @@ struct psensor *create_cpu_usage_sensor(int measures_len)
 	struct psensor *psensor;
 
 	id = g_strdup_printf("%s cpu usage", PROVIDER_NAME);
-	label = strdup(_("CPU usage"));
+	label = strdup("CPU usage");
 	type = SENSOR_TYPE_GTOP | SENSOR_TYPE_CPU_USAGE;
 
-	psensor = psensor_create(id, label, strdup(_("CPU")), type, measures_len);
+	psensor = psensor_create(id, label, strdup("CPU"), type, measures_len);
 
 	return psensor;
 }
@@ -57,7 +65,7 @@ static struct psensor *create_mem_free_sensor(int measures_len)
 	id = g_strdup_printf("%s mem free", PROVIDER_NAME);
 	type = SENSOR_TYPE_GTOP | SENSOR_TYPE_MEMORY | SENSOR_TYPE_PERCENT;
 
-	return psensor_create(id, strdup(_("free memory")), strdup(_("memory")), type, measures_len);
+	return psensor_create(id, strdup("free memory"), strdup("memory"), type, measures_len);
 }
 
 static double get_usage(void)

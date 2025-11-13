@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2014 jeanfi@gmail.com
+ * Copyright (C) 2010-2016 jeanfi@gmail.com
  * Copyright (C) 2025 kiptunor
  *
  * This program is free software; you can redistribute it and/or
@@ -17,34 +17,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#include <stdlib.h>
-//#include <stdio.h>
-#include <string.h>
 
-#include "measure.h"
 
-struct measure *measures_dbl_create(int size)
-{
-	int i;
-	struct measure *result;
 
-	result = malloc(size * sizeof(struct measure));
 
-	for(i = 0; i < size; i++)
-	{
-		result[i].value = UNKNOWN_DBL_VALUE;
-		timerclear(&result[i].time);
-	}
 
-	return result;
-}
 
-void measures_free(struct measure *measures)
-{
-	free(measures);
-}
 
-void measure_copy(struct measure *src, struct measure *dst)
-{
-	memcpy(dst, src, sizeof(struct measure));
-}
+
+
+
+#ifndef _PSENSOR_UDISKS2_H_
+#define _PSENSOR_UDISKS2_H_
+
+#include "../psensor.h"
+
+
+
+
+
+void udisks2_psensor_list_append(struct psensor ***, int);
+void udisks2_psensor_list_update(struct psensor **);
+
+#endif

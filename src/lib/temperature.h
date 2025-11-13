@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2014 jeanfi@gmail.com
+ * Copyright (C) 2010-2016 jeanfi@gmail.com
  * Copyright (C) 2025 kiptunor
  *
  * This program is free software; you can redistribute it and/or
@@ -17,14 +17,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef _PSENSOR_SLOG_H_
-#define _PSENSOR_SLOG_H_
 
-#include <pthread.h>
 
-#include "psensor.h"
 
-bool slog_activate(const char *, struct psensor **, pthread_mutex_t *, int s);
-void slog_close(void);
+
+
+
+
+
+
+
+#ifndef _PSENSOR_TEMPERATURE_H_
+#define _PSENSOR_TEMPERATURE_H_
+
+double celsius_to_fahrenheit(double c);
+double fahrenheit_to_celsius(double c);
+double kelvin_to_celsius(double k);
 
 #endif

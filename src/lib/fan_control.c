@@ -41,8 +41,8 @@ Todo:
 #include <log_c/log.h>
 
 
-#include "include/psensor/fan_control.h"
-#include "include/psensor/pmod.h"
+#include "fan_control.h"
+#include "pmod.h"
 
 
 

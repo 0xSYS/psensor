@@ -17,36 +17,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef _PSENSOR_HDD_H_
-#define _PSENSOR_HDD_H_
 
-#include "bool.h"
-#include "../../../config.h"
-#include "psensor.h"
 
-#if defined(HAVE_ATASMART) && HAVE_ATASMART
 
-static inline bool atasmart_is_supported(void)
+
+
+
+
+
+
+
+#ifndef _PSENSOR_MEASURE_H_
+#define _PSENSOR_MEASURE_H_
+
+#include <sys/time.h>
+#include <float.h>
+#include <stdint.h>
+
+#define UNKNOWN_DBL_VALUE DBL_MIN
+
+struct measure
 {
-    return true;
-}
+	double value;
+	struct timeval time;
+};
 
-void atasmart_psensor_list_append(struct psensor ***, int);
-void atasmart_psensor_list_update(struct psensor **);
+void measure_copy(struct measure *src, struct measure *dst);
 
-#else
+struct measure *measures_dbl_create(int size);
 
-static inline bool atasmart_is_supported(void)
-{
-    return false;
-}
-
-static inline void atasmart_psensor_list_append(struct psensor ***s, int n) {}
-static inline void atasmart_psensor_list_update(struct psensor **s) {}
-
-#endif
-
-void hddtemp_psensor_list_append(struct psensor ***sensors, int values_length);
-void hddtemp_psensor_list_update(struct psensor **sensors);
+void measures_free(struct measure *measures);
 
 #endif

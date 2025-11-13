@@ -22,8 +22,8 @@
 
 #include <stdio.h>
 
-#include "include/psensor/psensor_json.h"
-#include "include/psensor/url.h"
+#include "psensor_json.h"
+#include "url.h"
 
 #define ATT_SENSOR_ID "id"
 #define ATT_SENSOR_NAME "name"

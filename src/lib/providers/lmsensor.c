@@ -17,9 +17,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#include <locale.h>
-#include <libintl.h>
-#define _(str) gettext(str)
+
+
+
+
+
+
+
+
+
+
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,7 +36,7 @@
 #include <sensors/sensors.h>
 #include <sensors/error.h>
 
-#include "include/psensor/lmsensor.h"
+#include "lmsensor.h"
 
 #include <log_c/log.h>
 
@@ -192,15 +200,15 @@ static struct psensor *lmsensor_psensor_create(const sensors_chip_name *chip, co
 	sprintf(id, "%s %s %s", PROVIDER_NAME, name, label);
 
 	if(!strcmp(chip->prefix, "coretemp"))
-		cname = strdup(_("Intel CPU"));
+		cname = strdup("Intel CPU");
 	else if(!strcmp(chip->prefix, "k10temp") || !strcmp(chip->prefix, "k8temp") || !strcmp(chip->prefix, "fam15h_power"))
-		cname = strdup(_("AMD CPU"));
+		cname = strdup("AMD CPU");
 	else if(!strcmp(chip->prefix, "nouveau"))
-		cname = strdup(_("NVIDIA GPU"));
+		cname = strdup("NVIDIA GPU");
 	else if(!strcmp(chip->prefix, "via-cputemp"))
-		cname = strdup(_("VIA CPU"));
+		cname = strdup("VIA CPU");
 	else if(!strcmp(chip->prefix, "acpitz"))
-		cname = strdup(_("ACPI"));
+		cname = strdup("ACPI");
 	else
 		cname = strdup(chip->prefix);
 

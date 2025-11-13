@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2016 jeanfi@gmail.com
+ * Copyright (C) 2010-2014 jeanfi@gmail.com
  * Copyright (C) 2025 kiptunor
  *
  * This program is free software; you can redistribute it and/or
@@ -17,29 +17,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef _PSENSOR_UDISKS2_H_
-#define _PSENSOR_UDISKS2_H_
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+#ifndef _PSENSOR_LMSENSOR_H_
+#define _PSENSOR_LMSENSOR_H_
 
-#include "psensor.h"
+#include "../psensor.h"
 
-//#if defined(HAVE_LIBUDISKS2) && HAVE_LIBUDISKS2
 
-static bool udisks2_is_supported(void)
-{
-    return true;
-}
 
-void udisks2_psensor_list_append(struct psensor ***, int);
-void udisks2_psensor_list_update(struct psensor **);
 
-//#else
-//
-//bool udisks2_is_supported(void) { return false; }
-//
-//void udisks2_psensor_list_append(struct psensor ***s, int n) {}
-//
-//void udisks2_psensor_list_update(struct psensor **s) {}
-//
-//#endif
+void lmsensor_psensor_list_update(struct psensor **s);
+void lmsensor_psensor_list_append(struct psensor ***s, int n);
+void lmsensor_cleanup(void);
 
 #endif

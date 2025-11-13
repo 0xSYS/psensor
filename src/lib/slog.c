@@ -17,6 +17,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
+
+
+
+
+
+
+
+
+
+
 #define _LARGEFILE_SOURCE 1
 #include "../config.h"
 
@@ -34,9 +44,9 @@
 
 #include "include/psensor/bool.h"
 #include <log_c/log.h>
-#include "include/psensor/pmutex.h"
-#include "include/psensor/ptime.h"
-#include "include/psensor/slog.h"
+#include "pmutex.h"
+#include "ptime.h"
+#include "slog.h"
 
 static FILE *file;
 static double *last_values;

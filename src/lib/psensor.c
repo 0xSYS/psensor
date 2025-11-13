@@ -36,11 +36,11 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include "include/psensor/hdd.h"
-#include "include/psensor/pio.h"
-#include "include/psensor/psensor.h"
-#include "include/psensor/pmod.h"
-#include "include/psensor/temperature.h"
+#include "providers/hdd.h"
+//#include "pio.h"
+#include "psensor.h"
+#include "pmod.h"
+#include "temperature.h"
 
 #include <log_c/log.h>
 

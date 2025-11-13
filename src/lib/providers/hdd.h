@@ -17,32 +17,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#ifndef _PSENSOR_NVIDIA_H_
-#define _PSENSOR_NVIDIA_H_
-
-#include "bool.h"
-#include "psensor.h"
 
 
-//#if defined(HAVE_NVIDIA) && HAVE_NVIDIA
 
-static bool nvidia_is_supported(void)
-{
-    return true;
-}
 
-void nvidia_psensor_list_update(struct psensor **);
-void nvidia_psensor_list_append(struct psensor ***, int);
-void nvidia_cleanup(void);
 
-//#else
 
-//bool nvidia_is_supported(void) { return false; }
-//
-//void nvidia_psensor_list_update(struct psensor **s) {}
-//void nvidia_psensor_list_append(struct psensor ***s, int n) {}
-//void nvidia_cleanup(void) {}
-//
-//#endif
-//
+
+
+
+
+#ifndef _PSENSOR_HDD_H_
+#define _PSENSOR_HDD_H_
+
+#include "../psensor.h"
+
+
+
+void atasmart_psensor_list_append(struct psensor ***, int);
+void atasmart_psensor_list_update(struct psensor **);
+
+void hddtemp_psensor_list_append(struct psensor ***sensors, int values_length);
+void hddtemp_psensor_list_update(struct psensor **sensors);
+
 #endif

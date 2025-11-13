@@ -17,12 +17,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
+
+
+
+
+
+
+
+
+
+
+
 #ifndef _PSENSOR_PSENSOR_H_
 #define _PSENSOR_PSENSOR_H_
 
-#include "../../../config.h"
+#include <stdbool.h>
 
-#include "bool.h"
+
 #include "measure.h"
 #include "plog.h"
 

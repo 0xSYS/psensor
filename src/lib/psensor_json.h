@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2010-2016 jeanfi@gmail.com
  * Copyright (C) 2025 kiptunor
  *
  * This program is free software; you can redistribute it and/or
@@ -19,7 +20,6 @@
 
 
 
-#pragma once
 
 
 
@@ -27,12 +27,19 @@
 
 
 
+#ifndef _PSENSOR_PSENSOR_JSON_H_
+#define _PSENSOR_PSENSOR_JSON_H_
+
+#include <json-c/json.h>
+
+#include "psensor.h"
+
+char *sensor_to_json_string(struct psensor *s);
+char *sensors_to_json_string(struct psensor **sensors);
 
 /*
-Initialise sensor recording by starting to write a binary serialised file.
-Returns:
-0 = succss
-1 = failure
-2 = writing failure
-*/
-int psr_init(const char * prf_name);
+ * Creates a new allocated psensor corresponding to a given json
+ * representation.
+ */
+struct psensor *psensor_new_from_json(json_object *o, const char *sensors_url, int values_max_length);
+#endif

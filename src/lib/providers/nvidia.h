@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 jeanfi@gmail.com
+ * Copyright (C) 2010-2016 jeanfi@gmail.com
  * Copyright (C) 2025 kiptunor
  *
  * This program is free software; you can redistribute it and/or
@@ -17,25 +17,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
- 
-/*
-This file is was not part of the original source from github
-OG Source here: https://gitlab.com/jeanfi/psensor/-/blob/master/src/lib/bcm2835.h?ref_type=heads
-*/
-
-/*
- * Retrieve temperature from the chip BCM2835 which is mostly
- * used by the Raspberry PI3 and not support by lmsensor.
- */
-#ifndef _PSENSOR_BCM2835_H_
-#define _PSENSOR_BCM2835_H_
 
 
-#include "psensor.h"
 
 
-void bcm2835_psensor_list_update(struct psensor **);
-void bcm2835_psensor_list_append(struct psensor ***, int);
-void bcm2835_cleanup(void);
+
+
+
+
+
+
+#ifndef _PSENSOR_NVIDIA_H_
+#define _PSENSOR_NVIDIA_H_
+
+#include "../psensor.h"
+
+
+
+
+void nvidia_psensor_list_update(struct psensor **);
+void nvidia_psensor_list_append(struct psensor ***, int);
+void nvidia_cleanup(void);
 
 #endif

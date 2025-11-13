@@ -16,9 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#include <locale.h>
-#include <libintl.h>
-#define _(str) gettext(str)
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include <stdarg.h>
 #include <stdlib.h>
@@ -26,8 +35,8 @@
 
 #include <log_c/log.h>
 
-#include "include/psensor/pio.h"
-#include "include/psensor/bcm2835.h"
+#include "../pio.h"
+#include "bcm2835.h"
 
 /*
  * Support of the BCM2835 chip which is mostly used by the
@@ -87,7 +96,7 @@ void bcm2835_psensor_list_append(struct psensor ***sensors, int vl)
 
 	if(is_bcm2835_present())
 	{
-		log_provider_info(_("The BCM2835 (probably a Raspberry PI3) " "has been detected"));
+		log_info("The BCM2835 (probably a Raspberry PI3) " "has been detected");
 
 		p = psensor_create(strdup(PROVIDER_NAME), strdup(PROVIDER_NAME), strdup(PROVIDER_NAME), SENSOR_TYPE_BCM2835 | SENSOR_TYPE_TEMP, vl);
 
@@ -122,7 +131,7 @@ static double bcm2835_update_temp(struct psensor *s)
 	}
 	else
 	{
-		log_error(_("Failed to get content of file %s."), SYS_THERMAL_TEMP);
+		log_error("Failed to get content of file %s.", SYS_THERMAL_TEMP);
 	}
 
 	return 0;

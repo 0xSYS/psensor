@@ -34,15 +34,15 @@
 
 extern "C"
 {
-#include <psensor/psensor.h>
-#include <psensor/lmsensor.h>
-#include <psensor/hdd.h>
-#include <psensor/nvidia.h>
-#include <psensor/amd.h>
-#include <psensor/pgtop2.h>
-#include <psensor/pudisks2.h>
-#include <psensor/bcm2835.h>
-#include <psensor/psensor_json.h>
+#include <psensor.h>
+#include <providers/lmsensor.h>
+#include <providers/hdd.h>
+#include <providers/nvidia.h>
+#include <providers/amd.h>
+#include <providers/pgtop2.h>
+#include <providers/pudisks2.h>
+#include <providers/bcm2835.h>
+#include <psensor_json.h>
 }
 
 #include "UI/sensor_list.hpp"

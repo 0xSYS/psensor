@@ -22,7 +22,7 @@
 #include <ctype.h>
 #include <string.h>
 
-#include "include/psensor/color.h"
+#include "color.h"
 
 void color_set(struct color *c, double r, double g, double b)
 {

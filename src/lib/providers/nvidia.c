@@ -17,8 +17,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
-#include <locale.h>
-#include <libintl.h>
+
+
+
+
+
+
+
+
+
+
+
 
 #include <limits.h>
 #include <math.h>
@@ -31,7 +40,7 @@
 #include <NVCtrl.h>
 #include <NVCtrlLib.h>
 
-#include "include/psensor/nvidia.h"
+#include "nvidia.h"
 
 #include <log_c/log.h>
 
