@@ -78,7 +78,8 @@ pconfig readConfig()
     out_conf.provider_udisks2   = providers_obj.value("udisks2",   defaultSettings.provider_udisks2  );
     out_conf.provider_atasmart  = providers_obj.value("atasmart",  defaultSettings.provider_atasmart );
     out_conf.provider_hddtemp   = providers_obj.value("hddtemp",   defaultSettings.provider_hddtemp  );
-    out_conf.provider_amd       = providers_obj.value("amd",       defaultSettings.provider_amd      );
+    //out_conf.provider_amd       = providers_obj.value("amd",       defaultSettings.provider_amd      );
+    out_conf.provider_roc_smi   = providers_obj.value("roc-smi",   defaultSettings.provider_roc_smi  );
     out_conf.provider_nvidia    = providers_obj.value("nvidia",    defaultSettings.provider_nvidia   );
     out_conf.provider_bcm2835   = providers_obj.value("bcm2835",   defaultSettings.provider_bcm2835  );
     out_conf.provider_ipmi      = providers_obj.value("ipmi",      defaultSettings.provider_ipmi     );
@@ -149,7 +150,8 @@ void writeConfig(const pconfig config)
                 { "gtop",      config.provider_gtop      },
                 { "atasmart",  config.provider_atasmart  },
                 { "hddtemp",   config.provider_hddtemp   },
-                { "amd",       config.provider_amd       },
+                //{ "amd",       config.provider_amd       },
+                { "roc-smi",   config.provider_roc_smi   },
                 { "nvidia",    config.provider_nvidia    },
                 { "bcm2835",   config.provider_bcm2835   },
                 { "ipmi",      config.provider_ipmi      }
@@ -245,7 +247,7 @@ void printConfig(const pconfig config)
     std::cout << "[BOOL] - provider_udisks2:   -> " << config.provider_udisks2   << "\n";
     std::cout << "[BOOL] - provider_atasmart:  -> " << config.provider_atasmart  << "\n";
     std::cout << "[BOOL] - provider_hddtemp:   -> " << config.provider_hddtemp   << "\n";
-    std::cout << "[BOOL] - provider_amd:       -> " << config.provider_amd       << "\n";
+    std::cout << "[BOOL] - provider_roc_smi:   -> " << config.provider_roc_smi   << "\n";
     std::cout << "[BOOL] - provider_nvidia:    -> " << config.provider_nvidia    << "\n";
     std::cout << "[BOOL] - provider_ipmi:      -> " << config.provider_ipmi      << "\n";
     std::cout << "--------------------------------------------\n";

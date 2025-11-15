@@ -102,12 +102,16 @@ target("psensor")
       "libkmod"
     )
 
+    -- The paths on arch
+    add_linkdirs("/opt/rocm/lib/")
+    add_links("rocm_smi64")
     add_syslinks("sensors", "Xext")
     --add_defines("PSENSOR_JSON_PRETTY")
 
 
 
     add_includedirs(
+      "/opt/rocm/include",
       "../ext_deps/adl_sdk",
       "../ext_deps/NVCtrl",
       "../ext_deps"

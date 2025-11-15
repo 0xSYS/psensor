@@ -194,7 +194,8 @@ void RefreshSensorList()
     sensor_list_atasmart  = liveSettings.provider_atasmart;
     sensor_list_udisks2   = liveSettings.provider_udisks2;
     sensor_list_gtop      = liveSettings.provider_gtop;
-    sensor_list_amd       = liveSettings.provider_amd;
+    //sensor_list_amd       = liveSettings.provider_amd;
+    sensor_list_roc_smi   = liveSettings.provider_roc_smi;
     sensor_list_nvidia    = liveSettings.provider_nvidia;
     sensor_list_hddtemp   = liveSettings.provider_hddtemp;
     sensor_list_up_interv = liveSettings.update_interval;
@@ -709,14 +710,21 @@ void RenderPreferences()
             AddQuestionMarkTooltip("Provides system information resources (CPU usage, Memory etc)");
             
             ImGui::BeginDisabled();
-            if(ImGui::Checkbox("amd (Deprecated)", &cb_provider_amd))
+            ImGui::Checkbox("amd (Deprecated)", &cb_provider_amd);
+            ImGui::EndDisabled();
+            
+            ImGui::SameLine();
+            AddQuestionMarkTooltip("The old AMD GPU information provider via ADL SDK (It gives info about: GPU Fan Speed, GPU Clock Speed, GPU Memory Usage)");
+            
+            
+            if(ImGui::Checkbox("Roc SMI", &cb_provider_roc_smi))
             {
-                liveSettings.provider_amd = cb_provider_amd;
+                liveSettings.provider_roc_smi = cb_provider_roc_smi;
                 SaveSettings();
             }
-            ImGui::EndDisabled();
             ImGui::SameLine();
-            AddQuestionMarkTooltip("The old AMD GPU information provider (It gives info about: GPU Fan Speed, GPU Clock Speed, GPU Memory Usage)");
+            AddQuestionMarkTooltip("Radeon Open Compute System Management Interface\nIt aims to provide parameters from modern AMD GPUs.Parameters: VRAM Usage, VRAM Clock, SOC Clock, GPU Temperature, Power Usage\n");
+            
             
             if(ImGui::Checkbox("nvidia", &cb_provider_nvidia))
             {

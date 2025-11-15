@@ -86,7 +86,7 @@ then build:
         - ❌ NVML
         - ✔️ Broadcom BCM2835
         - ❌ Broadcom BCM2712
-        - ❌ ROC SMI (New replacement for the old AMD GPU provider)
+        - ✔️ ROC SMI (New replacement for the old AMD GPU provider. Partial integration)
         - 🔽 gtop2
              - ✔️ CPU Usage
              - ✔️ Free Memory

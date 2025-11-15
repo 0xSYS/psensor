@@ -60,7 +60,8 @@ typedef struct
     bool provider_udisks2;
     bool provider_atasmart;
     bool provider_hddtemp;
-    bool provider_amd;
+    //bool provider_amd;
+    bool provider_roc_smi;
     bool provider_nvidia;
     bool provider_bcm2835;
     bool provider_ipmi;

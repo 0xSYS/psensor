@@ -53,6 +53,7 @@ extern "C"
     #include <providers/pgtop2.h>
     #include <providers/pudisks2.h>
     #include <providers/bcm2835.h>
+    #include <providers/roc_smi.h>
     #include <psensor_json.h>
     #include <log_c/log.h>
 }
@@ -82,6 +83,9 @@ void create_sensor_list()
     // Deprecated
     //if(sensor_list_amd)
     //    amd_psensor_list_append(&sensors, 600);
+    
+    if(sensor_list_roc_smi)
+        roc_smi_psensor_list_append(&sensors, 600);
     
     if(sensor_list_gtop)
         gtop2_psensor_list_append(&sensors, 600);
@@ -125,6 +129,9 @@ void update_sensor_list(std::vector<ui_sensor>& sl)
         // Deprecated
         //if(sensor_list_amd)
         //    amd_psensor_list_update(sensors);
+        
+        if(sensor_list_roc_smi)
+            roc_smi_psensor_list_update(sensors);
         
         if(sensor_list_udisks2)
             udisks2_psensor_list_update(sensors);

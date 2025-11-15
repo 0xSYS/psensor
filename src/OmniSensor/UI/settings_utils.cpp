@@ -69,7 +69,8 @@ void SyncSettings()
     cb_provider_hddtemp        = liveSettings.provider_hddtemp      ;
     cb_provider_atasmart       = liveSettings.provider_atasmart     ;
     cb_provider_gtop           = liveSettings.provider_gtop         ;
-    cb_provider_amd            = liveSettings.provider_amd          ;
+    //cb_provider_amd            = liveSettings.provider_amd          ;
+    cb_provider_roc_smi        = liveSettings.provider_roc_smi      ;
     cb_provider_nvidia         = liveSettings.provider_nvidia       ;
     cb_provider_bcm2835        = liveSettings.provider_bcm2835      ;
     cb_provider_ipmi           = liveSettings.provider_ipmi         ;
@@ -85,7 +86,8 @@ void SyncSettings()
     sensor_list_atasmart  = liveSettings.provider_atasmart;
     sensor_list_udisks2   = liveSettings.provider_udisks2;
     sensor_list_gtop      = liveSettings.provider_gtop;
-    sensor_list_amd       = liveSettings.provider_amd;
+    //sensor_list_amd       = liveSettings.provider_amd;
+    sensor_list_roc_smi   = liveSettings.provider_roc_smi;
     sensor_list_nvidia    = liveSettings.provider_nvidia;
     sensor_list_hddtemp   = liveSettings.provider_hddtemp;
     sensor_list_up_interv = liveSettings.update_interval;
