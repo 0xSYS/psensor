@@ -84,8 +84,8 @@ then build:
         - lm-sensors
         - ✔️ NVIDIA (X11 NVCtrl)
         - ❌ NVML
-        - ✔️ Broadcom BCM2835
-        - ❌ Broadcom BCM2712
+        - ✔️ Broadcom BCM2835 (Raspberry Pi 1)
+        - ❌ Broadcom BCM2712 (Raspberry Pi 5)
         - ✔️ ROC SMI (New replacement for the old AMD GPU provider. Partial integration)
         - 🔽 gtop2
              - ✔️ CPU Usage
@@ -93,7 +93,7 @@ then build:
              - ❌ Memory Usage
              - ❌ Network Usage / traffic
              - ❌ Individual Core Usage
-             - ❌ Cache Usage
+             - ✔️ Cache Usage
         - 🔽 procps
              - ❌ CPU Usage
              - ❌ Memory Usage
@@ -114,6 +114,9 @@ then build:
         - ✔️ Autosave window / table layouts
         - ✔️ Custom theme support
         - ❌ Custom font support
+        - 🔽 View modes
+            - ✔️ Old Psensor View (Still needs some polishing)
+            - Task Manager like / [System Monitoring Center](https://github.com/hakandundar34coding/system-monitoring-center)
     - 🔽 Fan controller table
         - ❌ User created presets for fan speeds
         - ✔️ User controlled fan speeds
