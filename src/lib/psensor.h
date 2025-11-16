@@ -73,7 +73,7 @@ enum psensor_type
 	SENSOR_TYPE_GRAPHICS = 1ull << 30,
 	SENSOR_TYPE_VIDEO    = 1ull << 31,
 	SENSOR_TYPE_PCIE     = 1ull << 32,
-	SENSOR_TYPE_MEMORY   = 1ull << 33,
+	SENSOR_TYPE_MEMORY   = 1ull << 4,
 	SENSOR_TYPE_AMBIENT  = 1ull << 34,
 
 	/* Combinations */

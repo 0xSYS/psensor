@@ -60,7 +60,8 @@ struct psensor *create_cpu_usage_sensor(int measures_len)
 static struct psensor *create_mem_free_sensor(int measures_len)
 {
 	char *id;
-	int type;
+	//int type;
+	unsigned long long type;
 
 	id = g_strdup_printf("%s mem free", PROVIDER_NAME);
 	type = SENSOR_TYPE_GTOP | SENSOR_TYPE_MEMORY | SENSOR_TYPE_PERCENT;
