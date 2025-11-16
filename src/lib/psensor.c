@@ -431,6 +431,8 @@ const char *psensor_type_to_str(unsigned int type)
             return "AMD GPU Usage";
         else if(type & SENSOR_TYPE_GPU_VRAM)
             return "AMD GPU VRAM Usage";
+        else if(type & SENSOR_TYPE_GPU_POWER_AVG)
+            return "AMD GPU Power Avg";
     }
 
     if((type & SENSOR_TYPE_HDD_TEMP) == SENSOR_TYPE_HDD_TEMP)
@@ -473,6 +475,14 @@ const char *psensor_type_to_unit_str(unsigned int type, int use_celsius)
     else if(type & SENSOR_TYPE_FREQUENCY)
     {
         return " MHz";
+    }
+    else if(type & SENSOR_TYPE_PWM)
+    {
+        return " PWM";
+    }
+    else if(type & SENSOR_TYPE_WATT)
+    {
+        return " W";
     }
     else if(type & SENSOR_TYPE_PERCENT)
     {

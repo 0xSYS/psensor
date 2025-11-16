@@ -47,6 +47,8 @@ enum psensor_type
     SENSOR_TYPE_RPM       = 1ull << 1,
     SENSOR_TYPE_PERCENT   = 1ull << 2,
     SENSOR_TYPE_FREQUENCY = 1ull << 3,
+    SENSOR_TYPE_PWM       = 1ull << 5,
+    SENSOR_TYPE_WATT      = 1ull << 6,
 
 	/* Whether the sensor is remote */
 	SENSOR_TYPE_REMOTE   = 1ull << 26,
@@ -64,11 +66,14 @@ enum psensor_type
 	SENSOR_TYPE_BCM2835  = 1ull << 18,
 
 	/* Type of HW component */
-	SENSOR_TYPE_HDD      = 1ull << 20,
-	SENSOR_TYPE_CPU      = 1ull << 21,
-	SENSOR_TYPE_GPU      = 1ull << 22,
-	SENSOR_TYPE_GPU_VRAM = 1ull << 23,
-	SENSOR_TYPE_FAN      = 1ull << 24,
+	SENSOR_TYPE_HDD           = 1ull << 20,
+	SENSOR_TYPE_CPU           = 1ull << 21,
+	SENSOR_TYPE_GPU           = 1ull << 22,
+	SENSOR_TYPE_GPU_VRAM      = 1ull << 23,
+	SENSOR_TYPE_FAN           = 1ull << 24,
+	SENSOR_TYPE_GPU_POWER_AVG = 1ull << 25,
+	SENSOR_TYPE_GPU_POWER     = 1ull << 26,
+
 	
 	SENSOR_TYPE_GRAPHICS = 1ull << 30,
 	SENSOR_TYPE_VIDEO    = 1ull << 31,
