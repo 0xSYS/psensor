@@ -68,6 +68,16 @@ static struct psensor *create_mem_free_sensor(int measures_len)
 
 	return psensor_create(id, strdup("free memory"), strdup("memory"), type, measures_len);
 }
+static struct psensor *create_cache_usage_sensor(int measure_len)
+{
+    char *id;
+    unsigned long long type;
+
+    id = g_strdup_printf("%s cache", PROVIDER_NAME);
+    type = SENSOR_TYPE_GTOP | SENSOR_TYPE_CACHE | SENSOR_TYPE_PERCENT;
+
+    return psensor_create(id, strdup("cache usage"), strdup("memory"), type, measure_len);
+}
 
 static double get_usage(void)
 {
@@ -103,10 +113,22 @@ static double get_mem_free(void)
 	return v;
 }
 
+static double get_cache_usage(void)
+{
+    glibtop_mem mem;
+	double v;
+   
+	glibtop_get_mem(&mem);
+	v = ((double)mem.cached) * 100.0 / mem.total;
+   
+	return v;
+}
+
 void gtop2_psensor_list_append(struct psensor ***sensors, int measures_len)
 {
 	psensor_list_append(sensors, create_cpu_usage_sensor(measures_len));
 	psensor_list_append(sensors, create_mem_free_sensor(measures_len));
+	psensor_list_append(sensors, create_cache_usage_sensor(measures_len));
 }
 
 void cpu_usage_sensor_update(struct psensor *s)
@@ -124,6 +146,16 @@ static void mem_free_sensor_update(struct psensor *s)
 	double v;
 
 	v = get_mem_free();
+
+	if(v != UNKNOWN_DBL_VALUE)
+		psensor_set_current_value(s, v);
+}
+
+static void cache_usage_sensor_update(struct psensor *s)
+{
+	double v;
+
+	v = get_cache_usage();
 
 	if(v != UNKNOWN_DBL_VALUE)
 		psensor_set_current_value(s, v);
@@ -149,6 +181,8 @@ void gtop2_psensor_list_update(struct psensor **sensors)
 				cpu_usage_sensor_update(s);
 			else if(s->type & SENSOR_TYPE_MEMORY)
 				mem_free_sensor_update(s);
+			else if((s->type & SENSOR_TYPE_CACHE) && (s->type & SENSOR_TYPE_PERCENT))
+				cache_usage_sensor_update(s);
 		}
 
 		sensors++;
