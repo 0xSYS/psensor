@@ -470,6 +470,10 @@ const char *psensor_type_to_unit_str(unsigned int type, int use_celsius)
     {
         return " RPM";
     }
+    else if(type & SENSOR_TYPE_FREQUENCY)
+    {
+        return " MHz";
+    }
     else if(type & SENSOR_TYPE_PERCENT)
     {
         return " %";
@@ -477,10 +481,6 @@ const char *psensor_type_to_unit_str(unsigned int type, int use_celsius)
     else if(type & SENSOR_TYPE_GPU_VRAM)
     {
         return " %";
-    }
-    else if(type & SENSOR_TYPE_FREQUENCY)
-    {
-        return " GHz";
     }
     return "N/A";
 }

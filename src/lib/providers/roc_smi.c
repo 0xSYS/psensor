@@ -76,12 +76,12 @@ static struct psensor *create_sensor(int id, int type, int values_len)
 					
 		case 1:
 		    sprintf(name, "GPU %d VRAM Usage", id);
-			sensor_type |= SENSOR_TYPE_GPU | SENSOR_TYPE_MEMORY | SENSOR_TYPE_GPU_VRAM;
+			sensor_type |= SENSOR_TYPE_GPU | SENSOR_TYPE_GPU_VRAM;
 		break;
 		
 		case 2:
 		    sprintf(name, "GPU %d Clock", id);
-			sensor_type |= SENSOR_TYPE_GPU;
+			sensor_type |= SENSOR_TYPE_GPU | SENSOR_TYPE_FREQUENCY;
 		break;
 		
 		case 3:
@@ -91,7 +91,7 @@ static struct psensor *create_sensor(int id, int type, int values_len)
 		
 		case 4:
 		    sprintf(name, "GPU %d VRAM Clock", id);
-			sensor_type |= SENSOR_TYPE_GPU | SENSOR_TYPE_GPU_VRAM ;
+			sensor_type |= SENSOR_TYPE_GPU | SENSOR_TYPE_GPU_VRAM | SENSOR_TYPE_FREQUENCY;
 		break;
 	}
 	
@@ -137,6 +137,7 @@ void roc_smi_psensor_list_update(struct psensor ** sensors)
     uint64_t gpu_vram_total[devices];
     int64_t gpu_vram_temp[devices];
     int64_t gpu_vram_clock[devices];
+    int64_t gpu_freq_clk[devices];
 
     // Fetch values once
     for(uint32_t i = 0; i < devices; i++)
@@ -161,12 +162,22 @@ void roc_smi_psensor_list_update(struct psensor ** sensors)
         if(ret != RSMI_STATUS_SUCCESS)
             gpu_vram_temp[i] = 0;
         
-        // VRM Temperature
-        ret = rsmi_dev_temp_metric_get(i, RSMI_CLK_TYPE_MEM, RSMI_TEMP_CURRENT, &gpu_vram_clock[i]);
-        if(ret != RSMI_STATUS_SUCCESS)
+        
+        // VRAM Clock
+        rsmi_frequencies_t mem_freq;
+        ret = rsmi_dev_gpu_clk_freq_get(i, RSMI_CLK_TYPE_MEM, &mem_freq);
+        if(ret == RSMI_STATUS_SUCCESS)
+            gpu_vram_clock[i] = mem_freq.current;
+        else
             gpu_vram_clock[i] = 0;
         
-        
+        // GPU core clock
+        rsmi_frequencies_t gfx_freq;
+        ret = rsmi_dev_gpu_clk_freq_get(i, RSMI_CLK_TYPE_SYS, &gfx_freq);
+        if (ret == RSMI_STATUS_SUCCESS)
+            gpu_freq_clk[i] = gfx_freq.current;
+        else
+            gpu_freq_clk[i] = 0;
     }
 
     ss = sensors;
@@ -186,27 +197,31 @@ void roc_smi_psensor_list_update(struct psensor ** sensors)
             ss++;
             continue;
         }
-
-        if(s->type & SENSOR_TYPE_PERCENT) // In rae cases you'll get actual GPU usage lmaoo
+        
+        if(s->type & SENSOR_TYPE_PERCENT)
         {
-            //printf("GPU %u usage = %u%%\n", id, gpu_activity[id]);
-            psensor_set_current_value(s, (double)gpu_activity[id]);
-        }
-        // VRAM sensor
-        else if((s->type & SENSOR_TYPE_MEMORY) && (s->type & SENSOR_TYPE_GPU_VRAM))
-        {
-            double pct = (double)gpu_vram_used[id] / gpu_vram_total[id] * 100.0;
-            psensor_set_current_value(s, pct);
+            psensor_set_current_value(s, gpu_activity[id]);
         }
         else if((s->type & SENSOR_TYPE_GPU_VRAM) && (s->type & SENSOR_TYPE_TEMP))
         {
-            //printf("GPU %u VRAM temperature = %.1f°C\n", id, (double)gpu_vram_temp[id]);
+            // VRAM temperature
             psensor_set_current_value(s, (double)gpu_vram_temp[id]);
+        }
+        else if((s->type & SENSOR_TYPE_GPU_VRAM) && (s->type & SENSOR_TYPE_FREQUENCY))
+        {
+            // VRAM clock
+            psensor_set_current_value(s, (double)gpu_vram_clock[id]);
         }
         else if((s->type & SENSOR_TYPE_GPU_VRAM))
         {
-            //printf("GPU %u VRAM clock = %.1fMHz\n", id, (double)gpu_vram_clock[id]);
-            psensor_set_current_value(s, (double)gpu_vram_clock[id]);
+            // VRAM usage
+            double pct = (double)gpu_vram_used[id] / gpu_vram_total[id] * 100.0;
+            psensor_set_current_value(s, pct);
+        }
+        else if((s->type & SENSOR_TYPE_GPU) && (s->type & SENSOR_TYPE_FREQUENCY))
+        {
+            // GPU core clock
+            psensor_set_current_value(s, (double)gpu_freq_clk[id]);
         }
 
         ss++;
