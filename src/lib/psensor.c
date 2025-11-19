@@ -484,6 +484,10 @@ const char *psensor_type_to_unit_str(unsigned int type, int use_celsius)
     {
         return " W";
     }
+    else if(type & SENSOR_TYPE_DATA_TRAFFIC)
+    {
+        return " MB/s";
+    }
     else if(type & SENSOR_TYPE_PERCENT)
     {
         return " %";

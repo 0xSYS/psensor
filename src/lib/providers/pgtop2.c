@@ -30,10 +30,15 @@
 
 
 #include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
 #include <log_c/log.h>
 
 #include <glibtop/cpu.h>
 #include <glibtop/mem.h>
+//#include <glibtop.h>
+#include <glibtop/netload.h>
+#include <glibtop/netlist.h>
 
 #include "pgtop2.h"
 
@@ -41,6 +46,70 @@ static float last_used;
 static float last_total;
 
 static const char *PROVIDER_NAME = "gtop2";
+
+
+
+
+
+
+
+
+/* - - - - Internal Functions - - - - - */
+
+
+// Some netwrk functions...
+int is_physical(const char *iface)
+{
+    char path[128];
+    snprintf(path, sizeof(path), "/sys/class/net/%s/device", iface);
+
+    struct stat st;
+    return (stat(path, &st) == 0); // exists → physical
+}
+
+const char * get_physical_interface_name()
+{
+    glibtop_netlist list;
+    char **ifaces = glibtop_get_netlist(&list);
+    
+    glibtop_netload nl;
+    
+    static char best_iface[64];
+    best_iface[0] = '\0';
+    
+    unsigned long best_total = 0;
+    
+    for(int i = 0; ifaces[i]; i++)
+    {
+        const char *iface = ifaces[i];
+    
+        if(!is_physical(iface))
+            continue;
+    
+        glibtop_get_netload(&nl, iface);
+    
+        unsigned long total = nl.bytes_in + nl.bytes_out;
+    
+        if(total > best_total)
+        {
+            best_total = total;
+            snprintf(best_iface, sizeof(best_iface), "%s", iface);
+        }
+    }
+    
+    if(best_iface[0] != '\0')
+    {
+        log_info("Network: Physical interface: %s", best_iface);
+        return best_iface;
+    }
+    
+    log_warn("Network: No physical interface detected.");
+    return NULL;
+}
+// Damn gtop can provide more info about the network traffic
+// Now what ?!
+// idfk
+// This means I must create the new UI design so I can add network traffic tracking too
 
 struct psensor *create_cpu_usage_sensor(int measures_len)
 {

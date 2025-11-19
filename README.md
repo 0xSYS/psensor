@@ -102,6 +102,7 @@ then build:
         - ✔️ hddtemp
         - ✔️ atasmart
         - ❌ IPMI
+        - ❌ Internal Provider
    
     - ❌ Sensor recording
         - Formats

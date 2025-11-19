@@ -36,5 +36,4 @@ struct psensor *create_cpu_usage_sensor(int n);
 void cpu_usage_sensor_update(struct psensor *s);
 void gtop2_psensor_list_update(struct psensor **s);
 void gtop2_psensor_list_append(struct psensor ***s, int n);
-
 #endif

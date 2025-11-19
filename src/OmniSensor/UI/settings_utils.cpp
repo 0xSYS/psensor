@@ -113,12 +113,9 @@ void SyncSettings()
 void SaveSettings()
 {
     if(liveSettings.autosave_settings)
-    {
         writeConfig(liveSettings);
-    }
+    
     else
-    {
-        log_info("No auto save");
         return;
-    }
+    
 }

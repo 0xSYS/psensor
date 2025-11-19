@@ -164,6 +164,7 @@ void test_stuff()
     writeConfig(config_test);
 */
 
+/*
 struct psensor **sensors = nullptr;
 //amd_psensor_list_append(&sensors, 600);
 lmsensor_psensor_list_append(&sensors, 600);
@@ -201,6 +202,10 @@ while(1)
 	}
 
 psensor_list_free(sensors);
+*/
+
+//NetWorkTest();
+//std::cout << "From cpp: " << get_physical_interface_name() << "\n";
 
 
 /*
