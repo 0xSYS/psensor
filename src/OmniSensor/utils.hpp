@@ -35,7 +35,7 @@
 
 
 
-#define PSENSOR_DIR ".config/psensor"
+#define PSENSOR_DIR ".config/omnisensor"
 
 inline sfd_Options temp_fd;
 

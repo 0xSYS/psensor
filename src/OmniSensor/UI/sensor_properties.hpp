@@ -30,7 +30,7 @@
 #include "sensor_list.hpp"
 
 
-#define SENSOR_PROPERTIES_PATH "/.config/psensor/sensor_properties.json"
+#define SENSOR_PROPERTIES_PATH "/.config/omnisensor/sensor_properties.json"
 
 
 
